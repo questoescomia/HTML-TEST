@@ -1,0 +1,1237 @@
+<!-- 
+    IMPORTANTE PARA GITHUB PAGES: 
+    Salve este conteúdo completo em um arquivo chamado exatamente "index.html" 
+    e coloque-o na pasta raiz do seu repositório (ou na pasta configurada para o GitHub Pages, como /docs).
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuestMaster - Gerador de Questões Médicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2d3748; 
+            color: #e2e8f0; 
+        }
+        .dark-bg { background-color: #4a5568; }
+        .dark-card { background-color: #718096; }
+        .dark-input { background-color: #4a5568; border-color: #718096; color: #e2e8f0; }
+        .dark-input:focus { border-color: #facc15; box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.5); }
+        
+        .btn-green { background-color: #38a169; color: white; }
+        .btn-green:hover { background-color: #2f855a; }
+        
+        .btn-yellow { background-color: #facc15; color: #1a202c; }
+        .btn-yellow:hover { background-color: #eab308; }
+
+        .btn-gray { background-color: #718096; color: white; }
+        .btn-gray:hover { background-color: #5A677B; }
+
+        .btn-red { background-color: #e53e3e; }
+        .btn-red:hover { background-color: #c53030; }
+
+        .btn-purple { background-color: #805ad5; color: white; } 
+        .btn-purple:hover { background-color: #6b46c1; }
+
+
+        .option-button-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .option-button {
+            transition: all 0.2s ease-in-out;
+            flex-grow: 1;
+        }
+        .option-button.selected-temporary { 
+            background-color: #63b3ed; 
+            border-color: #63b3ed;
+            color: white;
+        }
+        .option-button.selected { 
+            background-color: #facc15; 
+            color: #1a202c; 
+            border-color: #facc15;
+        }
+        .option-button.correct {
+            background-color: #38a169; 
+            color: white;
+            border-color: #38a169;
+        }
+        .option-button.incorrect {
+            background-color: #e53e3e; 
+            color: white;
+            border-color: #e53e3e;
+        }
+        .option-button.eliminated {
+            text-decoration: line-through;
+            opacity: 0.6;
+            background-color: #718096 !important; 
+            color: #a0aec0 !important; 
+        }
+        .eliminate-icon {
+            cursor: pointer;
+            color: #9ca3af; 
+            padding: 0.5rem; 
+            border-radius: 0.375rem; 
+            transition: all 0.2s ease-in-out;
+        }
+        .eliminate-icon:hover {
+            color: #facc15; 
+            background-color: #4a5568; 
+        }
+        .eliminate-icon.eliminated-active {
+            color: #e53e3e; 
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #2d3748; }
+        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #718096; }
+        .loader, .small-loader {
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader {
+            border: 4px solid #f3f3f320; 
+            border-top: 4px solid #facc15; 
+            width: 40px;
+            height: 40px;
+            margin: 20px auto;
+        }
+        .small-loader {
+            border: 2px solid #f3f3f320; 
+            border-top: 2px solid #facc15; 
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        html, body { height: 100%; }
+        .min-h-screen-custom { min-height: 100vh; }
+    </style>
+</head>
+<body class="text-gray-200"> 
+
+    <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
+
+        <div id="setupScreen" class="w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
+            <header class="mb-6 text-center">
+                <h1 class="text-4xl font-bold text-yellow-400">Fazer questões sempre é uma boa escolha!</h1>
+                <p class="text-gray-400 mt-2">Gere questões de medicina personalizadas</p> 
+            </header>
+
+            <div class="mb-4"> 
+                <label for="fileInput" class="block text-sm font-medium text-gray-300 mb-1">Escolher arquivo PDF</label>
+                <div class="flex items-center">
+                    <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                    <button onclick="document.getElementById('fileInput').click()" class="dark-input px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-600"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
+                    </button>
+                    <span id="fileName" class="dark-input px-4 py-2 rounded-r-md border flex-grow">Nenhum arquivo escolhido</span> </div>
+            </div>
+             <button id="summarizeTextButton" class="hidden w-full sm:w-auto btn-yellow text-sm py-2 px-4 rounded-md shadow-md mb-6 flex items-center justify-center">
+                <i class="fas fa-magic-sparkles mr-2"></i>Resumir Texto do PDF ✨
+                <div id="summarizeLoader" class="small-loader hidden"></div>
+            </button>
+            <div id="summaryOutputContainer" class="hidden dark-card p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
+                <h4 class="text-md font-semibold text-yellow-300 mb-2">Resumo do Texto:</h4>
+                <p id="summaryOutputText" class="text-sm whitespace-pre-wrap"></p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <div>
+                    <label for="numQuestions" class="block text-sm font-medium text-gray-300 mb-1">Nº de Questões</label>
+                    <select id="numQuestions" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                        <option value="5">5 Questões</option>
+                        <option value="10" selected>10 Questões</option>
+                        <option value="15">15 Questões</option>
+                        <option value="20">20 Questões</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="difficulty" class="block text-sm font-medium text-gray-300 mb-1">Dificuldade</label>
+                    <select id="difficulty" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                        <option value="Fácil">Fácil</option>
+                        <option value="Médio" selected>Médio</option>
+                        <option value="Difícil">Difícil</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="timePerQuestion" class="block text-sm font-medium text-gray-300 mb-1">Tempo por Questão</label>
+                    <select id="timePerQuestion" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                        <option value="0">Sem limite</option>
+                        <option value="30">30 Segundos</option>
+                        <option value="60" selected>1 Minuto</option>
+                        <option value="120">2 Minutos</option>
+                        <option value="180">3 Minutos</option>
+                        <option value="300">5 Minutos</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="startQuizButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md transition duration-150 flex items-center justify-center text-lg">
+                <i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado
+            </button>
+            <div id="loadingIndicator" class="hidden text-center mt-4">
+                <div class="loader"></div>
+                <p class="text-yellow-300">Gerando questões... Por favor, aguarde.</p> 
+            </div>
+            <div id="generationWarning" class="text-xs text-yellow-500 mt-3 text-center hidden">
+                <i class="fas fa-exclamation-triangle mr-1"></i>A geração de questões pode demorar até 30 segundos. Se já enviou o PDF e clicou em gerar, fique tranquilo, logo ficará pronto.
+            </div>
+            <p id="errorMessage" class="text-red-400 text-center mt-4"></p>
+        </div>
+
+        <div id="quizScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-yellow-400">Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestionNumber"></span></h2> 
+                <div id="questionTimerDisplay" class="text-xl font-bold text-yellow-400"></div> 
+            </div>
+            <div id="questionContainer" class="mb-6">
+                <p id="questionText" class="text-lg leading-relaxed mb-6"></p>
+                <div id="optionsContainer" class="space-y-3"></div>
+                <button id="hintButton" class="mt-4 text-sm btn-purple py-1 px-3 rounded-md shadow-sm flex items-center justify-center w-full sm:w-auto">
+                    <i class="fas fa-lightbulb mr-2"></i>Gerar Dica ✨
+                    <div id="hintLoader" class="small-loader hidden"></div>
+                </button>
+                <div id="hintOutputContainer" class="hidden dark-card p-3 rounded-md mt-3">
+                     <p id="hintOutputText" class="text-sm text-yellow-200"></p>
+                </div>
+            </div>
+            <button id="confirmAnswerButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md mb-4 transition duration-150 hidden">
+                <i class="fas fa-check-circle mr-2"></i>Responder
+            </button>
+            <div id="feedbackContainer" class="hidden dark-card p-4 rounded-md mb-4"> 
+                <h3 id="feedbackTitle" class="text-lg font-semibold mb-2"></h3>
+                <p id="feedbackText" class="text-sm mb-2"></p>
+                <p id="feedbackExplanation" class="text-sm italic"></p>
+                <button id="deeperExplanationButton" class="mt-3 text-sm btn-yellow py-1 px-3 rounded-md shadow-sm flex items-center">
+                    <i class="fas fa-magic-sparkles mr-2"></i>Aprofundar Explicação ✨
+                    <div id="deeperExplanationLoader" class="small-loader hidden"></div>
+                </button>
+                <div id="deeperExplanationOutput" class="mt-2 text-sm text-gray-300 whitespace-pre-wrap"></div>
+            </div>
+            <div class="flex justify-between mt-6">
+                <button id="prevQuestionButton" class="btn-gray text-white font-semibold py-3 px-6 rounded-md shadow-md transition duration-150">
+                    <i class="fas fa-arrow-left mr-2"></i>Anterior
+                </button>
+                <button id="nextQuestionButton" class="btn-yellow text-gray-900 font-semibold py-3 px-6 rounded-md shadow-md transition duration-150"> 
+                    Próxima Questão <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="resultsScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl text-center">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6">Resultado do Simulado</h2> 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Total de Questões:</p>
+                    <p id="resultsTotalQuestions" class="text-2xl font-semibold"></p>
+                </div>
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Acertos:</p>
+                    <p id="resultsCorrectAnswers" class="text-2xl font-semibold text-green-400"></p>
+                </div>
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Erros:</p>
+                    <p id="resultsIncorrectAnswers" class="text-2xl font-semibold text-red-400"></p>
+                </div>
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Percentual de Acerto:</p>
+                    <p id="resultsAccuracy" class="text-2xl font-semibold"></p>
+                </div>
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Tempo Total:</p>
+                    <p id="resultsTotalTime" class="text-2xl font-semibold"></p>
+                </div>
+                <div class="dark-card p-4 rounded-md"> 
+                    <p class="text-sm text-gray-400">Tempo Médio por Questão:</p>
+                    <p id="resultsAvgTime" class="text-2xl font-semibold"></p>
+                </div>
+            </div>
+            <button id="analyzePerformanceButton" class="w-full md:w-auto btn-purple text-white font-semibold py-3 px-6 rounded-md shadow-md mb-4 flex items-center justify-center">
+                <i class="fas fa-chart-line mr-2"></i>Analisar Meu Desempenho ✨
+                <div id="analyzePerformanceLoader" class="small-loader hidden"></div>
+            </button>
+            <div id="performanceAnalysisOutputContainer" class="hidden dark-card p-4 rounded-md mb-6 text-left max-h-60 overflow-y-auto">
+                <h4 class="text-md font-semibold text-yellow-300 mb-2">Análise de Desempenho:</h4>
+                <p id="performanceAnalysisOutputText" class="text-sm whitespace-pre-wrap"></p>
+            </div>
+            <div class="space-y-4 md:space-y-0 md:flex md:space-x-4 justify-center">
+                <button id="reviewQuestionsButton" class="w-full md:w-auto btn-yellow text-gray-900 font-semibold py-3 px-6 rounded-md shadow-md"> 
+                    <i class="fas fa-list-alt mr-2"></i>Revisar Questões
+                </button>
+                <button id="newQuizButton" class="w-full md:w-auto btn-green text-white font-semibold py-3 px-6 rounded-md shadow-md">
+                    <i class="fas fa-redo mr-2"></i>Novo Simulado
+                </button>
+            </div>
+        </div>
+        
+        <div id="reviewModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden z-50"> 
+            <div class="dark-bg w-full max-w-2xl max-h-[90vh] p-6 rounded-lg shadow-xl overflow-y-auto"> 
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-semibold text-yellow-400">Revisão das Questões</h3> 
+                    <button id="closeReviewModalButton" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                </div>
+                <div id="reviewQuestionsContainer" class="space-y-6">
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const setupScreen = document.getElementById('setupScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const reviewModal = document.getElementById('reviewModal');
+
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('fileName');
+        const summarizeTextButton = document.getElementById('summarizeTextButton'); 
+        const summarizeLoader = document.getElementById('summarizeLoader'); 
+        const summaryOutputContainer = document.getElementById('summaryOutputContainer'); 
+        const summaryOutputText = document.getElementById('summaryOutputText'); 
+
+        const numQuestionsSelect = document.getElementById('numQuestions');
+        const difficultySelect = document.getElementById('difficulty');
+        const timePerQuestionSelect = document.getElementById('timePerQuestion');
+        const startQuizButton = document.getElementById('startQuizButton');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const generationWarning = document.getElementById('generationWarning'); 
+
+        const currentQuestionNumberDisplay = document.getElementById('currentQuestionNumber');
+        const totalQuestionNumberDisplay = document.getElementById('totalQuestionNumber');
+        const questionTimerDisplay = document.getElementById('questionTimerDisplay');
+        const questionTextDisplay = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const hintButton = document.getElementById('hintButton'); 
+        const hintLoader = document.getElementById('hintLoader'); 
+        const hintOutputContainer = document.getElementById('hintOutputContainer'); 
+        const hintOutputText = document.getElementById('hintOutputText'); 
+        const confirmAnswerButton = document.getElementById('confirmAnswerButton'); 
+        const feedbackContainer = document.getElementById('feedbackContainer');
+        const feedbackTitle = document.getElementById('feedbackTitle');
+        const feedbackText = document.getElementById('feedbackText');
+        const feedbackExplanation = document.getElementById('feedbackExplanation');
+        const deeperExplanationButton = document.getElementById('deeperExplanationButton'); 
+        const deeperExplanationLoader = document.getElementById('deeperExplanationLoader'); 
+        const deeperExplanationOutput = document.getElementById('deeperExplanationOutput'); 
+        const prevQuestionButton = document.getElementById('prevQuestionButton'); 
+        const nextQuestionButton = document.getElementById('nextQuestionButton');
+
+        const resultsTotalQuestions = document.getElementById('resultsTotalQuestions');
+        const resultsCorrectAnswers = document.getElementById('resultsCorrectAnswers');
+        const resultsIncorrectAnswers = document.getElementById('resultsIncorrectAnswers');
+        const resultsAccuracy = document.getElementById('resultsAccuracy');
+        const resultsTotalTime = document.getElementById('resultsTotalTime');
+        const resultsAvgTime = document.getElementById('resultsAvgTime');
+        const analyzePerformanceButton = document.getElementById('analyzePerformanceButton'); 
+        const analyzePerformanceLoader = document.getElementById('analyzePerformanceLoader'); 
+        const performanceAnalysisOutputContainer = document.getElementById('performanceAnalysisOutputContainer'); 
+        const performanceAnalysisOutputText = document.getElementById('performanceAnalysisOutputText'); 
+        const reviewQuestionsButton = document.getElementById('reviewQuestionsButton');
+        const newQuizButton = document.getElementById('newQuizButton');
+        const closeReviewModalButton = document.getElementById('closeReviewModalButton');
+        const reviewQuestionsContainer = document.getElementById('reviewQuestionsContainer');
+
+        // App State
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = []; 
+        let questionTimerInterval;
+        let timeLeftForQuestion;
+        let quizStartTime;
+        let questionStartTime;
+        let extractedPdfText = ""; 
+        let quizState = []; 
+        let temporarilySelectedOption = null; 
+
+
+        // Event Listeners
+        fileInput.addEventListener('change', async () => {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+                loadingIndicator.classList.remove('hidden');
+                generationWarning.classList.add('hidden'); 
+                errorMessage.textContent = '';
+                summarizeTextButton.classList.add('hidden'); 
+                summaryOutputContainer.classList.add('hidden');
+                summaryOutputText.textContent = '';
+                
+                if (typeof pdfjsLib === 'undefined') {
+                    console.warn("pdf.js library is not loaded. PDF text extraction will not work.");
+                    errorMessage.textContent = "Biblioteca PDF.js não carregada. Extração de PDF não funcionará.";
+                    loadingIndicator.classList.add('hidden');
+                    extractedPdfText = ""; 
+                    return;
+                }
+                if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                }
+
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    try {
+                        const typedArray = new Uint8Array(event.target.result);
+                        const pdf = await pdfjsLib.getDocument({data: typedArray}).promise;
+                        let fullText = "";
+                        for (let i = 1; i <= pdf.numPages; i++) {
+                            const page = await pdf.getPage(i);
+                            const textContent = await page.getTextContent();
+                            fullText += textContent.items.map(item => item.str).join(" ") + "\n";
+                        }
+                        extractedPdfText = fullText.trim();
+                        if (!extractedPdfText) {
+                             errorMessage.textContent = 'Não foi possível extrair texto do PDF. Tente um arquivo diferente.';
+                             errorMessage.classList.add('text-red-400');
+                             errorMessage.classList.remove('text-green-400');
+                             summarizeTextButton.classList.add('hidden');
+                        } else {
+                            console.log("Texto extraído do PDF:", extractedPdfText.substring(0, 200) + "..."); 
+                            errorMessage.textContent = 'Texto do PDF extraído com sucesso! Pronto para gerar questões ou resumir.';
+                            errorMessage.classList.remove('text-red-400');
+                            errorMessage.classList.add('text-green-400');
+                            summarizeTextButton.classList.remove('hidden'); 
+                        }
+                    } catch (error) {
+                        console.error("Erro ao processar PDF:", error);
+                        errorMessage.textContent = `Erro ao processar PDF: ${error.message}. Tente outro arquivo.`;
+                        errorMessage.classList.add('text-red-400');
+                        errorMessage.classList.remove('text-green-400');
+                        extractedPdfText = "";
+                        summarizeTextButton.classList.add('hidden');
+                    } finally {
+                        loadingIndicator.classList.add('hidden');
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
+                extractedPdfText = "";
+                summarizeTextButton.classList.add('hidden');
+                summaryOutputContainer.classList.add('hidden');
+            }
+        });
+
+        summarizeTextButton.addEventListener('click', handleSummarizeText); 
+        deeperExplanationButton.addEventListener('click', handleDeeperExplanation); 
+        confirmAnswerButton.addEventListener('click', handleConfirmAnswer); 
+        hintButton.addEventListener('click', handleGenerateHint); 
+        analyzePerformanceButton.addEventListener('click', handleAnalyzePerformance); 
+
+
+        startQuizButton.addEventListener('click', generateAndStartQuiz);
+        prevQuestionButton.addEventListener('click', handlePrevQuestion); 
+        nextQuestionButton.addEventListener('click', handleNextQuestion);
+        newQuizButton.addEventListener('click', () => {
+            showScreen('setup');
+            resetQuizState();
+        });
+        reviewQuestionsButton.addEventListener('click', showReviewModal);
+        closeReviewModalButton.addEventListener('click', () => reviewModal.classList.add('hidden'));
+
+        // Functions
+        function showScreen(screenName) {
+            setupScreen.classList.add('hidden');
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            reviewModal.classList.add('hidden'); 
+            generationWarning.classList.add('hidden'); 
+            performanceAnalysisOutputContainer.classList.add('hidden'); 
+
+            if (screenName === 'setup') setupScreen.classList.remove('hidden');
+            else if (screenName === 'quiz') quizScreen.classList.remove('hidden');
+            else if (screenName === 'results') resultsScreen.classList.remove('hidden');
+        }
+
+        function resetQuizState() {
+            questions = [];
+            currentQuestionIndex = 0;
+            userAnswers = [];
+            quizState = []; 
+            clearInterval(questionTimerInterval);
+            timeLeftForQuestion = 0;
+            quizStartTime = null;
+            questionStartTime = null;
+            extractedPdfText = "";
+            fileInput.value = ""; 
+            fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
+            errorMessage.textContent = '';
+            errorMessage.classList.remove('text-green-400'); 
+            errorMessage.classList.add('text-red-400');
+            loadingIndicator.classList.add('hidden');
+            generationWarning.classList.add('hidden');
+            summarizeTextButton.classList.add('hidden');
+            summaryOutputContainer.classList.add('hidden');
+            summaryOutputText.textContent = '';
+            hintOutputContainer.classList.add('hidden');
+            hintOutputText.textContent = '';
+            performanceAnalysisOutputContainer.classList.add('hidden');
+            performanceAnalysisOutputText.textContent = '';
+            startQuizButton.disabled = false;
+            startQuizButton.innerHTML = '<i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado';
+        }
+
+        async function callGeminiAPI(promptText, isJsonOutput = false, schema = null) {
+            // ==============================================================================
+            // ========================== CHAVE DE API GEMINI ===============================
+            // A chave fornecida pelo usuário foi inserida aqui.
+            // LEMBRE-SE: Se o seu repositório no GitHub for público, esta chave ficará visível.
+            // Considere os riscos ou use um repositório privado para testes.
+            // ==============================================================================
+            const apiKey = "AIzaSyDjqagILL3JKVgmKRSJFREpTWXvT2D63yg"; 
+
+            if (apiKey === "A_SUA_CHAVE_API_AQUI" || apiKey === "") { // Redundant check, but kept for safety
+                console.error("Chave de API não configurada. Por favor, adicione sua chave de API do Gemini no código.");
+                throw new Error("Chave de API do Gemini não configurada no código JavaScript.");
+            }
+            
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            
+            const payload = { contents: [{ role: "user", parts: [{ text: promptText }] }] };
+            if (isJsonOutput && schema) {
+                payload.generationConfig = {
+                    responseMimeType: "application/json",
+                    responseSchema: schema
+                };
+            }
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.text();
+                console.error("Gemini API Error Response:", errorBody);
+                throw new Error(`Erro na API Gemini: ${response.status} ${response.statusText}. Verifique sua chave de API e cotas.`);
+            }
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                
+                const responseText = result.candidates[0].content.parts[0].text;
+                if (isJsonOutput) {
+                    try {
+                        return JSON.parse(responseText);
+                    } catch (e) {
+                        console.error("Error parsing JSON from Gemini API:", e, "\nResponse text:", responseText);
+                        throw new Error("Falha ao processar a resposta JSON da API Gemini.");
+                    }
+                }
+                return responseText;
+
+            } else {
+                console.error("Unexpected Gemini API response structure:", result);
+                throw new Error('Resposta inesperada da API Gemini.');
+            }
+        }
+
+
+        async function handleSummarizeText() {
+            if (!extractedPdfText) {
+                errorMessage.textContent = "Nenhum texto de PDF para resumir.";
+                return;
+            }
+            summarizeLoader.classList.remove('hidden');
+            summarizeTextButton.disabled = true;
+            summaryOutputContainer.classList.add('hidden');
+            summaryOutputText.textContent = '';
+            errorMessage.textContent = '';
+
+            try {
+                const prompt = `Por favor, resuma o seguinte texto médico de forma concisa, idealmente em 3 a 5 pontos principais ou parágrafos curtos. O texto é: \n\n"${extractedPdfText}"`;
+                const summary = await callGeminiAPI(prompt);
+                summaryOutputText.textContent = summary;
+                summaryOutputContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error("Erro ao resumir texto:", error);
+                errorMessage.textContent = `Erro ao resumir: ${error.message}`;
+            } finally {
+                summarizeLoader.classList.add('hidden');
+                summarizeTextButton.disabled = false;
+            }
+        }
+
+        async function handleDeeperExplanation() {
+            const question = questions[currentQuestionIndex];
+            const currentQState = quizState[currentQuestionIndex];
+
+            if (!question || !currentQState.isAnswered) return;
+
+            deeperExplanationLoader.classList.remove('hidden');
+            deeperExplanationButton.disabled = true;
+            deeperExplanationOutput.textContent = '';
+
+            try {
+                const userAnswerText = currentQState.selectedAnswerLetter ? question.options[currentQState.selectedAnswerLetter] : "Não respondeu / Tempo esgotado";
+                const prompt = `Dado o seguinte texto médico original (parcial ou completo): \n\n"${extractedPdfText.substring(0, 3000)}...\n\nA questão foi: "${question.text}"\nA opção selecionada pelo usuário foi: "${userAnswerText}" (Opção ${currentQState.selectedAnswerLetter || 'Nenhuma'}).\nA resposta correta é: "${question.options[question.correctAnswerLetter]}" (Opção ${question.correctAnswerLetter}).\nA explicação inicial fornecida foi: "${question.explanation}".\n\nPor favor, forneça uma explicação MAIS APROFUNDADA e detalhada sobre o porquê da resposta "${question.correctAnswerLetter}" ser a correta, e por que a opção do usuário (se houver) estava incorreta. Se possível, referencie partes do texto original ou explique princípios médicos subjacentes. Mantenha a linguagem clara e focada no aprendizado.`;
+                
+                const deeperExplanation = await callGeminiAPI(prompt);
+                deeperExplanationOutput.textContent = deeperExplanation;
+
+            } catch (error) {
+                console.error("Erro ao buscar explicação aprofundada:", error);
+                deeperExplanationOutput.textContent = `Erro ao buscar explicação: ${error.message}`;
+            } finally {
+                deeperExplanationLoader.classList.add('hidden');
+                deeperExplanationButton.disabled = false;
+            }
+        }
+
+        async function handleGenerateHint() {
+            const question = questions[currentQuestionIndex];
+            if (!question || quizState[currentQuestionIndex].isAnswered) return;
+
+            hintLoader.classList.remove('hidden');
+            hintButton.disabled = true;
+            hintOutputText.textContent = '';
+            hintOutputContainer.classList.add('hidden');
+
+            try {
+                let optionsString = "";
+                for (const key in question.options) {
+                    optionsString += `${key}) ${question.options[key]} \n`;
+                }
+                const prompt = `Você é um tutor médico. Para a seguinte questão de múltipla escolha, forneça uma dica sutil (em uma frase curta) que ajude o aluno a pensar na direção certa, mas NÃO revele a resposta diretamente nem mencione a letra da opção correta. Questão: "${question.text}". Opções:\n${optionsString}`;
+                const hint = await callGeminiAPI(prompt);
+                hintOutputText.textContent = hint;
+                hintOutputContainer.classList.remove('hidden');
+            } catch (error) {
+                console.error("Erro ao gerar dica:", error);
+                hintOutputText.textContent = `Erro ao gerar dica: ${error.message}`;
+                hintOutputContainer.classList.remove('hidden'); 
+            } finally {
+                hintLoader.classList.add('hidden');
+            }
+        }
+
+        async function handleAnalyzePerformance() {
+            if (userAnswers.length === 0) {
+                performanceAnalysisOutputText.textContent = "Nenhuma questão foi respondida para analisar o desempenho.";
+                performanceAnalysisOutputContainer.classList.remove('hidden');
+                return;
+            }
+
+            analyzePerformanceLoader.classList.remove('hidden');
+            analyzePerformanceButton.disabled = true;
+            performanceAnalysisOutputText.textContent = '';
+            performanceAnalysisOutputContainer.classList.add('hidden');
+
+            try {
+                let performanceSummary = "Resumo do desempenho do aluno:\n";
+                const wrongAnswers = userAnswers.filter(ans => !ans.isCorrect);
+
+                if (wrongAnswers.length === 0) {
+                    performanceSummary += "Parabéns! Você acertou todas as questões. Continue com o ótimo trabalho!\n";
+                } else {
+                    performanceSummary += `O aluno errou ${wrongAnswers.length} de ${questions.length} questões.\n`;
+                    performanceSummary += "Detalhes das questões erradas/não respondidas:\n";
+                    wrongAnswers.forEach(ans => {
+                        const q = questions[ans.questionIndex];
+                        performanceSummary += `- Questão: "${q.text.substring(0,100)}..." Sua resposta: ${ans.userAnswer || 'Não respondida/Timeout'}. Correta: ${q.correctAnswerLetter}. Explicação: ${q.explanation.substring(0,100)}...\n`;
+                    });
+                }
+                
+                const prompt = `Você é um conselheiro de estudos médicos experiente e encorajador. Um aluno acabou de fazer um quiz. Aqui está o resumo do desempenho dele: \n\n${performanceSummary}\n\nCom base nisso, forneça uma breve análise construtiva (2-3 parágrafos) sobre possíveis áreas para focar nos estudos (se houver erros) e algumas dicas gerais de estudo personalizadas para este desempenho. Se o aluno acertou tudo, ofereça palavras de encorajamento e sugestões para continuar progredindo. Seja positivo e motivador.`;
+                
+                const analysis = await callGeminiAPI(prompt);
+                performanceAnalysisOutputText.textContent = analysis;
+                performanceAnalysisOutputContainer.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Erro ao analisar desempenho:", error);
+                performanceAnalysisOutputText.textContent = `Erro ao analisar desempenho: ${error.message}`;
+                performanceAnalysisOutputContainer.classList.remove('hidden');
+            } finally {
+                analyzePerformanceLoader.classList.add('hidden');
+                analyzePerformanceButton.disabled = false; 
+            }
+        }
+
+
+        async function generateAndStartQuiz() {
+            const materialContent = extractedPdfText;
+
+            if (!materialContent) {
+                errorMessage.textContent = 'Por favor, escolha um arquivo PDF com conteúdo para gerar as questões.';
+                errorMessage.classList.add('text-red-400');
+                errorMessage.classList.remove('text-green-400');
+                generationWarning.classList.add('hidden');
+                return;
+            }
+            errorMessage.textContent = '';
+            loadingIndicator.classList.remove('hidden');
+            generationWarning.classList.remove('hidden'); 
+            startQuizButton.disabled = true;
+            startQuizButton.innerHTML = '<div class="loader !w-6 !h-6 !border-2 !inline-block !mr-2 !m-0"></div> Processando...';
+            summaryOutputContainer.classList.add('hidden'); 
+
+            const numQs = parseInt(numQuestionsSelect.value);
+            const difficulty = difficultySelect.value;
+            
+            try {
+                const questionGenerationSchema = {
+                    type: "OBJECT",
+                    properties: {
+                        "questoes": {
+                            type: "ARRAY",
+                            items: {
+                                type: "OBJECT",
+                                properties: {
+                                    "pergunta": { "type": "STRING", description: "O texto da questão." },
+                                    "opcoes": {
+                                        type: "OBJECT",
+                                        properties: {
+                                            "A": { type: "STRING", description: "Texto da opção A." },
+                                            "B": { type: "STRING", description: "Texto da opção B." },
+                                            "C": { type: "STRING", description: "Texto da opção C." },
+                                            "D": { type: "STRING", description: "Texto da opção D." }
+                                        },
+                                        required: ["A", "B", "C", "D"]
+                                    },
+                                    "respostaCorreta": { type: "STRING", description: "A letra da opção correta (A, B, C ou D)." },
+                                    "explicacao": { "type": "STRING", description: "Explicação detalhada da resposta correta." }
+                                },
+                                required: ["pergunta", "opcoes", "respostaCorreta", "explicacao"]
+                            }
+                        }
+                    },
+                    required: ["questoes"]
+                };
+
+                const prompt = `Com base no seguinte texto médico extraído de um PDF, gere ${numQs} questões de múltipla escolha de dificuldade "${difficulty}". O texto é: \n\n"${materialContent}"`;
+                const generatedData = await callGeminiAPI(prompt, true, questionGenerationSchema);
+                    
+                if (!generatedData.questoes || generatedData.questoes.length === 0) {
+                    throw new Error("A API não retornou questões válidas. Verifique o texto do PDF e tente novamente.");
+                }
+                questions = generatedData.questoes.map(q => ({
+                    text: q.pergunta,
+                    options: q.opcoes, 
+                    correctAnswerLetter: q.respostaCorreta.toUpperCase(),
+                    explanation: q.explicacao
+                }));
+
+                if (questions.length === 0) {
+                     throw new Error("Nenhuma questão foi gerada. Tente refinar o texto ou as configurações.");
+                }
+                
+                if (questions.length < numQs) {
+                    console.warn(`A API gerou ${questions.length} questões, menos que as ${numQs} solicitadas.`);
+                }
+                questions = questions.slice(0, numQs); 
+
+                quizState = questions.map(() => ({
+                    selectedAnswerLetter: null,
+                    isAnswered: false,
+                    eliminatedOptions: new Set(),
+                    timeTaken: 0,
+                    timeTakenOnPause: 0 
+                }));
+
+                quizStartTime = new Date();
+                showScreen('quiz'); 
+                displayCurrentQuestion();
+
+            } catch (error) {
+                console.error('Erro ao gerar questões:', error);
+                errorMessage.textContent = `Erro ao gerar questões: ${error.message}. Tente novamente ou ajuste o PDF.`;
+                errorMessage.classList.add('text-red-400');
+                errorMessage.classList.remove('text-green-400');
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                generationWarning.classList.add('hidden'); 
+                startQuizButton.disabled = false;
+                startQuizButton.innerHTML = '<i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado';
+            }
+        }
+        
+        function displayCurrentQuestion() {
+            if (currentQuestionIndex < 0 || currentQuestionIndex >= questions.length) {
+                console.error("Invalid currentQuestionIndex:", currentQuestionIndex);
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            const currentQState = quizState[currentQuestionIndex];
+            temporarilySelectedOption = null; 
+
+            questionTextDisplay.textContent = question.text;
+            currentQuestionNumberDisplay.textContent = currentQuestionIndex + 1;
+            totalQuestionNumberDisplay.textContent = questions.length;
+
+            optionsContainer.innerHTML = '';
+            feedbackContainer.classList.add('hidden'); 
+            confirmAnswerButton.classList.add('hidden'); 
+            confirmAnswerButton.disabled = true;
+            deeperExplanationOutput.textContent = ''; 
+            deeperExplanationButton.classList.add('hidden'); 
+            hintOutputContainer.classList.add('hidden'); 
+            hintOutputText.textContent = '';
+            hintButton.disabled = false; 
+            hintButton.classList.remove('hidden'); 
+            
+            prevQuestionButton.disabled = currentQuestionIndex === 0;
+            nextQuestionButton.innerHTML = currentQuestionIndex === questions.length - 1 ? 'Ver Resultado <i class="fas fa-poll-h ml-2"></i>' : 'Próxima Questão <i class="fas fa-arrow-right ml-2"></i>';
+            
+            if (currentQState.isAnswered) {
+                nextQuestionButton.disabled = false;
+                hintButton.classList.add('hidden'); 
+            } else {
+                nextQuestionButton.disabled = true;
+                hintButton.classList.remove('hidden');
+            }
+
+
+            ['A', 'B', 'C', 'D'].forEach(key => {
+                if (question.options && question.options[key]) { 
+                    const optionContainer = document.createElement('div');
+                    optionContainer.className = 'option-button-container';
+
+                    const eliminateBtn = document.createElement('span');
+                    eliminateBtn.className = 'eliminate-icon';
+                    eliminateBtn.innerHTML = '<i class="fas fa-cut"></i>'; 
+                    eliminateBtn.title = 'Eliminar esta alternativa';
+                    eliminateBtn.dataset.option = key;
+
+                    const button = document.createElement('button');
+                    button.classList.add('dark-input', 'text-left', 'p-3', 'rounded-md', 'border', 'hover:bg-gray-600', 'option-button'); 
+                    button.innerHTML = `<span class="font-bold mr-2">${key}.</span> ${question.options[key]}`;
+                    button.dataset.option = key;
+                    
+                    optionContainer.appendChild(eliminateBtn);
+                    optionContainer.appendChild(button);
+                    optionsContainer.appendChild(optionContainer);
+
+                    if (currentQState.eliminatedOptions.has(key)) {
+                        button.classList.add('eliminated');
+                        eliminateBtn.classList.add('eliminated-active');
+                        button.disabled = true; 
+                    }
+                    
+                    if (currentQState.isAnswered) { 
+                        button.disabled = true;
+                        eliminateBtn.style.display = 'none'; 
+                        if (key === currentQState.selectedAnswerLetter) {
+                            button.classList.add('selected'); 
+                            if (key === question.correctAnswerLetter) {
+                                button.classList.add('correct');
+                            } else {
+                                button.classList.add('incorrect');
+                            }
+                        } else if (key === question.correctAnswerLetter) {
+                             button.classList.add('correct'); 
+                        }
+                    } else { 
+                        button.addEventListener('click', () => selectOptionTemporarily(key, button));
+                        eliminateBtn.addEventListener('click', (e) => {
+                            e.stopPropagation(); 
+                            toggleEliminateOption(key, button, eliminateBtn);
+                        });
+                    }
+                }
+            });
+
+            if (currentQState.isAnswered) {
+                showFeedback(currentQState.selectedAnswerLetter === question.correctAnswerLetter, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
+                nextQuestionButton.disabled = false; 
+            } else {
+                 questionStartTime = new Date(); 
+                 startQuestionTimer();
+            }
+        }
+
+        function selectOptionTemporarily(optionKey, clickedButton) {
+            if (quizState[currentQuestionIndex].isAnswered) return;
+
+            Array.from(optionsContainer.querySelectorAll('.option-button')).forEach(btn => {
+                btn.classList.remove('selected-temporary');
+            });
+
+            clickedButton.classList.add('selected-temporary');
+            temporarilySelectedOption = optionKey;
+
+            confirmAnswerButton.classList.remove('hidden');
+            confirmAnswerButton.disabled = false;
+        }
+
+
+        function toggleEliminateOption(optionKey, optionButtonElement, eliminateIconElement) {
+            const currentQState = quizState[currentQuestionIndex];
+            if (currentQState.isAnswered) return; 
+
+            if (currentQState.eliminatedOptions.has(optionKey)) {
+                currentQState.eliminatedOptions.delete(optionKey);
+                optionButtonElement.classList.remove('eliminated');
+                eliminateIconElement.classList.remove('eliminated-active');
+                optionButtonElement.disabled = false;
+            } else {
+                currentQState.eliminatedOptions.add(optionKey);
+                optionButtonElement.classList.add('eliminated');
+                eliminateIconElement.classList.add('eliminated-active');
+                optionButtonElement.disabled = true; 
+                if (temporarilySelectedOption === optionKey) { 
+                    temporarilySelectedOption = null;
+                    optionButtonElement.classList.remove('selected-temporary');
+                    confirmAnswerButton.disabled = true;
+                    confirmAnswerButton.classList.add('hidden');
+                }
+            }
+        }
+
+
+        function startQuestionTimer() {
+            clearInterval(questionTimerInterval);
+            const timeLimit = parseInt(timePerQuestionSelect.value);
+            if (timeLimit === 0 || quizState[currentQuestionIndex].isAnswered) { 
+                questionTimerDisplay.textContent = quizState[currentQuestionIndex].isAnswered ? 'Respondida' : 'Sem limite';
+                return;
+            }
+
+            let remainingTime = timeLimit - (quizState[currentQuestionIndex].timeTakenOnPause || 0);
+            timeLeftForQuestion = remainingTime > 0 ? remainingTime : 0;
+
+            updateTimerDisplay();
+
+            if (timeLeftForQuestion <= 0 && !quizState[currentQuestionIndex].isAnswered) {
+                 handleTimeout(); 
+                 return;
+            }
+
+
+            questionTimerInterval = setInterval(() => {
+                timeLeftForQuestion--;
+                updateTimerDisplay();
+                if (timeLeftForQuestion <= 0) {
+                    clearInterval(questionTimerInterval);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeftForQuestion / 60);
+            const seconds = timeLeftForQuestion % 60;
+            questionTimerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function handleTimeout() {
+            if (quizState[currentQuestionIndex].isAnswered) return; 
+
+            const question = questions[currentQuestionIndex];
+            quizState[currentQuestionIndex].isAnswered = true;
+            quizState[currentQuestionIndex].selectedAnswerLetter = null; 
+            quizState[currentQuestionIndex].timeTaken = parseInt(timePerQuestionSelect.value); 
+
+            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === currentQuestionIndex);
+            const answerData = {
+                questionIndex: currentQuestionIndex, questionText: question.text, options: question.options,
+                userAnswer: null, userAnswerText: "Tempo Esgotado", correctAnswer: question.correctAnswerLetter,
+                correctAnswerText: (question.options && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
+                isCorrect: false, explanation: question.explanation, timeTaken: quizState[currentQuestionIndex].timeTaken,
+                eliminatedOptions: Array.from(quizState[currentQuestionIndex].eliminatedOptions)
+            };
+            if (existingAnswerIndex > -1) userAnswers[existingAnswerIndex] = answerData;
+            else userAnswers.push(answerData);
+
+
+            showFeedback(false, null, question.correctAnswerLetter, question.explanation, question.options);
+            
+            Array.from(optionsContainer.querySelectorAll('.option-button')).forEach(btn => btn.disabled = true);
+            Array.from(optionsContainer.querySelectorAll('.eliminate-icon')).forEach(icon => icon.style.display = 'none');
+            confirmAnswerButton.classList.add('hidden');
+            hintButton.classList.add('hidden');
+            nextQuestionButton.disabled = false;
+        }
+
+        function showFeedback(isCorrect, userAnswerLetter, correctAnswerLetter, explanation, optionsObj) {
+            feedbackContainer.classList.remove('hidden');
+            deeperExplanationButton.classList.remove('hidden'); 
+            deeperExplanationOutput.textContent = ''; 
+            if (userAnswerLetter === null) { 
+                 feedbackTitle.textContent = 'Tempo Esgotado!';
+                 feedbackTitle.className = 'text-lg font-semibold mb-2 text-yellow-400';
+                 feedbackText.textContent = `A resposta correta era: ${correctAnswerLetter}. ${optionsObj[correctAnswerLetter]}`;
+            } else if (isCorrect) {
+                feedbackTitle.textContent = 'Correto!';
+                feedbackTitle.className = 'text-lg font-semibold mb-2 text-green-400';
+                feedbackText.textContent = '';
+            } else {
+                feedbackTitle.textContent = 'Incorreto!';
+                feedbackTitle.className = 'text-lg font-semibold mb-2 text-red-400';
+                feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${optionsObj[userAnswerLetter]}. A correta era: ${correctAnswerLetter}. ${optionsObj[correctAnswerLetter]}`;
+            }
+            feedbackExplanation.textContent = `Explicação: ${explanation}`;
+        }
+
+
+        function handleConfirmAnswer() {
+            if (!temporarilySelectedOption || quizState[currentQuestionIndex].isAnswered) return;
+
+            clearInterval(questionTimerInterval); 
+            const question = questions[currentQuestionIndex];
+            const currentQState = quizState[currentQuestionIndex];
+            
+            const questionEndTime = new Date();
+            const timeForThisAttempt = Math.round((questionEndTime - questionStartTime) / 1000);
+            currentQState.timeTaken = (currentQState.timeTakenOnPause || 0) + timeForThisAttempt;
+            currentQState.timeTakenOnPause = 0; 
+
+            currentQState.selectedAnswerLetter = temporarilySelectedOption;
+            currentQState.isAnswered = true;
+            const isCorrect = currentQState.selectedAnswerLetter === question.correctAnswerLetter;
+
+            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === currentQuestionIndex);
+            const answerData = {
+                questionIndex: currentQuestionIndex,
+                questionText: question.text,
+                options: question.options,
+                userAnswer: currentQState.selectedAnswerLetter,
+                userAnswerText: (question.options && question.options[currentQState.selectedAnswerLetter]) ? question.options[currentQState.selectedAnswerLetter] : "N/A",
+                correctAnswer: question.correctAnswerLetter,
+                correctAnswerText: (question.options && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
+                isCorrect: isCorrect,
+                explanation: question.explanation,
+                timeTaken: currentQState.timeTaken,
+                eliminatedOptions: Array.from(currentQState.eliminatedOptions) 
+            };
+            if (existingAnswerIndex > -1) {
+                userAnswers[existingAnswerIndex] = answerData;
+            } else {
+                userAnswers.push(answerData);
+            }
+
+            Array.from(optionsContainer.querySelectorAll('.option-button-container')).forEach(container => {
+                const btn = container.querySelector('.option-button');
+                const elimIcon = container.querySelector('.eliminate-icon');
+                btn.disabled = true; 
+                btn.classList.remove('selected-temporary'); 
+                if(elimIcon) elimIcon.style.display = 'none'; 
+
+                const optKey = btn.dataset.option;
+                if (optKey === currentQState.selectedAnswerLetter) { 
+                    btn.classList.add('selected'); 
+                    if (isCorrect) {
+                        btn.classList.add('correct');
+                    } else {
+                        btn.classList.add('incorrect');
+                    }
+                } else if (optKey === question.correctAnswerLetter) { 
+                    btn.classList.add('correct'); 
+                }
+            });
+
+            showFeedback(isCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
+            confirmAnswerButton.classList.add('hidden');
+            hintButton.classList.add('hidden'); 
+            nextQuestionButton.disabled = false;
+        }
+
+
+        function handlePrevQuestion() {
+            if (currentQuestionIndex > 0) {
+                if (!quizState[currentQuestionIndex].isAnswered) {
+                     clearInterval(questionTimerInterval);
+                     const timeLimit = parseInt(timePerQuestionSelect.value);
+                     if (timeLimit > 0) {
+                        const timeSpentNow = timeLimit - timeLeftForQuestion;
+                        quizState[currentQuestionIndex].timeTakenOnPause = (quizState[currentQuestionIndex].timeTakenOnPause || 0) + timeSpentNow;
+                     }
+                }
+                currentQuestionIndex--;
+                displayCurrentQuestion();
+            }
+        }
+
+        function handleNextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                if (!quizState[currentQuestionIndex].isAnswered) {
+                     clearInterval(questionTimerInterval);
+                     const timeLimit = parseInt(timePerQuestionSelect.value);
+                     if (timeLimit > 0) {
+                        const timeSpentNow = timeLimit - timeLeftForQuestion;
+                        quizState[currentQuestionIndex].timeTakenOnPause = (quizState[currentQuestionIndex].timeTakenOnPause || 0) + timeSpentNow;
+                     }
+                }
+                currentQuestionIndex++;
+                displayCurrentQuestion();
+            } else {
+                quizState.forEach((qState, idx) => {
+                    if (!qState.isAnswered) {
+                        const existingAnswer = userAnswers.find(ans => ans.questionIndex === idx);
+                        if(!existingAnswer) {
+                             userAnswers.push({
+                                questionIndex: idx,
+                                questionText: questions[idx].text,
+                                options: questions[idx].options,
+                                userAnswer: null, 
+                                userAnswerText: "N/A",
+                                correctAnswer: questions[idx].correctAnswerLetter,
+                                correctAnswerText: (questions[idx].options && questions[idx].options[questions[idx].correctAnswerLetter]) ? questions[idx].options[questions[idx].correctAnswerLetter] : "N/A",
+                                isCorrect: false,
+                                explanation: questions[idx].explanation,
+                                timeTaken: qState.timeTakenOnPause || 0, 
+                                eliminatedOptions: Array.from(qState.eliminatedOptions)
+                            });
+                        }
+                    }
+                });
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            clearInterval(questionTimerInterval); 
+            const quizEndTime = new Date();
+            const totalQuizDurationSec = userAnswers.length > 0 ? Math.round((quizEndTime - quizStartTime) / 1000) : 0;
+
+            const answeredQuestions = userAnswers.filter(ans => ans.userAnswer !== null); 
+            const correctCount = userAnswers.filter(ans => ans.isCorrect).length;
+            const totalAnsweredOrTimedOut = userAnswers.length; 
+
+            const accuracy = totalAnsweredOrTimedOut > 0 ? (correctCount / totalAnsweredOrTimedOut * 100).toFixed(1) : 0;
+            
+            let totalTimeSpentOnQuestions = 0;
+            userAnswers.forEach(ans => {
+                totalTimeSpentOnQuestions += ans.timeTaken || 0;
+            });
+            
+            const avgTimePerQuestion = totalAnsweredOrTimedOut > 0 ? (totalTimeSpentOnQuestions / totalAnsweredOrTimedOut).toFixed(1) : 0;
+
+            resultsTotalQuestions.textContent = questions.length; 
+            resultsCorrectAnswers.textContent = `${correctCount} (${accuracy}%)`;
+            resultsIncorrectAnswers.textContent = `${totalAnsweredOrTimedOut - correctCount} (${(totalAnsweredOrTimedOut > 0 ? (100 - parseFloat(accuracy)) : 0).toFixed(1)}%)`;
+            resultsAccuracy.textContent = `${accuracy}%`;
+            
+            const totalMinutes = Math.floor(totalQuizDurationSec / 60);
+            const totalSeconds = totalQuizDurationSec % 60;
+            resultsTotalTime.textContent = `${totalMinutes.toString().padStart(2, '0')}:${totalSeconds.toString().padStart(2, '0')}`;
+            resultsAvgTime.textContent = `${avgTimePerQuestion} seg`;
+
+            analyzePerformanceButton.classList.remove('hidden'); 
+            performanceAnalysisOutputContainer.classList.add('hidden'); 
+            performanceAnalysisOutputText.textContent = '';
+
+
+            showScreen('results');
+        }
+        
+        function showReviewModal() {
+            reviewQuestionsContainer.innerHTML = ''; 
+            if (userAnswers.length === 0 && questions.length > 0) { 
+                 reviewQuestionsContainer.innerHTML = '<p class="text-gray-400">Nenhuma resposta registrada para revisar.</p>';
+            } else if (questions.length === 0) {
+                 reviewQuestionsContainer.innerHTML = '<p class="text-gray-400">Nenhuma questão foi gerada para revisar.</p>';
+                 reviewModal.classList.remove('hidden');
+                 return;
+            }
+
+            const reviewData = questions.map((q, idx) => {
+                const userAnswerData = userAnswers.find(ua => ua.questionIndex === idx);
+                if (userAnswerData) return userAnswerData;
+                return {
+                    questionIndex: idx,
+                    questionText: q.text,
+                    options: q.options,
+                    userAnswer: null, 
+                    userAnswerText: "Não respondida",
+                    correctAnswer: q.correctAnswerLetter,
+                    correctAnswerText: (q.options && q.options[q.correctAnswerLetter]) ? q.options[q.correctAnswerLetter] : "N/A",
+                    isCorrect: false, 
+                    explanation: q.explanation,
+                    timeTaken: quizState[idx]?.timeTakenOnPause || 0, 
+                    eliminatedOptions: Array.from(quizState[idx]?.eliminatedOptions || [])
+                };
+            });
+
+            reviewData.forEach((answer, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'dark-card p-4 rounded-md';
+
+                let optionsHTML = '<ul class="list-none space-y-1 mt-2">';
+                ['A', 'B', 'C', 'D'].forEach(optKey => {
+                    if (answer.options && answer.options[optKey]) { 
+                        let optClass = 'text-gray-300';
+                        if (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey)) {
+                            optClass += ' line-through opacity-60';
+                        }
+                        if (optKey === answer.correctAnswer) optClass = 'text-green-400 font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
+                        
+                        if (optKey === answer.userAnswer) { 
+                            if(answer.isCorrect) {
+                                optClass = 'text-green-400 font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
+                            } else {
+                                 optClass = 'text-red-400 ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : 'font-semibold');
+                            }
+                        }
+                        optionsHTML += `<li class="${optClass}"><span class="font-bold">${optKey}.</span> ${answer.options[optKey]}</li>`;
+                    }
+                });
+                optionsHTML += '</ul>';
+                
+                let statusText = '';
+                if (answer.userAnswer === null) { 
+                    statusText = `<p class="text-sm text-yellow-400">Não respondida ou tempo esgotado.</p>`; 
+                } else if (answer.isCorrect) {
+                    statusText = `<p class="text-sm text-green-400">Sua resposta: ${answer.userAnswer} (Correta)</p>`;
+                } else {
+                    statusText = `<p class="text-sm text-red-400">Sua resposta: ${answer.userAnswer} (Incorreta)</p>`;
+                }
+
+                questionDiv.innerHTML = `
+                    <h4 class="text-md font-semibold text-yellow-300 mb-1">Questão ${index + 1}: ${answer.questionText}</h4>
+                    ${optionsHTML}
+                    ${statusText}
+                    <p class="text-sm text-gray-400 mt-1">Resposta Correta: ${answer.correctAnswer}. ${answer.correctAnswerText || 'N/A'}</p>
+                    <p class="text-sm text-gray-300 mt-1 italic">Explicação: ${answer.explanation || 'N/A'}</p>
+                    <p class="text-xs text-gray-500 mt-1">Tempo gasto: ${answer.timeTaken !== null ? answer.timeTaken + 's' : 'N/A'}</p>
+                `;
+                reviewQuestionsContainer.appendChild(questionDiv);
+            });
+            reviewModal.classList.remove('hidden');
+        }
+
+        // Initial setup
+        showScreen('setup');
+        resetQuizState(); 
+
+        // Dynamically load PDF.js if not available
+        if (typeof pdfjsLib === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            script.onload = () => {
+                console.log("PDF.js loaded dynamically.");
+                if (typeof pdfjsLib !== 'undefined') {
+                     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+                }
+            };
+            script.onerror = () => {
+                console.error("Failed to load PDF.js dynamically.");
+                errorMessage.textContent = "Falha ao carregar a biblioteca PDF.js. A extração de PDF não funcionará.";
+            };
+            document.head.appendChild(script);
+        } else {
+             if (typeof pdfjsLib !== 'undefined' && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+        }
+    </script>
+</body>
+</html>
