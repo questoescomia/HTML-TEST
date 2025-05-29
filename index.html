@@ -17,38 +17,41 @@
             background-color: #E5E7EB; /* Gray 200 - Fundo da página claro */
             color: #1F2937; /* Gray 800 - Texto padrão escuro */
         }
-        /* Card principal (setup, quiz, results) */
+        /* Card principal (setup, quiz, results) - agora se expande */
         .content-card { 
-            background-color: #FFFFFF; /* Branco */
-            color: #1F2937; /* Gray 800 - Texto dentro do card */
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+            background-color: #FFFFFF; 
+            color: #1F2937; 
+            width: 100%; /* Ocupa toda a largura */
+            min-height: 100vh; /* Ocupa toda a altura da viewport */
+            display: flex;
+            flex-direction: column;
+            /* padding é adicionado diretamente aos elementos para controle */
         }
-        /* Cards menores dentro dos cards principais (feedback, stats, etc.) */
         .inner-card { 
-            background-color: #F9FAFB; /* Gray 50 - Um pouco off-white */
-            border: 1px solid #E5E7EB; /* Gray 200 */
-            color: #374151; /* Gray 700 */
+            background-color: #F9FAFB; 
+            border: 1px solid #E5E7EB; 
+            color: #374151; 
         }
         
         .input-field, .select-field { 
             background-color: #FFFFFF; 
-            border-color: #D1D5DB; /* Gray 300 */
-            color: #111827; /* Gray 900 */
+            border-color: #D1D5DB; 
+            color: #111827; 
         }
         .input-field:focus, .select-field:focus { 
-            border-color: #10B981; /* Green 500 - Foco verde */
+            border-color: #10B981; 
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5); 
         }
         
         .btn-green { background-color: #10B981; color: white; }
-        .btn-green:hover { background-color: #059669; }
+        .btn-green:hover:not(:disabled) { background-color: #059669; }
+        .btn-green:disabled { background-color: #6EE7B7; cursor: not-allowed; }
         
         .btn-yellow { background-color: #FBBF24; color: #111827; }
         .btn-yellow:hover { background-color: #F59E0B; }
 
-        .btn-gray { background-color: #6B7280; color: white; } /* Gray 500 */
-        .btn-gray:hover { background-color: #4B5563; } /* Gray 600 */
+        .btn-gray { background-color: #6B7280; color: white; } 
+        .btn-gray:hover { background-color: #4B5563; } 
 
         .btn-red { background-color: #EF4444; color: white;}
         .btn-red:hover { background-color: #DC2626; }
@@ -58,58 +61,67 @@
 
         .mode-selector button {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #D1D5DB; /* Gray 300 */
-            background-color: #F9FAFB; /* Gray 50 */
-            color: #374151; /* Gray 700 */
+            border: 2px solid #D1D5DB; 
+            background-color: #F9FAFB; 
+            color: #374151; 
         }
         .mode-selector button.active {
             border-color: #10B981; 
-            background-color: #D1FAE5; /* Green 100 */
-            color: #065F46; /* Green 700 */
+            background-color: #D1FAE5; 
+            color: #065F46; 
         }
         .mode-description {
             font-size: 0.75rem; 
-            color: #6B7280; /* Gray 500 */
+            color: #6B7280; 
             margin-top: 0.25rem; 
             min-height: 2.25rem; 
         }
+
+        .question-block-vertical { 
+            border: 1px solid #E5E7EB; 
+            padding: 1rem; 
+            border-radius: 0.5rem; 
+            margin-bottom: 1.5rem; 
+            background-color: #F9FAFB; 
+        }
+
 
         .option-button-container { display: flex; align-items: center; gap: 0.5rem; }
         .option-button {
             transition: all 0.2s ease-in-out;
             flex-grow: 1;
             background-color: #FFFFFF; 
-            border: 1px solid #D1D5DB; /* Gray 300 */
-            color: #1F2937; /* Gray 800 */
+            border: 1px solid #D1D5DB; 
+            color: #1F2937; 
         }
         .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
-             background-color: #F3F4F6; /* Gray 100 */
+             background-color: #F3F4F6; 
         }
         .option-button.selected-temporary { 
-            background-color: #60A5FA; /* Blue 400 */ 
-            border-color: #3B82F6; /* Blue 500 */
+            background-color: #60A5FA; 
+            border-color: #3B82F6; 
             color: white;
         }
         .option-button.selected { 
             background-color: #FBBF24; 
             color: #111827; 
-            border-color: #F59E0B; /* Amber 500 */
+            border-color: #F59E0B; 
         }
         .option-button.correct {
             background-color: #10B981; 
             color: white;
-            border-color: #059669; /* Green 600 */
+            border-color: #059669; 
         }
         .option-button.incorrect {
             background-color: #EF4444; 
             color: white;
-            border-color: #DC2626; /* Red 600 */
+            border-color: #DC2626; 
         }
         .option-button.eliminated {
             text-decoration: line-through;
             opacity: 0.6;
-            background-color: #E5E7EB !important; /* Gray 200 */
-            color: #6B7280 !important; /* Gray 500 */
+            background-color: #E5E7EB !important; 
+            color: #6B7280 !important; 
             border-color: #D1D5DB !important;
         }
         .eliminate-icon {
@@ -121,31 +133,31 @@
         }
         .eliminate-icon:hover {
             color: #10B981; 
-            background-color: #F3F4F6; /* Gray 100 */
+            background-color: #F3F4F6; 
         }
         .eliminate-icon.eliminated-active {
             color: #EF4444; 
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #E5E7EB; /* Body gray */ }
-        ::-webkit-scrollbar-thumb { background: #D1D5DB; /* Lighter gray */ border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; /* Medium gray */ }
+        ::-webkit-scrollbar-track { background: #E5E7EB;  }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB;  border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF;  }
         
         .loader, .small-loader {
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        .loader { /* Main loader */
-            border: 4px solid rgba(16, 185, 129, 0.2); /* Lighter green for track */
-            border-top: 4px solid #10B981; /* Green 500 */
+        .loader { 
+            border: 4px solid rgba(16, 185, 129, 0.2); 
+            border-top: 4px solid #10B981; 
             width: 40px;
             height: 40px;
             margin: 20px auto;
         }
-        .small-loader { /* Small inline loaders */
-            border: 2px solid rgba(16, 185, 129, 0.2); /* Lighter green for track */
-            border-top: 2px solid #10B981; /* Green 500 */
+        .small-loader { 
+            border: 2px solid rgba(16, 185, 129, 0.2); 
+            border-top: 2px solid #10B981; 
             width: 16px;
             height: 16px;
             display: inline-block;
@@ -156,52 +168,58 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        html, body { height: 100%; }
-        .min-h-screen-custom { min-height: 100vh; }
+        html, body { height: 100%; margin: 0; padding: 0; } /* Ensure no default margin/padding */
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* This will center the content-card if it's not w-full */
+            /* justify-content: center; */ /* Remove if content-card takes full height */
+            width: 100%;
+            min-height: 100vh;
+        }
 
-        /* Specific text color adjustments for readability */
-        .header-title { color: #10B981; /* Green 500 - ALTERADO */ }
-        .header-subtitle { color: #4B5563; /* Gray 600 */ }
-        .label-text { color: #374151; /* Gray 700 */ }
-        .file-name-text { color: #4B5563; /* Gray 600 */ }
-        .loading-text { color: #059669; /* Green 600 */ }
-        .warning-text { color: #D97706; /* Amber 600 */ }
-        .error-text { color: #DC2626; /* Red 600 */ }
-        .quiz-title-text { color: #1F2937; /* Gray 800 */ }
-        .timer-text { color: #D97706; /* Amber 600 */ }
-        .question-text-color { color: #111827; /* Gray 900 */ }
-        /* .hint-output-text-color { color: #CA8A04; } */ /* Hint feature removed */
-        .feedback-title-color-correct { color: #059669; /* Green 600 */ }
-        .feedback-title-color-incorrect { color: #DC2626; /* Red 600 */ }
-        .feedback-title-color-info { color: #4B5563; /* Gray 600 */ }
-        .feedback-text-color { color: #374151; /* Gray 700 */ }
-        .feedback-explanation-color { color: #4B5563; /* Gray 600 */ }
-        .deeper-explanation-output-color { color: #374151; /* Gray 700 */ }
-        .results-title-text { color: #1F2937; /* Gray 800 */ }
-        .results-label-text { color: #4B5563; /* Gray 600 */ }
-        .results-value-text { color: #111827; /* Gray 900 */ }
-        .results-value-correct-text { color: #059669; /* Green 600 */ }
-        .results-value-incorrect-text { color: #DC2626; /* Red 600 */ }
-        .modal-title-text { color: #1F2937; /* Gray 800 */ }
-        .modal-close-button-text { color: #6B7280; /* Gray 500 */ }
-        .modal-close-button-text:hover { color: #111827; /* Gray 900 */ }
-        .review-question-title-text { color: #1F2937; /* Gray 800 */ }
-        .review-option-default-text { color: #374151; /* Gray 700 */ }
-        .review-option-correct-text { color: #059669; /* Green 600 */ }
-        .review-option-incorrect-text { color: #DC2626; /* Red 600 */ }
-        .review-status-info-text { color: #4B5563; /* Gray 600 */ }
-        .review-status-correct-text { color: #059669; /* Green 600 */ }
-        .review-status-incorrect-text { color: #DC2626; /* Red 600 */ }
-        .review-explanation-text { color: #4B5563; /* Gray 600 */ }
-        .review-time-text { color: #6B7280; /* Gray 500 */ }
+
+        .header-title { color: #10B981; }
+        .header-subtitle { color: #4B5563; }
+        .label-text { color: #374151; }
+        .file-name-text { color: #4B5563; }
+        .loading-text { color: #059669; }
+        .warning-text { color: #D97706; }
+        .error-text { color: #DC2626; }
+        .quiz-title-text { color: #1F2937; }
+        .timer-text { color: #D97706; }
+        .question-text-color { color: #111827; }
+        .feedback-title-color-correct { color: #059669; }
+        .feedback-title-color-incorrect { color: #DC2626; }
+        .feedback-title-color-info { color: #4B5563; }
+        .feedback-text-color { color: #374151; }
+        .feedback-explanation-color { color: #4B5563; }
+        .deeper-explanation-output-color { color: #374151; }
+        .results-title-text { color: #1F2937; }
+        .results-label-text { color: #4B5563; }
+        .results-value-text { color: #111827; }
+        .results-value-correct-text { color: #059669; }
+        .results-value-incorrect-text { color: #DC2626; }
+        .modal-title-text { color: #1F2937; }
+        .modal-close-button-text { color: #6B7280; }
+        .modal-close-button-text:hover { color: #111827; }
+        .review-question-title-text { color: #1F2937; }
+        .review-option-default-text { color: #374151; }
+        .review-option-correct-text { color: #059669; }
+        .review-option-incorrect-text { color: #DC2626; }
+        .review-status-info-text { color: #4B5563; }
+        .review-status-correct-text { color: #059669; }
+        .review-status-incorrect-text { color: #DC2626; }
+        .review-explanation-text { color: #4B5563; }
+        .review-time-text { color: #6B7280; }
 
     </style>
 </head>
 <body> 
 
-    <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
+    <div id="app">
 
-        <div id="setupScreen" class="w-full max-w-3xl content-card p-6 md:p-8">
+        <div id="setupScreen" class="content-card p-6 md:p-8">
             <header class="mb-6 text-center">
                 <h1 class="text-4xl font-bold header-title">MedQUEST</h1> 
                 <p class="mt-2 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> 
@@ -231,7 +249,7 @@
                     <span id="fileName" class="input-field px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6"> 
                 <div>
                     <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
                     <select id="numQuestions" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
@@ -274,43 +292,31 @@
                  <i class="fas fa-info-circle mr-1"></i>Nota: A IA pode cometer erros. Verifique informações críticas.
             </div>
             <div id="generationWarning" class="text-xs mt-2 text-center warning-text hidden">
-                <i class="fas fa-exclamation-triangle mr-1"></i>A geração/extração de questões pode demorar até 30 segundos. Se já enviou o PDF e clicou em gerar/extrair, fique tranquilo, logo ficará pronto.
+                <i class="fas fa-exclamation-triangle mr-1"></i>A geração/extração de questões pode demorar. Se já enviou o PDF e clicou em gerar/extrair, fique tranquilo, logo ficará pronto.
             </div>
             <p id="errorMessage" class="error-text text-center mt-4"></p>
         </div>
 
-        <div id="quizScreen" class="hidden w-full max-w-3xl content-card p-6 md:p-8">
+        <div id="quizScreen" class="hidden w-full content-card p-6 md:p-8">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold quiz-title-text">Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestionNumber"></span></h2> 
-                <div id="questionTimerDisplay" class="text-xl font-bold timer-text"></div> 
+                <h2 class="text-2xl font-semibold quiz-title-text" id="quizScreenTitle">Página X de Y (Questões X-Y)</h2> 
+                <div id="questionTimerDisplay" class="text-xl font-bold timer-text">Múltiplas Questões</div> 
             </div>
-            <div id="questionContainer" class="mb-6">
-                <p id="questionText" class="text-lg leading-relaxed mb-6 question-text-color"></p>
-                <div id="optionsContainer" class="space-y-3"></div>
+            
+            <div id="questionsDisplayArea" class="mb-6 flex-grow overflow-y-auto"> 
                 </div>
-            <button id="confirmAnswerButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md mb-4 transition duration-150 hidden">
-                <i class="fas fa-check-circle mr-2"></i>Responder
-            </button>
-            <div id="feedbackContainer" class="hidden inner-card p-4 rounded-md mb-4"> 
-                <h3 id="feedbackTitle" class="text-lg font-semibold mb-2"></h3> <p id="feedbackText" class="text-sm mb-2 feedback-text-color"></p>
-                <p id="feedbackExplanation" class="text-sm italic feedback-explanation-color"></p>
-                <button id="deeperExplanationButton" class="mt-3 text-sm btn-yellow py-1 px-3 rounded-md shadow-sm flex items-center">
-                    <i class="fas fa-search-plus mr-2"></i>Explicação Profunda
-                    <div id="deeperExplanationLoader" class="small-loader hidden"></div>
+            
+            <div class="flex justify-between items-center mt-6">
+                <button id="prevQuestionButton" class="btn-gray text-white font-semibold py-3 px-4 sm:px-6 rounded-md shadow-md transition duration-150">
+                    <i class="fas fa-arrow-left mr-2"></i><span id="prevButtonText">Página Anterior</span>
                 </button>
-                <div id="deeperExplanationOutput" class="mt-2 text-sm deeper-explanation-output-color whitespace-pre-wrap"></div>
-            </div>
-            <div class="flex justify-between mt-6">
-                <button id="prevQuestionButton" class="btn-gray text-white font-semibold py-3 px-6 rounded-md shadow-md transition duration-150">
-                    <i class="fas fa-arrow-left mr-2"></i>Anterior
-                </button>
-                <button id="nextQuestionButton" class="btn-yellow text-gray-900 font-semibold py-3 px-6 rounded-md shadow-md transition duration-150"> 
-                    Próxima Questão <i class="fas fa-arrow-right ml-2"></i>
+                <button id="nextQuestionButton" class="btn-yellow text-gray-900 font-semibold py-3 px-4 sm:px-6 rounded-md shadow-md transition duration-150"> 
+                    <span id="nextButtonText">Próxima Página</span> <i class="fas fa-arrow-right ml-2"></i>
                 </button>
             </div>
         </div>
 
-        <div id="resultsScreen" class="hidden w-full max-w-3xl content-card p-6 md:p-8 text-center">
+        <div id="resultsScreen" class="hidden w-full content-card p-6 md:p-8 text-center">
             <h2 class="text-3xl font-bold results-title-text mb-6">Resultado do Simulado</h2> 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <div class="inner-card p-4 rounded-md"> 
@@ -384,12 +390,13 @@
         const startQuizButtonText = document.getElementById('startQuizButtonText'); 
         const loadingIndicatorText = document.getElementById('loadingIndicatorText'); 
         const generalProcessWarning = document.getElementById('generalProcessWarning'); 
+        const questionsDisplayArea = document.getElementById('questionsDisplayArea');
+        const quizScreenTitle = document.getElementById('quizScreenTitle');
 
 
         const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('fileName');
-        // Summarize elements are removed from JS as well
-
+        
         const numQuestionsSelect = document.getElementById('numQuestions');
         const difficultySelect = document.getElementById('difficulty');
         const timePerQuestionSelect = document.getElementById('timePerQuestion');
@@ -398,23 +405,13 @@
         const errorMessage = document.getElementById('errorMessage');
         const generationWarning = document.getElementById('generationWarning'); 
 
-        const currentQuestionNumberDisplay = document.getElementById('currentQuestionNumber');
-        const totalQuestionNumberDisplay = document.getElementById('totalQuestionNumber');
         const questionTimerDisplay = document.getElementById('questionTimerDisplay');
-        const questionTextDisplay = document.getElementById('questionText');
-        const optionsContainer = document.getElementById('optionsContainer');
-        // Hint elements removed
-        const confirmAnswerButton = document.getElementById('confirmAnswerButton'); 
-        const feedbackContainer = document.getElementById('feedbackContainer');
-        const feedbackTitle = document.getElementById('feedbackTitle');
-        const feedbackText = document.getElementById('feedbackText');
-        const feedbackExplanation = document.getElementById('feedbackExplanation');
-        const deeperExplanationButton = document.getElementById('deeperExplanationButton'); 
-        const deeperExplanationLoader = document.getElementById('deeperExplanationLoader'); 
-        const deeperExplanationOutput = document.getElementById('deeperExplanationOutput'); 
+        
         const prevQuestionButton = document.getElementById('prevQuestionButton'); 
         const nextQuestionButton = document.getElementById('nextQuestionButton');
-
+        const prevButtonText = document.getElementById('prevButtonText'); 
+        const nextButtonText = document.getElementById('nextButtonText'); 
+        
         const resultsTotalQuestions = document.getElementById('resultsTotalQuestions');
         const resultsCorrectAnswers = document.getElementById('resultsCorrectAnswers');
         const resultsIncorrectAnswers = document.getElementById('resultsIncorrectAnswers');
@@ -432,21 +429,25 @@
 
         // App State
         let questions = [];
-        let currentQuestionIndex = 0;
         let userAnswers = []; 
-        let questionTimerInterval;
-        let timeLeftForQuestion;
+        let activeQuestionTimerInterval = null; 
+        let activeQuestionTimeLeft = 0;
         let quizStartTime;
-        let questionStartTime;
+        let activeQuestionStartTime; 
         let extractedPdfText = ""; 
         let quizState = []; 
         let temporarilySelectedOption = null; 
         let currentQuizMode = 'generate'; 
+        const currentLayoutMode = 'vertical'; // Fixed to vertical
+        const QUESTIONS_PER_VERTICAL_PAGE = 10;
+        let currentVerticalPage = 0;
+        const MAX_PDF_TEXT_LENGTH = 35000; 
 
 
         // Event Listeners
         modeGenerateButton.addEventListener('click', () => setQuizMode('generate'));
         modeExtractButton.addEventListener('click', () => setQuizMode('extract'));
+        // Removed layout button listeners
 
 
         fileInput.addEventListener('change', async () => {
@@ -507,15 +508,13 @@
             }
         });
 
-        deeperExplanationButton.addEventListener('click', handleDeeperExplanation); 
-        confirmAnswerButton.addEventListener('click', handleConfirmAnswer); 
-        // Removed hintButton event listener
         analyzePerformanceButton.addEventListener('click', handleAnalyzePerformance); 
 
 
         startQuizButton.addEventListener('click', generateOrExtractAndStartQuiz); 
-        prevQuestionButton.addEventListener('click', handlePrevQuestion); 
-        nextQuestionButton.addEventListener('click', handleNextQuestion);
+        prevQuestionButton.addEventListener('click', handlePrevNavigation); 
+        nextQuestionButton.addEventListener('click', handleNextNavigation);
+        
         newQuizButton.addEventListener('click', () => {
             showScreen('setup');
             resetQuizState();
@@ -524,6 +523,7 @@
         closeReviewModalButton.addEventListener('click', () => reviewModal.classList.add('hidden'));
 
         // Functions
+        // Removed setLayoutMode function
 
         function setQuizMode(mode) {
             currentQuizMode = mode;
@@ -573,6 +573,7 @@
             if (screenName === 'setup') {
                 setupScreen.classList.remove('hidden');
                 setQuizMode(currentQuizMode); 
+                // setLayoutMode no longer needed
             }
             else if (screenName === 'quiz') quizScreen.classList.remove('hidden');
             else if (screenName === 'results') resultsScreen.classList.remove('hidden');
@@ -580,13 +581,13 @@
 
         function resetQuizState() {
             questions = [];
-            currentQuestionIndex = 0;
+            currentVerticalPage = 0;
             userAnswers = [];
             quizState = []; 
-            clearInterval(questionTimerInterval);
-            timeLeftForQuestion = 0;
+            clearInterval(activeQuestionTimerInterval);
+            activeQuestionTimeLeft = 0;
             quizStartTime = null;
-            questionStartTime = null;
+            activeQuestionStartTime = null;
             extractedPdfText = "";
             fileInput.value = ""; 
             fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
@@ -595,11 +596,11 @@
             errorMessage.classList.add('error-text'); 
             loadingIndicator.classList.add('hidden');
             generationWarning.classList.add('hidden');
-            // Hint elements are removed from reset as they are no longer global
             performanceAnalysisOutputContainer.classList.add('hidden');
             performanceAnalysisOutputText.textContent = '';
             startQuizButton.disabled = false;
             setQuizMode('generate'); 
+            // setLayoutMode no longer needed
         }
 
         async function callGeminiAPI(promptText, isJsonOutput = false, schema = null) {
@@ -641,7 +642,7 @@
                     try {
                         return JSON.parse(responseText);
                     } catch (e) {
-                        console.error("Error parsing JSON from Gemini API:", e, "\nResponse text:", responseText);
+                        console.error("Erro ao processar JSON da API Gemini. Texto da resposta:", responseText, e); 
                         throw new Error("Falha ao processar a resposta JSON da API Gemini.");
                     }
                 }
@@ -653,35 +654,60 @@
             }
         }
 
-        // Removed handleSummarizeText function
 
-        async function handleDeeperExplanation() {
-            const question = questions[currentQuestionIndex];
-            const currentQState = quizState[currentQuestionIndex];
+        async function handleDeeperExplanation(questionAbsoluteIndex) { 
+            const question = questions[questionAbsoluteIndex];
+            const qState = quizState[questionAbsoluteIndex];
 
-            if (!question || !currentQState.isAnswered) return;
+            if (!question || !qState.isAnswered) return;
 
-            deeperExplanationLoader.classList.remove('hidden');
-            deeperExplanationButton.disabled = true;
-            deeperExplanationOutput.textContent = '';
+            const deeperExplanationBtn = document.getElementById(`deeperExplanationButton_${questionAbsoluteIndex}`);
+            const deeperLoader = document.getElementById(`deeperExplanationLoader_${questionAbsoluteIndex}`);
+            const deeperOutput = document.getElementById(`deeperExplanationOutput_${questionAbsoluteIndex}`);
+            
+            if(deeperLoader) deeperLoader.classList.remove('hidden');
+            if(deeperExplanationBtn) deeperExplanationBtn.disabled = true;
+            if(deeperOutput) deeperOutput.textContent = '';
 
             try {
-                const userAnswerText = currentQState.selectedAnswerLetter ? question.options[currentQState.selectedAnswerLetter] : "Não respondeu / Tempo esgotado";
-                const prompt = `Dado o seguinte texto médico original (parcial ou completo): \n\n"${extractedPdfText.substring(0, 3000)}...\n\nA questão foi: "${question.text}"\nA opção selecionada pelo usuário foi: "${userAnswerText}" (Opção ${currentQState.selectedAnswerLetter || 'Nenhuma'}).\nA resposta correta é: "${question.options[question.correctAnswerLetter]}" (Opção ${question.correctAnswerLetter}).\nA explicação inicial fornecida foi: "${question.explanation}".\n\nPor favor, forneça uma explicação MAIS APROFUNDADA e detalhada sobre o porquê da resposta "${question.correctAnswerLetter}" ser a correta, e por que a opção do usuário (se houver) estava incorreta. Se possível, referencie partes do texto original ou explique princípios médicos subjacentes. Mantenha a linguagem clara e focada no aprendizado.`;
+                const userAnswerText = qState.selectedAnswerLetter ? question.options[qState.selectedAnswerLetter] : "Não respondeu / Tempo esgotado";
+                
+                let optionsText = "";
+                for(const key in question.options){
+                    if (question.options.hasOwnProperty(key)) {
+                        optionsText += `Opção ${key}: ${question.options[key]}\n`;
+                    }
+                }
+
+                const prompt = `Contexto:
+Texto Original do PDF (parcial): "${extractedPdfText.substring(0, 2500)}..."
+
+Questão: "${question.text}"
+Alternativas:
+${optionsText}
+Resposta Correta Fornecida: Opção "${question.correctAnswerLetter}" ("${question.options[question.correctAnswerLetter] || 'N/A'}")
+Explicação Inicial: "${question.explanation}"
+Resposta do Utilizador (se houver): Opção "${qState.selectedAnswerLetter || 'Nenhuma'}" ("${userAnswerText}")
+
+Tarefa:
+Forneça uma Explicação Profunda em texto simples, usando parágrafos claros e quebras de linha onde apropriado. Não use formatação Markdown (como asteriscos para listas ou negrito).
+A explicação deve:
+1. Reafirmar por que a opção "${question.correctAnswerLetter}" é a correta, detalhando com base no texto original (se aplicável e fornecido no contexto) ou princípios médicos.
+2. Para CADA UMA das outras alternativas (A, B, C, D, e E se aplicável) que NÃO seja a correta, explique especificamente por que ela é incorreta, relacionando com o texto original ou conhecimento médico. Seja claro e direto.
+3. Se o utilizador selecionou uma opção incorreta, explique também o possível erro no raciocínio do utilizador.
+Mantenha a linguagem clara, didática e focada no aprendizado.`;
                 
                 const deeperExplanation = await callGeminiAPI(prompt);
-                deeperExplanationOutput.textContent = deeperExplanation;
+                if(deeperOutput) deeperOutput.textContent = deeperExplanation;
 
             } catch (error) {
                 console.error("Erro ao buscar explicação aprofundada:", error);
-                deeperExplanationOutput.textContent = `Erro ao buscar explicação: ${error.message}`;
+                if(deeperOutput) deeperOutput.textContent = `Erro ao buscar explicação: ${error.message}`;
             } finally {
-                deeperExplanationLoader.classList.add('hidden');
-                deeperExplanationButton.disabled = false;
+                if(deeperLoader) deeperLoader.classList.add('hidden');
+                if(deeperExplanationBtn) deeperExplanationBtn.disabled = false;
             }
         }
-
-        // Removed handleGenerateHint function
 
         async function handleAnalyzePerformance() {
             if (userAnswers.length === 0) {
@@ -710,7 +736,7 @@
                     });
                 }
                 
-                const prompt = `Você é um conselheiro de estudos médicos experiente e encorajador. Um aluno acabou de fazer um quiz. Aqui está o resumo do desempenho dele: \n\n${performanceSummary}\n\nCom base nisso, forneça uma breve análise construtiva (2-3 parágrafos) sobre possíveis áreas para focar nos estudos (se houver erros) e algumas dicas gerais de estudo personalizadas para este desempenho. Se o aluno acertou tudo, ofereça palavras de encorajamento e sugestões para continuar progredindo. Seja positivo e motivador.`;
+                const prompt = `Você é um conselheiro de estudos médicos experiente e encorajador. Um aluno acabou de fazer um quiz. Aqui está o resumo do desempenho dele: \n\n${performanceSummary}\n\nCom base nisso, forneça uma breve análise construtiva (2-3 parágrafos) sobre possíveis áreas para focar nos estudos (se houver erros) e algumas dicas gerais de estudo personalizadas para este desempenho. Se o aluno acertou tudo, ofereça palavras de encorajamento e sugestões para continuar progredindo. Seja positivo e motivador. Use texto simples, sem formatação Markdown.`;
                 
                 const analysis = await callGeminiAPI(prompt);
                 performanceAnalysisOutputText.textContent = analysis;
@@ -728,16 +754,23 @@
 
 
         async function generateOrExtractAndStartQuiz() { 
-            const materialContent = extractedPdfText;
+            let materialToSend = extractedPdfText;
+            if (materialToSend.length > MAX_PDF_TEXT_LENGTH) {
+                materialToSend = extractedPdfText.substring(0, MAX_PDF_TEXT_LENGTH);
+                console.warn(`O texto do PDF foi truncado para ${MAX_PDF_TEXT_LENGTH} caracteres para evitar sobrecarga da API.`);
+                errorMessage.textContent = `Aviso: O PDF é muito longo e foi parcialmente processado para evitar erros. Tente um PDF menor para processamento completo. ${errorMessage.textContent}`;
+                errorMessage.classList.add('warning-text'); 
+                errorMessage.classList.remove('text-green-400', 'error-text');
+            }
 
-            if (!materialContent) {
+
+            if (!materialToSend) {
                 errorMessage.textContent = 'Por favor, escolha um arquivo PDF com conteúdo para gerar as questões.';
                 errorMessage.classList.add('error-text');
                 errorMessage.classList.remove('text-green-400');
                 generationWarning.classList.add('hidden');
                 return;
             }
-            errorMessage.textContent = '';
             loadingIndicator.classList.remove('hidden');
             generationWarning.classList.remove('hidden'); 
             startQuizButton.disabled = true;
@@ -754,20 +787,20 @@
                             items: {
                                 type: "OBJECT",
                                 properties: {
-                                    "pergunta": { "type": "STRING", description: "O texto da questão." },
+                                    "pergunta": { "type": "STRING" },
                                     "opcoes": {
                                         type: "OBJECT",
                                         properties: {
-                                            "A": { type: "STRING", description: "Texto da opção A." },
-                                            "B": { type: "STRING", description: "Texto da opção B." },
-                                            "C": { type: "STRING", description: "Texto da opção C." },
-                                            "D": { type: "STRING", description: "Texto da opção D." },
-                                            "E": { type: "STRING", description: "Texto da opção E (opcional)." } 
+                                            "A": { "type": "STRING" },
+                                            "B": { "type": "STRING" },
+                                            "C": { "type": "STRING" },
+                                            "D": { "type": "STRING" },
+                                            "E": { "type": "STRING", "description": "Opcional" } 
                                         },
                                         required: ["A", "B", "C", "D"] 
                                     },
-                                    "respostaCorreta": { type: "STRING", description: "A LETRA da opção correta (A, B, C, D ou E)." },
-                                    "explicacao": { "type": "STRING", description: "Explicação detalhada da resposta correta (opcional, pode ser null)." }
+                                    "respostaCorreta": { "type": "STRING", "nullable": true, "description": "A LETRA da opção correta ou null se desconhecida." },
+                                    "explicacao": { "type": "STRING", "nullable": true, "description": "Explicação ou null se não fornecida." }
                                 },
                                 required: ["pergunta", "opcoes", "respostaCorreta"] 
                             }
@@ -778,9 +811,18 @@
 
                 let prompt;
                 if (currentQuizMode === 'generate') {
-                    prompt = `Com base no seguinte texto médico extraído de um PDF, gere ${numQs} questões de múltipla escolha de dificuldade "${difficulty}". O texto é: \n\n"${materialContent}"`;
+                    prompt = `Com base no seguinte texto médico extraído de um PDF (máximo de ${MAX_PDF_TEXT_LENGTH} caracteres processados): "${materialToSend}"\n\nGere ${numQs} questões de múltipla escolha de dificuldade "${difficulty}". Siga o schema JSON: ${JSON.stringify(questionSchema, null, 2)}. CRÍTICO: Assegure que todas as strings dentro do JSON (pergunta, opções, explicação) tenham caracteres especiais (como ", \\, e novas linhas) devidamente escapados para produzir um JSON válido.`;
                 } else { 
-                    prompt = `Você é um especialista em analisar e estruturar documentos. O texto a seguir foi extraído de um PDF que contém uma lista de questões de múltipla escolha prontas, com suas alternativas e, possivelmente, a indicação da resposta correta e uma explicação. Sua tarefa é identificar cada questão individual, suas alternativas (A, B, C, D, E, etc.), a LETRA da alternativa que é a correta, e qualquer explicação/gabarito comentado associado à questão. Se a resposta correta ou a explicação não estiverem explicitamente claras para uma questão, retorne 'null' para 'respostaCorreta' e/ou 'explicacao' para essa questão específica, mas tente ao máximo inferir a resposta correta se houver alguma indicação (ex: asterisco, negrito, ou uma seção de gabarito no texto). Formate cada questão como um objeto JSON. Retorne uma lista (array) destes objetos JSON. \n\nTexto do PDF:\n${materialContent}`;
+                    prompt = `Analise o texto do PDF (máximo de ${MAX_PDF_TEXT_LENGTH} caracteres processados): "${materialToSend}". Identifique questões de múltipla escolha. Para cada questão, extraia:
+1. O texto da pergunta.
+2. As alternativas (A, B, C, D, e E se houver).
+3. A LETRA da alternativa correta. Se não for clara, use o valor JSON null para 'respostaCorreta'.
+4. A explicação da resposta. Se não houver, use o valor JSON null para 'explicacao'.
+
+Formate a saída como um único objeto JSON seguindo este schema:
+${JSON.stringify(questionSchema, null, 2)}
+
+IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, explicação) tenham caracteres especiais (como ", \\, e novas linhas) devidamente escapados para produzir um JSON válido.`;
                 }
                 
                 const generatedData = await callGeminiAPI(prompt, true, questionSchema);
@@ -801,12 +843,11 @@
                      throw new Error("Nenhuma questão utilizável foi encontrada/gerada.");
                 }
                 
-                if (currentQuizMode === 'extract' && numQs === 0) {
-                } else if (numQs > 0) {
-                    if (questions.length < numQs) {
-                        console.warn(`A API ${currentQuizMode === 'generate' ? 'gerou' : 'extraiu'} ${questions.length} questões, menos que as ${numQs} solicitadas.`);
-                    }
+                if (currentQuizMode === 'extract' && numQs === 0) { 
+                } else if (numQs > 0 && questions.length > numQs) { 
                     questions = questions.slice(0, numQs); 
+                } else if (questions.length < numQs && numQs !== 0) { 
+                     console.warn(`A API ${currentQuizMode === 'generate' ? 'gerou' : 'extraiu'} ${questions.length} questões, menos que as ${numQs} solicitadas.`);
                 }
 
 
@@ -819,8 +860,9 @@
                 }));
 
                 quizStartTime = new Date();
+                currentVerticalPage = 0;  
                 showScreen('quiz'); 
-                displayCurrentQuestion();
+                displayCurrentPageOrQuestion();
 
             } catch (error) {
                 console.error(`Erro ao ${currentQuizMode === 'generate' ? 'gerar' : 'extrair'} questões:`, error);
@@ -834,37 +876,44 @@
             }
         }
         
-        function displayCurrentQuestion() {
-            if (currentQuestionIndex < 0 || currentQuestionIndex >= questions.length) {
-                console.error("Invalid currentQuestionIndex:", currentQuestionIndex);
-                return;
-            }
+        function displayCurrentPageOrQuestion() {
+            questionsDisplayArea.innerHTML = ''; 
+            temporarilySelectedOption = null;
 
-            const question = questions[currentQuestionIndex];
-            const currentQState = quizState[currentQuestionIndex];
-            temporarilySelectedOption = null; 
-
-            questionTextDisplay.textContent = question.text;
-            currentQuestionNumberDisplay.textContent = currentQuestionIndex + 1;
-            totalQuestionNumberDisplay.textContent = questions.length;
-
-            optionsContainer.innerHTML = '';
-            feedbackContainer.classList.add('hidden'); 
-            confirmAnswerButton.classList.add('hidden'); 
-            confirmAnswerButton.disabled = true;
-            deeperExplanationOutput.textContent = ''; 
-            deeperExplanationButton.classList.add('hidden'); 
-            // Hint elements removed
+            const startIndex = currentVerticalPage * QUESTIONS_PER_VERTICAL_PAGE;
+            const endIndex = Math.min(startIndex + QUESTIONS_PER_VERTICAL_PAGE, questions.length);
+            quizScreenTitle.innerHTML = `Página ${currentVerticalPage + 1} de ${Math.ceil(questions.length / QUESTIONS_PER_VERTICAL_PAGE)} (Questões ${startIndex + 1}-${endIndex})`;
             
-            prevQuestionButton.disabled = currentQuestionIndex === 0;
-            nextQuestionButton.innerHTML = currentQuestionIndex === questions.length - 1 ? 'Ver Resultado <i class="fas fa-poll-h ml-2"></i>' : 'Próxima Questão <i class="fas fa-arrow-right ml-2"></i>';
-            
-            if (currentQState.isAnswered) {
-                nextQuestionButton.disabled = false;
-            } else {
-                nextQuestionButton.disabled = true;
-            }
+            for (let i = startIndex; i < endIndex; i++) {
+                const questionBlockWrapper = document.createElement('div');
+                questionBlockWrapper.className = 'question-block-vertical';
+                const qHeader = document.createElement('h3');
+                qHeader.className = 'text-md font-semibold quiz-title-text mb-2';
+                qHeader.textContent = `Questão ${i + 1}`; 
+                questionBlockWrapper.appendChild(qHeader);
 
+                renderQuestionBlock(i, questionBlockWrapper); 
+                questionsDisplayArea.appendChild(questionBlockWrapper);
+            }
+            questionTimerDisplay.textContent = 'Múltiplas Questões'; 
+            updateNavigationButtons();
+        }
+
+        function renderQuestionBlock(questionAbsoluteIndex, parentContainer) { 
+            const question = questions[questionAbsoluteIndex];
+            const currentQState = quizState[questionAbsoluteIndex];
+
+            const questionDiv = document.createElement('div');
+            questionDiv.id = `question_block_${questionAbsoluteIndex}`; 
+
+            const questionTextEl = document.createElement('p');
+            questionTextEl.className = 'text-lg leading-relaxed mb-6 question-text-color';
+            questionTextEl.textContent = question.text;
+            questionDiv.appendChild(questionTextEl);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'space-y-3';
+            questionDiv.appendChild(optionsDiv);
 
             ['A', 'B', 'C', 'D', 'E'].forEach(key => { 
                 if (question.options && question.options[key]) { 
@@ -876,20 +925,28 @@
                     eliminateBtn.innerHTML = '<i class="fas fa-cut"></i>'; 
                     eliminateBtn.title = 'Eliminar esta alternativa';
                     eliminateBtn.dataset.option = key;
+                    eliminateBtn.onclick = (e) => {
+                        e.stopPropagation(); 
+                        toggleEliminateOption(key, button, eliminateBtn, questionAbsoluteIndex);
+                    };
 
                     const button = document.createElement('button');
-                    button.classList.add('dark-input', 'text-left', 'p-3', 'rounded-md', 'border', 'hover:bg-gray-100', 'option-button'); 
+                    button.classList.add('input-field', 'text-left', 'p-3', 'rounded-md', 'border', 'hover:bg-gray-100', 'option-button'); 
                     button.innerHTML = `<span class="font-bold mr-2">${key}.</span> ${question.options[key]}`;
                     button.dataset.option = key;
+                    button.onclick = () => selectOptionTemporarily(key, button, questionAbsoluteIndex);
                     
                     optionContainer.appendChild(eliminateBtn);
                     optionContainer.appendChild(button);
-                    optionsContainer.appendChild(optionContainer);
+                    optionsDiv.appendChild(optionContainer);
 
                     if (currentQState.eliminatedOptions.has(key)) {
                         button.classList.add('eliminated');
                         eliminateBtn.classList.add('eliminated-active');
                         button.disabled = true; 
+                    }
+                     if (temporarilySelectedOption && temporarilySelectedOption.qIndex === questionAbsoluteIndex && temporarilySelectedOption.option === key && !currentQState.isAnswered) {
+                        button.classList.add('selected-temporary');
                     }
                     
                     if (currentQState.isAnswered) { 
@@ -905,43 +962,75 @@
                         } else if (question.correctAnswerLetter && key === question.correctAnswerLetter) {
                              button.classList.add('correct'); 
                         }
-                    } else { 
-                        button.addEventListener('click', () => selectOptionTemporarily(key, button));
-                        eliminateBtn.addEventListener('click', (e) => {
-                            e.stopPropagation(); 
-                            toggleEliminateOption(key, button, eliminateBtn);
-                        });
                     }
                 }
             });
+            
+            if (!currentQState.isAnswered) {
+                const confirmBtnPerQuestion = document.createElement('button');
+                confirmBtnPerQuestion.id = `confirmAnswerButton_${questionAbsoluteIndex}`;
+                confirmBtnPerQuestion.className = 'w-full btn-green text-white font-semibold py-2 px-3 rounded-md shadow-md mt-4 transition duration-150';
+                confirmBtnPerQuestion.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Responder'; 
+                confirmBtnPerQuestion.disabled = true; 
+                confirmBtnPerQuestion.onclick = () => handleConfirmAnswerForBlock(questionAbsoluteIndex);
+                questionDiv.appendChild(confirmBtnPerQuestion);
+
+                if (temporarilySelectedOption && temporarilySelectedOption.qIndex === questionAbsoluteIndex) {
+                    confirmBtnPerQuestion.disabled = false;
+                }
+            }
+
+
+            const feedbackContEl = document.createElement('div');
+            feedbackContEl.id = `feedbackContainer_${questionAbsoluteIndex}`;
+            feedbackContEl.className = 'hidden inner-card p-4 rounded-md mt-4'; 
+            feedbackContEl.innerHTML = `
+                <h3 id="feedbackTitle_${questionAbsoluteIndex}" class="text-lg font-semibold mb-2"></h3>
+                <p id="feedbackText_${questionAbsoluteIndex}" class="text-sm mb-2 feedback-text-color"></p>
+                <p id="feedbackExplanation_${questionAbsoluteIndex}" class="text-sm italic feedback-explanation-color"></p>
+                <button id="deeperExplanationButton_${questionAbsoluteIndex}" class="mt-3 text-sm btn-yellow py-1 px-3 rounded-md shadow-sm flex items-center">
+                    <i class="fas fa-search-plus mr-2"></i>Explicação Profunda
+                    <div id="deeperExplanationLoader_${questionAbsoluteIndex}" class="small-loader hidden"></div>
+                </button>
+                <div id="deeperExplanationOutput_${questionAbsoluteIndex}" class="mt-2 text-sm deeper-explanation-output-color whitespace-pre-wrap"></div>
+            `;
+            questionDiv.appendChild(feedbackContEl);
+            feedbackContEl.querySelector(`#deeperExplanationButton_${questionAbsoluteIndex}`).onclick = () => handleDeeperExplanation(questionAbsoluteIndex);
+
 
             if (currentQState.isAnswered) {
-                const isActuallyCorrect = question.correctAnswerLetter ? (currentQState.selectedAnswerLetter === question.correctAnswerLetter) : null; 
-                showFeedback(isActuallyCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
-                nextQuestionButton.disabled = false; 
-            } else {
-                 questionStartTime = new Date(); 
-                 startQuestionTimer();
+                const isActuallyCorrect = question.correctAnswerLetter ? (currentQState.selectedAnswerLetter === question.correctAnswerLetter) : null;
+                showFeedbackForQuestion(questionAbsoluteIndex, isActuallyCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
+            }
+            
+            parentContainer.appendChild(questionDiv);
+        }
+
+
+        function selectOptionTemporarily(optionKey, clickedButton, questionAbsoluteIndex) {
+            const qState = quizState[questionAbsoluteIndex];
+            if (qState.isAnswered) return;
+
+            const parentBlock = clickedButton.closest(`#question_block_${questionAbsoluteIndex}`);
+            if (parentBlock) {
+                parentBlock.querySelectorAll('.option-button.selected-temporary').forEach(btn => {
+                    btn.classList.remove('selected-temporary');
+                });
+            }
+            
+            clickedButton.classList.add('selected-temporary');
+            temporarilySelectedOption = { qIndex: questionAbsoluteIndex, option: optionKey, buttonRef: clickedButton };
+
+            const confirmBtnPerQ = document.getElementById(`confirmAnswerButton_${questionAbsoluteIndex}`);
+            if (confirmBtnPerQ) {
+                confirmBtnPerQ.classList.remove('hidden'); 
+                confirmBtnPerQ.disabled = false;
             }
         }
 
-        function selectOptionTemporarily(optionKey, clickedButton) {
-            if (quizState[currentQuestionIndex].isAnswered) return;
 
-            Array.from(optionsContainer.querySelectorAll('.option-button')).forEach(btn => {
-                btn.classList.remove('selected-temporary');
-            });
-
-            clickedButton.classList.add('selected-temporary');
-            temporarilySelectedOption = optionKey;
-
-            confirmAnswerButton.classList.remove('hidden');
-            confirmAnswerButton.disabled = false;
-        }
-
-
-        function toggleEliminateOption(optionKey, optionButtonElement, eliminateIconElement) {
-            const currentQState = quizState[currentQuestionIndex];
+        function toggleEliminateOption(optionKey, optionButtonElement, eliminateIconElement, questionAbsoluteIndex) {
+            const currentQState = quizState[questionAbsoluteIndex];
             if (currentQState.isAnswered) return; 
 
             if (currentQState.eliminatedOptions.has(optionKey)) {
@@ -954,129 +1043,117 @@
                 optionButtonElement.classList.add('eliminated');
                 eliminateIconElement.classList.add('eliminated-active');
                 optionButtonElement.disabled = true; 
-                if (temporarilySelectedOption === optionKey) { 
+                if (temporarilySelectedOption && temporarilySelectedOption.qIndex === questionAbsoluteIndex && temporarilySelectedOption.option === optionKey) { 
                     temporarilySelectedOption = null;
                     optionButtonElement.classList.remove('selected-temporary');
-                    confirmAnswerButton.disabled = true;
-                    confirmAnswerButton.classList.add('hidden');
+                    const confirmBtnPerQ = document.getElementById(`confirmAnswerButton_${questionAbsoluteIndex}`);
+                    if (confirmBtnPerQ) {
+                        confirmBtnPerQ.disabled = true;
+                    }
                 }
             }
         }
 
 
-        function startQuestionTimer() {
-            clearInterval(questionTimerInterval);
-            const timeLimit = parseInt(timePerQuestionSelect.value);
-            if (timeLimit === 0 || quizState[currentQuestionIndex].isAnswered) { 
-                questionTimerDisplay.textContent = quizState[currentQuestionIndex].isAnswered ? 'Respondida' : 'Sem limite';
-                return;
-            }
-
-            let remainingTime = timeLimit - (quizState[currentQuestionIndex].timeTakenOnPause || 0);
-            timeLeftForQuestion = remainingTime > 0 ? remainingTime : 0;
-
-            updateTimerDisplay();
-
-            if (timeLeftForQuestion <= 0 && !quizState[currentQuestionIndex].isAnswered) {
-                 handleTimeout(); 
-                 return;
-            }
-
-
-            questionTimerInterval = setInterval(() => {
-                timeLeftForQuestion--;
-                updateTimerDisplay();
-                if (timeLeftForQuestion <= 0) {
-                    clearInterval(questionTimerInterval);
-                    handleTimeout();
-                }
-            }, 1000);
+        function startQuestionTimer(qIndexForTimer) { 
+            questionTimerDisplay.textContent = 'Múltiplas Questões';
         }
 
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeLeftForQuestion / 60);
-            const seconds = timeLeftForQuestion % 60;
-            questionTimerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        function updateActiveTimerDisplay() { 
+            // Not used in vertical-only mode for individual question timer display
         }
         
-        function handleTimeout() {
-            if (quizState[currentQuestionIndex].isAnswered) return; 
+        function handleTimeout(questionAbsoluteIndex) { 
+            if (quizState[questionAbsoluteIndex].isAnswered) return; 
 
-            const question = questions[currentQuestionIndex];
-            quizState[currentQuestionIndex].isAnswered = true;
-            quizState[currentQuestionIndex].selectedAnswerLetter = null; 
-            quizState[currentQuestionIndex].timeTaken = parseInt(timePerQuestionSelect.value); 
+            const question = questions[questionAbsoluteIndex];
+            quizState[questionAbsoluteIndex].isAnswered = true;
+            quizState[questionAbsoluteIndex].selectedAnswerLetter = null; 
+            quizState[questionAbsoluteIndex].timeTaken = parseInt(timePerQuestionSelect.value) || 0; 
 
-            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === currentQuestionIndex);
+            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === questionAbsoluteIndex);
             const answerData = {
-                questionIndex: currentQuestionIndex, questionText: question.text, options: question.options,
+                questionIndex: questionAbsoluteIndex, questionText: question.text, options: question.options,
                 userAnswer: null, userAnswerText: "Tempo Esgotado", correctAnswer: question.correctAnswerLetter,
                 correctAnswerText: (question.options && question.correctAnswerLetter && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
-                isCorrect: false, explanation: question.explanation, timeTaken: quizState[currentQuestionIndex].timeTaken,
-                eliminatedOptions: Array.from(quizState[currentQuestionIndex].eliminatedOptions)
+                isCorrect: false, explanation: question.explanation, timeTaken: quizState[questionAbsoluteIndex].timeTaken,
+                eliminatedOptions: Array.from(quizState[questionAbsoluteIndex].eliminatedOptions)
             };
             if (existingAnswerIndex > -1) userAnswers[existingAnswerIndex] = answerData;
             else userAnswers.push(answerData);
 
-
-            showFeedback(false, null, question.correctAnswerLetter, question.explanation, question.options);
+            showFeedbackForQuestion(questionAbsoluteIndex, false, null, question.correctAnswerLetter, question.explanation, question.options);
             
-            Array.from(optionsContainer.querySelectorAll('.option-button')).forEach(btn => btn.disabled = true);
-            Array.from(optionsContainer.querySelectorAll('.eliminate-icon')).forEach(icon => icon.style.display = 'none');
-            confirmAnswerButton.classList.add('hidden');
-            // hintButton.classList.add('hidden'); // Removed
-            nextQuestionButton.disabled = false;
+            const questionBlock = document.getElementById(`question_block_${questionAbsoluteIndex}`);
+            if (questionBlock) {
+                questionBlock.querySelectorAll('.option-button').forEach(btn => btn.disabled = true);
+                questionBlock.querySelectorAll('.eliminate-icon').forEach(icon => icon.style.display = 'none');
+                const confirmBtnPerQ = questionBlock.querySelector(`#confirmAnswerButton_${questionAbsoluteIndex}`);
+                if(confirmBtnPerQ) confirmBtnPerQ.classList.add('hidden');
+            }
+            
+            if (temporarilySelectedOption && temporarilySelectedOption.qIndex === questionAbsoluteIndex) {
+                temporarilySelectedOption = null;
+            }
+            updateNavigationButtons(); 
         }
 
-        function showFeedback(isCorrect, userAnswerLetter, correctAnswerLetter, explanation, optionsObj) {
-            feedbackContainer.classList.remove('hidden');
-            deeperExplanationButton.classList.remove('hidden'); 
-            deeperExplanationOutput.textContent = ''; 
+        function showFeedbackForQuestion(qIndex, isCorrect, userAnswerLetter, correctAnswerLetter, explanation, optionsObj) {
+            const fbContainer = document.getElementById(`feedbackContainer_${qIndex}`);
+            const fbTitle = document.getElementById(`feedbackTitle_${qIndex}`);
+            const fbText = document.getElementById(`feedbackText_${qIndex}`);
+            const fbExplanation = document.getElementById(`feedbackExplanation_${qIndex}`);
+            const deepExplainBtn = document.getElementById(`deeperExplanationButton_${qIndex}`);
+            const deepExplainOut = document.getElementById(`deeperExplanationOutput_${qIndex}`);
+
+            if (!fbContainer || !fbTitle || !fbText || !fbExplanation || !deepExplainBtn) return;
+
+            fbContainer.classList.remove('hidden');
+            deepExplainBtn.classList.remove('hidden'); 
+            if(deepExplainOut) deepExplainOut.textContent = ''; 
 
             const correctOptionText = (correctAnswerLetter && optionsObj[correctAnswerLetter]) ? optionsObj[correctAnswerLetter] : "desconhecida";
             const userAnswerOptionText = (userAnswerLetter && optionsObj[userAnswerLetter]) ? optionsObj[userAnswerLetter] : "nenhuma";
 
-
-            if (userAnswerLetter === null) { // Timeout
-                 feedbackTitle.textContent = 'Tempo Esgotado!';
-                 feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
-                 feedbackText.textContent = `A resposta correta era: ${correctAnswerLetter || 'N/A'}. ${correctOptionText}`;
-            } else if (isCorrect === null) { // Correct answer unknown from PDF
-                 feedbackTitle.textContent = 'Resposta Registada';
-                 feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
-                 feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. (Não foi possível verificar a correção automaticamente para esta questão).`;
+            if (userAnswerLetter === null) { 
+                 fbTitle.textContent = 'Tempo Esgotado!'; 
+                 fbTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
+                 fbText.textContent = `A resposta correta era: ${correctAnswerLetter || 'N/A'}. ${correctOptionText}`;
+            } else if (isCorrect === null) { 
+                 fbTitle.textContent = 'Resposta Registada';
+                 fbTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
+                 fbText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. (Não foi possível verificar a correção automaticamente para esta questão).`;
             } else if (isCorrect) {
-                feedbackTitle.textContent = 'Correto!';
-                feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-correct';
-                feedbackText.textContent = '';
+                fbTitle.textContent = 'Correto!';
+                fbTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-correct';
+                fbText.textContent = '';
             } else {
-                feedbackTitle.textContent = 'Incorreto!';
-                feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-incorrect';
-                feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. A correta era: ${correctAnswerLetter}. ${correctOptionText}`;
+                fbTitle.textContent = 'Incorreto!';
+                fbTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-incorrect';
+                fbText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. A correta era: ${correctAnswerLetter}. ${correctOptionText}`;
             }
-            feedbackExplanation.textContent = `Explicação: ${explanation || "Não fornecida."}`;
+            fbExplanation.textContent = `Explicação: ${explanation || "Não fornecida."}`;
         }
 
 
-        function handleConfirmAnswer() {
-            if (!temporarilySelectedOption || quizState[currentQuestionIndex].isAnswered) return;
-
-            clearInterval(questionTimerInterval); 
-            const question = questions[currentQuestionIndex];
-            const currentQState = quizState[currentQuestionIndex];
+        function handleConfirmAnswerForBlock(questionAbsoluteIndex) {
+            if (!temporarilySelectedOption || temporarilySelectedOption.qIndex !== questionAbsoluteIndex || quizState[questionAbsoluteIndex].isAnswered) {
+                return;
+            }
             
-            const questionEndTime = new Date();
-            const timeForThisAttempt = Math.round((questionEndTime - questionStartTime) / 1000);
-            currentQState.timeTaken = (currentQState.timeTakenOnPause || 0) + timeForThisAttempt;
-            currentQState.timeTakenOnPause = 0; 
-
-            currentQState.selectedAnswerLetter = temporarilySelectedOption;
+            const selectedOpt = temporarilySelectedOption.option;
+            const question = questions[questionAbsoluteIndex];
+            const currentQState = quizState[questionAbsoluteIndex];
+            
+            currentQState.timeTaken = (currentQState.timeTakenOnPause || 0); 
+            
+            currentQState.selectedAnswerLetter = selectedOpt;
             currentQState.isAnswered = true;
             const isCorrect = question.correctAnswerLetter ? (currentQState.selectedAnswerLetter === question.correctAnswerLetter) : null; 
 
-            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === currentQuestionIndex);
+            const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === questionAbsoluteIndex);
             const answerData = {
-                questionIndex: currentQuestionIndex,
+                questionIndex: questionAbsoluteIndex,
                 questionText: question.text,
                 options: question.options,
                 userAnswer: currentQState.selectedAnswerLetter,
@@ -1094,89 +1171,88 @@
                 userAnswers.push(answerData);
             }
 
-            Array.from(optionsContainer.querySelectorAll('.option-button-container')).forEach(container => {
-                const btn = container.querySelector('.option-button');
-                const elimIcon = container.querySelector('.eliminate-icon');
-                btn.disabled = true; 
-                btn.classList.remove('selected-temporary'); 
-                if(elimIcon) elimIcon.style.display = 'none'; 
+            const questionBlock = document.getElementById(`question_block_${questionAbsoluteIndex}`);
+            if (questionBlock) {
+                questionBlock.querySelectorAll('.option-button-container').forEach(container => {
+                    const btn = container.querySelector('.option-button');
+                    const elimIcon = container.querySelector('.eliminate-icon');
+                    btn.disabled = true; 
+                    btn.classList.remove('selected-temporary'); 
+                    if(elimIcon) elimIcon.style.display = 'none'; 
 
-                const optKey = btn.dataset.option;
-                if (optKey === currentQState.selectedAnswerLetter) { 
-                    btn.classList.add('selected'); 
-                    if (isCorrect === true) {
-                        btn.classList.add('correct');
-                    } else if (isCorrect === false) {
-                        btn.classList.add('incorrect');
+                    const optKey = btn.dataset.option;
+                    if (optKey === currentQState.selectedAnswerLetter) { 
+                        btn.classList.add('selected'); 
+                        if (isCorrect === true) {
+                            btn.classList.add('correct');
+                        } else if (isCorrect === false) {
+                            btn.classList.add('incorrect');
+                        }
+                    } else if (question.correctAnswerLetter && optKey === question.correctAnswerLetter) { 
+                        btn.classList.add('correct'); 
                     }
-                } else if (question.correctAnswerLetter && optKey === question.correctAnswerLetter) { 
-                    btn.classList.add('correct'); 
-                }
-            });
+                });
+                const confirmBtnPerQ = questionBlock.querySelector(`#confirmAnswerButton_${questionAbsoluteIndex}`);
+                if (confirmBtnPerQ) confirmBtnPerQ.classList.add('hidden');
+            }
+            
+            showFeedbackForQuestion(questionAbsoluteIndex, isCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
+            
+            temporarilySelectedOption = null; 
+            updateNavigationButtons(); 
+        }
 
-            showFeedback(isCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
-            confirmAnswerButton.classList.add('hidden');
-            // hintButton.classList.add('hidden'); // Removed
-            nextQuestionButton.disabled = false;
+        function updateNavigationButtons() {
+            const prevBtnTextEl = document.getElementById('prevButtonText');
+            const nextBtnTextEl = document.getElementById('nextButtonText');
+
+            const totalPages = Math.ceil(questions.length / QUESTIONS_PER_VERTICAL_PAGE);
+            prevQuestionButton.disabled = currentVerticalPage === 0;
+            if (prevBtnTextEl) prevBtnTextEl.textContent = "Página Anterior";
+
+            const isLastPage = currentVerticalPage === totalPages - 1;
+            if (nextBtnTextEl) nextBtnTextEl.textContent = isLastPage ? "Ver Resultado" : "Próxima Página";
+            
+            nextQuestionButton.disabled = false; 
         }
 
 
-        function handlePrevQuestion() {
-            if (currentQuestionIndex > 0) {
-                if (!quizState[currentQuestionIndex].isAnswered) {
-                     clearInterval(questionTimerInterval);
-                     const timeLimit = parseInt(timePerQuestionSelect.value);
-                     if (timeLimit > 0) {
-                        const timeSpentNow = timeLimit - timeLeftForQuestion;
-                        quizState[currentQuestionIndex].timeTakenOnPause = (quizState[currentQuestionIndex].timeTakenOnPause || 0) + timeSpentNow;
-                     }
-                }
-                currentQuestionIndex--;
-                displayCurrentQuestion();
+        function handlePrevNavigation() {
+            if (currentVerticalPage > 0) {
+                currentVerticalPage--;
+                displayCurrentPageOrQuestion();
             }
         }
 
-        function handleNextQuestion() {
-            if (currentQuestionIndex < questions.length - 1) {
-                if (!quizState[currentQuestionIndex].isAnswered) {
-                     clearInterval(questionTimerInterval);
-                     const timeLimit = parseInt(timePerQuestionSelect.value);
-                     if (timeLimit > 0) {
-                        const timeSpentNow = timeLimit - timeLeftForQuestion;
-                        quizState[currentQuestionIndex].timeTakenOnPause = (quizState[currentQuestionIndex].timeTakenOnPause || 0) + timeSpentNow;
-                     }
-                }
-                currentQuestionIndex++;
-                displayCurrentQuestion();
-            } else {
-                quizState.forEach((qState, idx) => {
-                    if (!qState.isAnswered) {
-                        const existingAnswer = userAnswers.find(ans => ans.questionIndex === idx);
-                        if(!existingAnswer) {
-                             userAnswers.push({
-                                questionIndex: idx,
-                                questionText: questions[idx].text,
-                                options: questions[idx].options,
-                                userAnswer: null, 
-                                userAnswerText: "N/A",
-                                correctAnswer: questions[idx].correctAnswerLetter,
-                                correctAnswerText: (questions[idx].options && questions[idx].correctAnswerLetter && questions[idx].options[questions[idx].correctAnswerLetter]) ? questions[idx].options[questions[idx].correctAnswerLetter] : "N/A",
-                                isCorrect: false,
-                                explanation: questions[idx].explanation,
-                                timeTaken: qState.timeTakenOnPause || 0, 
-                                eliminatedOptions: Array.from(qState.eliminatedOptions)
-                            });
-                        }
-                    }
-                });
+        function handleNextNavigation() {
+            const totalPages = Math.ceil(questions.length / QUESTIONS_PER_VERTICAL_PAGE);
+            if (currentVerticalPage < totalPages - 1) {
+                currentVerticalPage++;
+                displayCurrentPageOrQuestion();
+            } else { 
                 endQuiz();
             }
         }
 
+
         function endQuiz() {
-            clearInterval(questionTimerInterval); 
+            clearInterval(activeQuestionTimerInterval); 
             const quizEndTime = new Date();
-            const totalQuizDurationSec = userAnswers.length > 0 ? Math.round((quizEndTime - quizStartTime) / 1000) : 0;
+            const totalQuizDurationSec = quizStartTime ? Math.round((quizEndTime - quizStartTime) / 1000) : 0;
+
+
+            questions.forEach((q, idx) => {
+                if (!userAnswers.find(ans => ans.questionIndex === idx)) {
+                    userAnswers.push({
+                        questionIndex: idx, questionText: q.text, options: q.options,
+                        userAnswer: null, userAnswerText: "Não Respondida", correctAnswer: q.correctAnswerLetter,
+                        correctAnswerText: (q.options && q.correctAnswerLetter && q.options[q.correctAnswerLetter]) ? q.options[q.correctAnswerLetter] : "N/A",
+                        isCorrect: false, explanation: q.explanation, timeTaken: quizState[idx]?.timeTakenOnPause || 0,
+                        eliminatedOptions: Array.from(quizState[idx]?.eliminatedOptions || [])
+                    });
+                }
+            });
+
 
             const correctCount = userAnswers.filter(ans => ans.isCorrect === true).length; 
             const totalAnsweredOrTimedOut = userAnswers.length; 
@@ -1193,10 +1269,21 @@
             resultsTotalQuestions.textContent = questions.length; 
             resultsCorrectAnswers.textContent = `${correctCount} (${accuracy}%)`;
             const scorableAnswers = userAnswers.filter(ans => ans.correctAnswer !== null);
-            const incorrectCount = scorableAnswers.filter(ans => !ans.isCorrect).length;
-            const accuracyOfScorable = scorableAnswers.length > 0 ? (correctCount / scorableAnswers.length * 100).toFixed(1) : accuracy; 
+            const incorrectCount = scorableAnswers.filter(ans => !ans.isCorrect).length; 
             
-            resultsIncorrectAnswers.textContent = `${incorrectCount} (${(scorableAnswers.length > 0 ? (100 - parseFloat(accuracyOfScorable)) : (100 - parseFloat(accuracy))).toFixed(1)}%)`;
+            let incorrectPercentage = "0.0";
+            if (totalAnsweredOrTimedOut > 0) {
+                const attemptedAndScorable = userAnswers.filter(ans => ans.userAnswer !== null && ans.correctAnswer !== null);
+                const incorrectAttemptedAndScorable = attemptedAndScorable.filter(ans => !ans.isCorrect).length;
+                incorrectPercentage = attemptedAndScorable.length > 0 ? (incorrectAttemptedAndScorable / attemptedAndScorable.length * 100).toFixed(1) : (100 - parseFloat(accuracy)).toFixed(1);
+            } else if (parseFloat(accuracy) === 0 && totalAnsweredOrTimedOut === 0 && questions.length > 0) {
+                 incorrectPercentage = "0.0"; 
+            } else if (parseFloat(accuracy) === 0 && totalAnsweredOrTimedOut > 0) {
+                incorrectPercentage = "100.0";
+            }
+
+
+            resultsIncorrectAnswers.textContent = `${incorrectCount} (${incorrectPercentage}%)`;
             resultsAccuracy.textContent = `${accuracy}%`; 
             
             const totalMinutes = Math.floor(totalQuizDurationSec / 60);
@@ -1242,7 +1329,7 @@
 
             reviewData.forEach((answer, index) => {
                 const questionDiv = document.createElement('div');
-                questionDiv.className = 'dark-card p-4 rounded-md';
+                questionDiv.className = 'inner-card p-4 rounded-md'; 
 
                 let optionsHTML = '<ul class="list-none space-y-1 mt-2">';
                 ['A', 'B', 'C', 'D', 'E'].forEach(optKey => { 
