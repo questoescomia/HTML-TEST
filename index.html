@@ -14,99 +14,126 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #2d3748; 
-            color: #e2e8f0; 
+            background-color: #B45309; /* Amber 700 - Fundo amarelo/laranja escuro */
+            color: #FFFFFF; /* Texto padrão branco */
         }
-        .dark-bg { background-color: #4a5568; }
-        .dark-card { background-color: #718096; }
-        .dark-input { background-color: #4a5568; border-color: #718096; color: #e2e8f0; }
-        .dark-input:focus { border-color: #facc15; box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.5); }
+        .dark-bg { background-color: #111827; /* Gray 900 - Cards principais bem escuros */ }
+        .dark-card { background-color: #1F2937; /* Gray 800 - Cards menores escuros */ }
         
-        .btn-green { background-color: #38a169; color: white; }
-        .btn-green:hover { background-color: #2f855a; }
+        .dark-input, .dark-select { 
+            background-color: #1F2937; /* Gray 800 */
+            border-color: #374151; /* Gray 700 */
+            color: #FFFFFF; 
+        }
+        .dark-input:focus, .dark-select:focus { 
+            border-color: #10B981; /* Green 500 - Foco verde */
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5); 
+        }
         
-        .btn-yellow { background-color: #facc15; color: #1a202c; }
-        .btn-yellow:hover { background-color: #eab308; }
+        .btn-green { background-color: #10B981; /* Green 500 */ color: white; }
+        .btn-green:hover { background-color: #059669; /* Green 600 */ }
+        
+        .btn-yellow { background-color: #FBBF24; /* Amber 400 */ color: #111827; /* Texto escuro para contraste */ }
+        .btn-yellow:hover { background-color: #F59E0B; /* Amber 500 */ }
 
-        .btn-gray { background-color: #718096; color: white; }
-        .btn-gray:hover { background-color: #5A677B; }
+        .btn-gray { background-color: #374151; /* Gray 700 */ color: white; }
+        .btn-gray:hover { background-color: #4B5563; /* Gray 600 */ }
 
-        .btn-red { background-color: #e53e3e; }
-        .btn-red:hover { background-color: #c53030; }
+        .btn-red { background-color: #EF4444; /* Red 500 */ color: white;}
+        .btn-red:hover { background-color: #DC2626; /* Red 600 */ }
 
-        .btn-purple { background-color: #805ad5; color: white; } 
-        .btn-purple:hover { background-color: #6b46c1; }
+        .btn-purple { background-color: #8B5CF6; /* Purple 500 */ color: white; } 
+        .btn-purple:hover { background-color: #7C3AED; /* Purple 600 */ }
 
-
-        .option-button-container {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .mode-selector button {
+            transition: all 0.2s ease-in-out;
+            border: 2px solid transparent;
+            background-color: #374151; /* Gray 700 */
+            color: #D1D5DB; /* Gray 300 */
+        }
+        .mode-selector button.active {
+            border-color: #10B981; /* Green 500 */
+            background-color: #1F2937; /* Gray 800 */
+            color: white;
+        }
+        .mode-description {
+            font-size: 0.75rem; 
+            color: #9CA3AF; /* Gray 400 - Ajustado para o fundo do card */
+            margin-top: 0.25rem; 
+            min-height: 2.25rem; 
         }
 
+        .option-button-container { display: flex; align-items: center; gap: 0.5rem; }
         .option-button {
             transition: all 0.2s ease-in-out;
             flex-grow: 1;
+            background-color: #1F2937; /* Default option button BG */
+            border-color: #374151; /* Default option button Border */
+            color: #FFFFFF; /* Default option button text */
+        }
+        .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
+             background-color: #374151; /* Darker hover for default options */
         }
         .option-button.selected-temporary { 
-            background-color: #63b3ed; 
-            border-color: #63b3ed;
+            background-color: #3B82F6; /* Blue 500 */ 
+            border-color: #3B82F6;
             color: white;
         }
         .option-button.selected { 
-            background-color: #facc15; 
-            color: #1a202c; 
-            border-color: #facc15;
+            background-color: #FBBF24; /* Amber 400 */ 
+            color: #111827; 
+            border-color: #FBBF24;
         }
         .option-button.correct {
-            background-color: #38a169; 
+            background-color: #10B981; /* Green 500 */ 
             color: white;
-            border-color: #38a169;
+            border-color: #10B981;
         }
         .option-button.incorrect {
-            background-color: #e53e3e; 
+            background-color: #EF4444; /* Red 500 */ 
             color: white;
-            border-color: #e53e3e;
+            border-color: #EF4444;
         }
         .option-button.eliminated {
             text-decoration: line-through;
             opacity: 0.6;
-            background-color: #718096 !important; 
-            color: #a0aec0 !important; 
+            background-color: #374151 !important; 
+            color: #9CA3AF !important; 
         }
         .eliminate-icon {
             cursor: pointer;
-            color: #9ca3af; 
+            color: #D1D5DB; /* Gray 300 */
             padding: 0.5rem; 
             border-radius: 0.375rem; 
             transition: all 0.2s ease-in-out;
         }
         .eliminate-icon:hover {
-            color: #facc15; 
-            background-color: #4a5568; 
+            color: #10B981; /* Green 500 */
+            background-color: #1F2937; /* Gray 800 */
         }
         .eliminate-icon.eliminated-active {
-            color: #e53e3e; 
+            color: #EF4444; /* Red 500 */
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #2d3748; }
-        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #718096; }
+        ::-webkit-scrollbar-track { background: #B45309; /* Body yellow */ }
+        ::-webkit-scrollbar-thumb { background: #111827; /* Darkest card gray */ border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #1F2937; /* Darker card gray */ }
+        
         .loader, .small-loader {
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        .loader {
-            border: 4px solid #f3f3f320; 
-            border-top: 4px solid #facc15; 
+        .loader { /* Main loader */
+            border: 4px solid rgba(16, 185, 129, 0.2); /* Lighter green for track */
+            border-top: 4px solid #10B981; /* Green 500 */
             width: 40px;
             height: 40px;
             margin: 20px auto;
         }
-        .small-loader {
-            border: 2px solid #f3f3f320; 
-            border-top: 2px solid #facc15; 
+        .small-loader { /* Small inline loaders */
+            border: 2px solid rgba(16, 185, 129, 0.2); /* Lighter green for track */
+            border-top: 2px solid #10B981; /* Green 500 */
             width: 16px;
             height: 16px;
             display: inline-block;
@@ -119,56 +146,97 @@
         }
         html, body { height: 100%; }
         .min-h-screen-custom { min-height: 100vh; }
+
+        /* Specific text color adjustments for readability on dark cards */
+        .header-title { color: #FBBF24; /* Amber 400 */ }
+        .header-subtitle { color: #D1D5DB; /* Gray 300 */ }
+        .label-text { color: #E5E7EB; /* Gray 200 */ }
+        .file-name-text { color: #9CA3AF; /* Gray 400 */ }
+        .loading-text { color: #6EE7B7; /* Green 300 */ }
+        .warning-text { color: #FBBF24; /* Amber 400 */ }
+        .error-text { color: #F87171; /* Red 400 */ }
+        .quiz-title-text { color: #FBBF24; /* Amber 400 */ }
+        .timer-text { color: #FBBF24; /* Amber 400 */ }
+        .question-text-color { color: #F3F4F6; /* Gray 100 */ }
+        .hint-output-text-color { color: #FDE68A; /* Amber 200 */ }
+        .feedback-title-color-correct { color: #34D399; /* Green 400 */ }
+        .feedback-title-color-incorrect { color: #F87171; /* Red 400 */ }
+        .feedback-title-color-info { color: #9CA3AF; /* Gray 400 */ }
+        .feedback-text-color { color: #E5E7EB; /* Gray 200 */ }
+        .feedback-explanation-color { color: #D1D5DB; /* Gray 300 */ }
+        .deeper-explanation-output-color { color: #E5E7EB; /* Gray 200 */ }
+        .results-title-text { color: #FBBF24; /* Amber 400 */ }
+        .results-label-text { color: #9CA3AF; /* Gray 400 */ }
+        .results-value-text { color: #FFFFFF; }
+        .results-value-correct-text { color: #34D399; /* Green 400 */ }
+        .results-value-incorrect-text { color: #F87171; /* Red 400 */ }
+        .modal-title-text { color: #FBBF24; /* Amber 400 */ }
+        .modal-close-button-text { color: #9CA3AF; /* Gray 400 */ }
+        .modal-close-button-text:hover { color: #FFFFFF; }
+        .review-question-title-text { color: #FCD34D; /* Amber 300 */ }
+        .review-option-default-text { color: #D1D5DB; /* Gray 300 */ }
+        .review-option-correct-text { color: #34D399; /* Green 400 */ }
+        .review-option-incorrect-text { color: #F87171; /* Red 400 */ }
+        .review-status-info-text { color: #9CA3AF; /* Gray 400 */ }
+        .review-status-correct-text { color: #34D399; /* Green 400 */ }
+        .review-status-incorrect-text { color: #F87171; /* Red 400 */ }
+        .review-explanation-text { color: #D1D5DB; /* Gray 300 */ }
+        .review-time-text { color: #9CA3AF; /* Gray 400 */ }
+
+
     </style>
 </head>
-<body class="text-gray-200"> 
-
-    <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
+<body class="text-gray-200">  <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
 
         <div id="setupScreen" class="w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
             <header class="mb-6 text-center">
-                <h1 class="text-4xl font-bold text-yellow-400">Fazer questões sempre é uma boa escolha!</h1>
-                <p class="text-gray-400 mt-2">Gere questões de medicina personalizadas</p> 
-            </header>
+                <h1 class="text-4xl font-bold header-title">MedQUEST</h1> <p class="mt-2 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> </header>
 
-            <div class="mb-4"> 
-                <label for="fileInput" class="block text-sm font-medium text-gray-300 mb-1">Escolher arquivo PDF</label>
+            <div class="mb-6 mode-selector grid grid-cols-2 gap-2 sm:gap-4">
+                <div class="text-center">
+                    <button id="modeGenerateButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base active w-full">
+                        <i class="fas fa-magic-sparkles mr-1 sm:mr-2"></i>Gerar Questões com IA
+                    </button>
+                    <p id="modeGenerateDescription" class="mode-description">As questões serão criadas pela IA a partir de um resumo/livro em PDF.</p>
+                </div>
+                <div class="text-center">
+                    <button id="modeExtractButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base w-full">
+                        <i class="fas fa-file-import mr-1 sm:mr-2"></i>Extrair Questões de PDF
+                    </button>
+                    <p id="modeExtractDescription" class="mode-description hidden">As questões serão extraídas de um PDF de questões prontas, utilizando a interface do site.</p>
+                </div>
+            </div>
+
+
+            <div class="mb-8"> <label for="fileInput" class="block text-sm font-medium label-text mb-1">Escolher arquivo PDF</label>
                 <div class="flex items-center">
                     <input type="file" id="fileInput" accept=".pdf" class="hidden">
                     <button onclick="document.getElementById('fileInput').click()" class="dark-input px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-600"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
                     </button>
-                    <span id="fileName" class="dark-input px-4 py-2 rounded-r-md border flex-grow">Nenhum arquivo escolhido</span> </div>
+                    <span id="fileName" class="dark-input px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
             </div>
-             <button id="summarizeTextButton" class="hidden w-full sm:w-auto btn-yellow text-sm py-2 px-4 rounded-md shadow-md mb-6 flex items-center justify-center">
-                <i class="fas fa-magic-sparkles mr-2"></i>Resumir Texto do PDF ✨
-                <div id="summarizeLoader" class="small-loader hidden"></div>
-            </button>
-            <div id="summaryOutputContainer" class="hidden dark-card p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
-                <h4 class="text-md font-semibold text-yellow-300 mb-2">Resumo do Texto:</h4>
-                <p id="summaryOutputText" class="text-sm whitespace-pre-wrap"></p>
-            </div>
-
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
                 <div>
-                    <label for="numQuestions" class="block text-sm font-medium text-gray-300 mb-1">Nº de Questões</label>
-                    <select id="numQuestions" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                    <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
+                    <select id="numQuestions" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="5">5 Questões</option>
                         <option value="10" selected>10 Questões</option>
                         <option value="15">15 Questões</option>
                         <option value="20">20 Questões</option>
+                        <option value="0" class="hidden">Todas do PDF</option> 
                     </select>
                 </div>
-                <div>
-                    <label for="difficulty" class="block text-sm font-medium text-gray-300 mb-1">Dificuldade</label>
-                    <select id="difficulty" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                <div id="difficultyContainer"> 
+                    <label for="difficulty" class="block text-sm font-medium label-text mb-1">Dificuldade</label>
+                    <select id="difficulty" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="Fácil">Fácil</option>
                         <option value="Médio" selected>Médio</option>
                         <option value="Difícil">Difícil</option>
                     </select>
                 </div>
                 <div>
-                    <label for="timePerQuestion" class="block text-sm font-medium text-gray-300 mb-1">Tempo por Questão</label>
-                    <select id="timePerQuestion" class="w-full dark-input p-2.5 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"> 
+                    <label for="timePerQuestion" class="block text-sm font-medium label-text mb-1">Tempo por Questão</label>
+                    <select id="timePerQuestion" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="0">Sem limite</option>
                         <option value="30">30 Segundos</option>
                         <option value="60" selected>1 Minuto</option>
@@ -180,46 +248,48 @@
             </div>
             
             <button id="startQuizButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md transition duration-150 flex items-center justify-center text-lg">
-                <i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado
+                <i class="fas fa-play mr-2"></i><span id="startQuizButtonText">Gerar Questões e Iniciar</span>
             </button>
             <div id="loadingIndicator" class="hidden text-center mt-4">
                 <div class="loader"></div>
-                <p class="text-yellow-300">Gerando questões... Por favor, aguarde.</p> 
+                <p class="loading-text" id="loadingIndicatorText">Gerando questões... Por favor, aguarde.</p> 
             </div>
-            <div id="generationWarning" class="text-xs text-yellow-500 mt-3 text-center hidden">
-                <i class="fas fa-exclamation-triangle mr-1"></i>A geração de questões pode demorar até 30 segundos. Se já enviou o PDF e clicou em gerar, fique tranquilo, logo ficará pronto.
+            <div id="generalProcessWarning" class="text-xs mt-3 text-center warning-text">
+                 <i class="fas fa-info-circle mr-1"></i>Nota: A IA pode cometer erros. Verifique informações críticas.
             </div>
-            <p id="errorMessage" class="text-red-400 text-center mt-4"></p>
+            <div id="generationWarning" class="text-xs mt-2 text-center warning-text hidden">
+                <i class="fas fa-exclamation-triangle mr-1"></i>A geração/extração de questões pode demorar até 30 segundos. Se já enviou o PDF e clicou em gerar/extrair, fique tranquilo, logo ficará pronto.
+            </div>
+            <p id="errorMessage" class="error-text text-center mt-4"></p>
         </div>
 
         <div id="quizScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold text-yellow-400">Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestionNumber"></span></h2> 
-                <div id="questionTimerDisplay" class="text-xl font-bold text-yellow-400"></div> 
+                <h2 class="text-2xl font-semibold quiz-title-text">Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestionNumber"></span></h2> 
+                <div id="questionTimerDisplay" class="text-xl font-bold timer-text"></div> 
             </div>
             <div id="questionContainer" class="mb-6">
-                <p id="questionText" class="text-lg leading-relaxed mb-6"></p>
+                <p id="questionText" class="text-lg leading-relaxed mb-6 question-text-color"></p>
                 <div id="optionsContainer" class="space-y-3"></div>
                 <button id="hintButton" class="mt-4 text-sm btn-purple py-1 px-3 rounded-md shadow-sm flex items-center justify-center w-full sm:w-auto">
                     <i class="fas fa-lightbulb mr-2"></i>Gerar Dica ✨
                     <div id="hintLoader" class="small-loader hidden"></div>
                 </button>
                 <div id="hintOutputContainer" class="hidden dark-card p-3 rounded-md mt-3">
-                     <p id="hintOutputText" class="text-sm text-yellow-200"></p>
+                     <p id="hintOutputText" class="text-sm hint-output-text-color"></p>
                 </div>
             </div>
             <button id="confirmAnswerButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md mb-4 transition duration-150 hidden">
                 <i class="fas fa-check-circle mr-2"></i>Responder
             </button>
             <div id="feedbackContainer" class="hidden dark-card p-4 rounded-md mb-4"> 
-                <h3 id="feedbackTitle" class="text-lg font-semibold mb-2"></h3>
-                <p id="feedbackText" class="text-sm mb-2"></p>
-                <p id="feedbackExplanation" class="text-sm italic"></p>
+                <h3 id="feedbackTitle" class="text-lg font-semibold mb-2"></h3> <p id="feedbackText" class="text-sm mb-2 feedback-text-color"></p>
+                <p id="feedbackExplanation" class="text-sm italic feedback-explanation-color"></p>
                 <button id="deeperExplanationButton" class="mt-3 text-sm btn-yellow py-1 px-3 rounded-md shadow-sm flex items-center">
-                    <i class="fas fa-magic-sparkles mr-2"></i>Aprofundar Explicação ✨
+                    <i class="fas fa-search-plus mr-2"></i>Explicação Profunda
                     <div id="deeperExplanationLoader" class="small-loader hidden"></div>
                 </button>
-                <div id="deeperExplanationOutput" class="mt-2 text-sm text-gray-300 whitespace-pre-wrap"></div>
+                <div id="deeperExplanationOutput" class="mt-2 text-sm deeper-explanation-output-color whitespace-pre-wrap"></div>
             </div>
             <div class="flex justify-between mt-6">
                 <button id="prevQuestionButton" class="btn-gray text-white font-semibold py-3 px-6 rounded-md shadow-md transition duration-150">
@@ -232,31 +302,31 @@
         </div>
 
         <div id="resultsScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl text-center">
-            <h2 class="text-3xl font-bold text-yellow-400 mb-6">Resultado do Simulado</h2> 
+            <h2 class="text-3xl font-bold results-title-text mb-6">Resultado do Simulado</h2> 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Total de Questões:</p>
-                    <p id="resultsTotalQuestions" class="text-2xl font-semibold"></p>
+                    <p class="text-sm results-label-text">Total de Questões:</p>
+                    <p id="resultsTotalQuestions" class="text-2xl font-semibold results-value-text"></p>
                 </div>
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Acertos:</p>
-                    <p id="resultsCorrectAnswers" class="text-2xl font-semibold text-green-400"></p>
+                    <p class="text-sm results-label-text">Acertos:</p>
+                    <p id="resultsCorrectAnswers" class="text-2xl font-semibold results-value-correct-text"></p>
                 </div>
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Erros:</p>
-                    <p id="resultsIncorrectAnswers" class="text-2xl font-semibold text-red-400"></p>
+                    <p class="text-sm results-label-text">Erros:</p>
+                    <p id="resultsIncorrectAnswers" class="text-2xl font-semibold results-value-incorrect-text"></p>
                 </div>
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Percentual de Acerto:</p>
-                    <p id="resultsAccuracy" class="text-2xl font-semibold"></p>
+                    <p class="text-sm results-label-text">Percentual de Acerto:</p>
+                    <p id="resultsAccuracy" class="text-2xl font-semibold results-value-text"></p>
                 </div>
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Tempo Total:</p>
-                    <p id="resultsTotalTime" class="text-2xl font-semibold"></p>
+                    <p class="text-sm results-label-text">Tempo Total:</p>
+                    <p id="resultsTotalTime" class="text-2xl font-semibold results-value-text"></p>
                 </div>
                 <div class="dark-card p-4 rounded-md"> 
-                    <p class="text-sm text-gray-400">Tempo Médio por Questão:</p>
-                    <p id="resultsAvgTime" class="text-2xl font-semibold"></p>
+                    <p class="text-sm results-label-text">Tempo Médio por Questão:</p>
+                    <p id="resultsAvgTime" class="text-2xl font-semibold results-value-text"></p>
                 </div>
             </div>
             <button id="analyzePerformanceButton" class="w-full md:w-auto btn-purple text-white font-semibold py-3 px-6 rounded-md shadow-md mb-4 flex items-center justify-center">
@@ -264,7 +334,7 @@
                 <div id="analyzePerformanceLoader" class="small-loader hidden"></div>
             </button>
             <div id="performanceAnalysisOutputContainer" class="hidden dark-card p-4 rounded-md mb-6 text-left max-h-60 overflow-y-auto">
-                <h4 class="text-md font-semibold text-yellow-300 mb-2">Análise de Desempenho:</h4>
+                <h4 class="text-md font-semibold header-title mb-2">Análise de Desempenho:</h4>
                 <p id="performanceAnalysisOutputText" class="text-sm whitespace-pre-wrap"></p>
             </div>
             <div class="space-y-4 md:space-y-0 md:flex md:space-x-4 justify-center">
@@ -280,8 +350,8 @@
         <div id="reviewModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden z-50"> 
             <div class="dark-bg w-full max-w-2xl max-h-[90vh] p-6 rounded-lg shadow-xl overflow-y-auto"> 
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-2xl font-semibold text-yellow-400">Revisão das Questões</h3> 
-                    <button id="closeReviewModalButton" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+                    <h3 class="text-2xl font-semibold modal-title-text">Revisão das Questões</h3> 
+                    <button id="closeReviewModalButton" class="modal-close-button-text text-2xl">&times;</button>
                 </div>
                 <div id="reviewQuestionsContainer" class="space-y-6">
                     </div>
@@ -296,13 +366,24 @@
         const quizScreen = document.getElementById('quizScreen');
         const resultsScreen = document.getElementById('resultsScreen');
         const reviewModal = document.getElementById('reviewModal');
+        const setupSubtitle = document.getElementById('setupSubtitle'); 
+        const modeGenerateButton = document.getElementById('modeGenerateButton'); 
+        const modeExtractButton = document.getElementById('modeExtractButton'); 
+        const modeGenerateDescription = document.getElementById('modeGenerateDescription'); 
+        const modeExtractDescription = document.getElementById('modeExtractDescription'); 
+        const difficultyContainer = document.getElementById('difficultyContainer'); 
+        const startQuizButtonText = document.getElementById('startQuizButtonText'); 
+        const loadingIndicatorText = document.getElementById('loadingIndicatorText'); 
+        const generalProcessWarning = document.getElementById('generalProcessWarning'); 
+
 
         const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('fileName');
-        const summarizeTextButton = document.getElementById('summarizeTextButton'); 
-        const summarizeLoader = document.getElementById('summarizeLoader'); 
-        const summaryOutputContainer = document.getElementById('summaryOutputContainer'); 
-        const summaryOutputText = document.getElementById('summaryOutputText'); 
+        // Removed summarizeTextButton, summarizeLoader, summaryOutputContainer, summaryOutputText
+        // const summarizeTextButton = document.getElementById('summarizeTextButton'); 
+        // const summarizeLoader = document.getElementById('summarizeLoader'); 
+        // const summaryOutputContainer = document.getElementById('summaryOutputContainer'); 
+        // const summaryOutputText = document.getElementById('summaryOutputText'); 
 
         const numQuestionsSelect = document.getElementById('numQuestions');
         const difficultySelect = document.getElementById('difficulty');
@@ -358,18 +439,23 @@
         let extractedPdfText = ""; 
         let quizState = []; 
         let temporarilySelectedOption = null; 
+        let currentQuizMode = 'generate'; 
 
 
         // Event Listeners
+        modeGenerateButton.addEventListener('click', () => setQuizMode('generate'));
+        modeExtractButton.addEventListener('click', () => setQuizMode('extract'));
+
+
         fileInput.addEventListener('change', async () => {
             if (fileInput.files.length > 0) {
                 fileNameDisplay.textContent = fileInput.files[0].name;
                 loadingIndicator.classList.remove('hidden');
                 generationWarning.classList.add('hidden'); 
                 errorMessage.textContent = '';
-                summarizeTextButton.classList.add('hidden'); 
-                summaryOutputContainer.classList.add('hidden');
-                summaryOutputText.textContent = '';
+                // summarizeTextButton.classList.add('hidden');  // No longer exists
+                // summaryOutputContainer.classList.add('hidden'); // No longer exists
+                // summaryOutputText.textContent = ''; // No longer exists
                 
                 if (typeof pdfjsLib === 'undefined') {
                     console.warn("pdf.js library is not loaded. PDF text extraction will not work.");
@@ -397,23 +483,23 @@
                         extractedPdfText = fullText.trim();
                         if (!extractedPdfText) {
                              errorMessage.textContent = 'Não foi possível extrair texto do PDF. Tente um arquivo diferente.';
-                             errorMessage.classList.add('text-red-400');
-                             errorMessage.classList.remove('text-green-400');
-                             summarizeTextButton.classList.add('hidden');
+                             errorMessage.classList.add('error-text');
+                             errorMessage.classList.remove('text-green-400'); 
+                             // summarizeTextButton.classList.add('hidden'); // No longer exists
                         } else {
                             console.log("Texto extraído do PDF:", extractedPdfText.substring(0, 200) + "..."); 
-                            errorMessage.textContent = 'Texto do PDF extraído com sucesso! Pronto para gerar questões ou resumir.';
-                            errorMessage.classList.remove('text-red-400');
-                            errorMessage.classList.add('text-green-400');
-                            summarizeTextButton.classList.remove('hidden'); 
+                            errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`; // Adjusted message
+                            errorMessage.classList.remove('error-text');
+                            errorMessage.classList.add('text-green-400'); 
+                            // summarizeTextButton.classList.remove('hidden'); // No longer exists
                         }
                     } catch (error) {
                         console.error("Erro ao processar PDF:", error);
                         errorMessage.textContent = `Erro ao processar PDF: ${error.message}. Tente outro arquivo.`;
-                        errorMessage.classList.add('text-red-400');
+                        errorMessage.classList.add('error-text');
                         errorMessage.classList.remove('text-green-400');
                         extractedPdfText = "";
-                        summarizeTextButton.classList.add('hidden');
+                        // summarizeTextButton.classList.add('hidden'); // No longer exists
                     } finally {
                         loadingIndicator.classList.add('hidden');
                     }
@@ -422,19 +508,19 @@
             } else {
                 fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
                 extractedPdfText = "";
-                summarizeTextButton.classList.add('hidden');
-                summaryOutputContainer.classList.add('hidden');
+                // summarizeTextButton.classList.add('hidden'); // No longer exists
+                // summaryOutputContainer.classList.add('hidden'); // No longer exists
             }
         });
 
-        summarizeTextButton.addEventListener('click', handleSummarizeText); 
+        // summarizeTextButton.addEventListener('click', handleSummarizeText); // Removed
         deeperExplanationButton.addEventListener('click', handleDeeperExplanation); 
         confirmAnswerButton.addEventListener('click', handleConfirmAnswer); 
         hintButton.addEventListener('click', handleGenerateHint); 
         analyzePerformanceButton.addEventListener('click', handleAnalyzePerformance); 
 
 
-        startQuizButton.addEventListener('click', generateAndStartQuiz);
+        startQuizButton.addEventListener('click', generateOrExtractAndStartQuiz); 
         prevQuestionButton.addEventListener('click', handlePrevQuestion); 
         nextQuestionButton.addEventListener('click', handleNextQuestion);
         newQuizButton.addEventListener('click', () => {
@@ -445,6 +531,44 @@
         closeReviewModalButton.addEventListener('click', () => reviewModal.classList.add('hidden'));
 
         // Functions
+
+        function setQuizMode(mode) {
+            currentQuizMode = mode;
+            if (mode === 'generate') {
+                modeGenerateButton.classList.add('active');
+                modeGenerateButton.innerHTML = '<i class="fas fa-magic-sparkles mr-1 sm:mr-2"></i>Gerar Questões com IA';
+                modeExtractButton.classList.remove('active');
+                modeExtractButton.innerHTML = '<i class="fas fa-file-import mr-1 sm:mr-2"></i>Extrair Questões de PDF';
+                
+                modeGenerateDescription.classList.remove('hidden');
+                modeExtractDescription.classList.add('hidden');
+
+                startQuizButtonText.textContent = "Gerar Questões e Iniciar"; 
+                loadingIndicatorText.textContent = "Gerando questões... Por favor, aguarde.";
+                difficultyContainer.classList.remove('hidden');
+                numQuestionsSelect.querySelector('option[value="0"]').classList.add('hidden'); 
+                if (numQuestionsSelect.value === "0") numQuestionsSelect.value = "10"; 
+
+            } else { // extract mode
+                modeExtractButton.classList.add('active');
+                modeExtractButton.innerHTML = '<i class="fas fa-file-import mr-1 sm:mr-2"></i>Extrair Questões de PDF';
+                modeGenerateButton.classList.remove('active');
+                modeGenerateButton.innerHTML = '<i class="fas fa-magic-sparkles mr-1 sm:mr-2"></i>Gerar Questões com IA';
+
+                modeExtractDescription.classList.remove('hidden');
+                modeGenerateDescription.classList.add('hidden');
+
+                startQuizButtonText.textContent = "Extrair e Iniciar Simulado";
+                loadingIndicatorText.textContent = "Extraindo questões... Por favor, aguarde.";
+                difficultyContainer.classList.add('hidden'); 
+                numQuestionsSelect.querySelector('option[value="0"]').classList.remove('hidden'); 
+            }
+            if (extractedPdfText && errorMessage.classList.contains('text-green-400')) {
+                 errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`; // Adjusted message
+            }
+        }
+
+
         function showScreen(screenName) {
             setupScreen.classList.add('hidden');
             quizScreen.classList.add('hidden');
@@ -453,7 +577,10 @@
             generationWarning.classList.add('hidden'); 
             performanceAnalysisOutputContainer.classList.add('hidden'); 
 
-            if (screenName === 'setup') setupScreen.classList.remove('hidden');
+            if (screenName === 'setup') {
+                setupScreen.classList.remove('hidden');
+                setQuizMode(currentQuizMode); 
+            }
             else if (screenName === 'quiz') quizScreen.classList.remove('hidden');
             else if (screenName === 'results') resultsScreen.classList.remove('hidden');
         }
@@ -472,30 +599,24 @@
             fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
             errorMessage.textContent = '';
             errorMessage.classList.remove('text-green-400'); 
-            errorMessage.classList.add('text-red-400');
+            errorMessage.classList.add('error-text'); 
             loadingIndicator.classList.add('hidden');
             generationWarning.classList.add('hidden');
-            summarizeTextButton.classList.add('hidden');
-            summaryOutputContainer.classList.add('hidden');
-            summaryOutputText.textContent = '';
+            // summarizeTextButton.classList.add('hidden'); // No longer exists
+            // summaryOutputContainer.classList.add('hidden'); // No longer exists
+            // summaryOutputText.textContent = ''; // No longer exists
             hintOutputContainer.classList.add('hidden');
             hintOutputText.textContent = '';
             performanceAnalysisOutputContainer.classList.add('hidden');
             performanceAnalysisOutputText.textContent = '';
             startQuizButton.disabled = false;
-            startQuizButton.innerHTML = '<i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado';
+            setQuizMode('generate'); 
         }
 
         async function callGeminiAPI(promptText, isJsonOutput = false, schema = null) {
-            // ==============================================================================
-            // ========================== CHAVE DE API GEMINI ===============================
-            // A chave fornecida pelo usuário foi inserida aqui.
-            // LEMBRE-SE: Se o seu repositório no GitHub for público, esta chave ficará visível.
-            // Considere os riscos ou use um repositório privado para testes.
-            // ==============================================================================
             const apiKey = "AIzaSyDjqagILL3JKVgmKRSJFREpTWXvT2D63yg"; 
 
-            if (apiKey === "A_SUA_CHAVE_API_AQUI" || apiKey === "") { // Redundant check, but kept for safety
+            if (apiKey === "A_SUA_CHAVE_API_AQUI" || apiKey === "") { 
                 console.error("Chave de API não configurada. Por favor, adicione sua chave de API do Gemini no código.");
                 throw new Error("Chave de API do Gemini não configurada no código JavaScript.");
             }
@@ -543,31 +664,7 @@
             }
         }
 
-
-        async function handleSummarizeText() {
-            if (!extractedPdfText) {
-                errorMessage.textContent = "Nenhum texto de PDF para resumir.";
-                return;
-            }
-            summarizeLoader.classList.remove('hidden');
-            summarizeTextButton.disabled = true;
-            summaryOutputContainer.classList.add('hidden');
-            summaryOutputText.textContent = '';
-            errorMessage.textContent = '';
-
-            try {
-                const prompt = `Por favor, resuma o seguinte texto médico de forma concisa, idealmente em 3 a 5 pontos principais ou parágrafos curtos. O texto é: \n\n"${extractedPdfText}"`;
-                const summary = await callGeminiAPI(prompt);
-                summaryOutputText.textContent = summary;
-                summaryOutputContainer.classList.remove('hidden');
-            } catch (error) {
-                console.error("Erro ao resumir texto:", error);
-                errorMessage.textContent = `Erro ao resumir: ${error.message}`;
-            } finally {
-                summarizeLoader.classList.add('hidden');
-                summarizeTextButton.disabled = false;
-            }
-        }
+        // Removed handleSummarizeText function
 
         async function handleDeeperExplanation() {
             const question = questions[currentQuestionIndex];
@@ -666,12 +763,12 @@
         }
 
 
-        async function generateAndStartQuiz() {
+        async function generateOrExtractAndStartQuiz() { 
             const materialContent = extractedPdfText;
 
             if (!materialContent) {
                 errorMessage.textContent = 'Por favor, escolha um arquivo PDF com conteúdo para gerar as questões.';
-                errorMessage.classList.add('text-red-400');
+                errorMessage.classList.add('error-text');
                 errorMessage.classList.remove('text-green-400');
                 generationWarning.classList.add('hidden');
                 return;
@@ -680,14 +777,14 @@
             loadingIndicator.classList.remove('hidden');
             generationWarning.classList.remove('hidden'); 
             startQuizButton.disabled = true;
-            startQuizButton.innerHTML = '<div class="loader !w-6 !h-6 !border-2 !inline-block !mr-2 !m-0"></div> Processando...';
-            summaryOutputContainer.classList.add('hidden'); 
+            
+            // summaryOutputContainer.classList.add('hidden'); // No longer exists
 
-            const numQs = parseInt(numQuestionsSelect.value);
-            const difficulty = difficultySelect.value;
+            let numQs = parseInt(numQuestionsSelect.value);
+            const difficulty = difficultySelect.value; 
             
             try {
-                const questionGenerationSchema = {
+                const questionSchema = { 
                     type: "OBJECT",
                     properties: {
                         "questoes": {
@@ -702,41 +799,54 @@
                                             "A": { type: "STRING", description: "Texto da opção A." },
                                             "B": { type: "STRING", description: "Texto da opção B." },
                                             "C": { type: "STRING", description: "Texto da opção C." },
-                                            "D": { type: "STRING", description: "Texto da opção D." }
+                                            "D": { type: "STRING", description: "Texto da opção D." },
+                                            "E": { type: "STRING", description: "Texto da opção E (opcional)." } 
                                         },
-                                        required: ["A", "B", "C", "D"]
+                                        required: ["A", "B", "C", "D"] 
                                     },
-                                    "respostaCorreta": { type: "STRING", description: "A letra da opção correta (A, B, C ou D)." },
-                                    "explicacao": { "type": "STRING", description: "Explicação detalhada da resposta correta." }
+                                    "respostaCorreta": { type: "STRING", description: "A LETRA da opção correta (A, B, C, D ou E)." },
+                                    "explicacao": { "type": "STRING", description: "Explicação detalhada da resposta correta (opcional, pode ser null)." }
                                 },
-                                required: ["pergunta", "opcoes", "respostaCorreta", "explicacao"]
+                                required: ["pergunta", "opcoes", "respostaCorreta"] 
                             }
                         }
                     },
                     required: ["questoes"]
                 };
 
-                const prompt = `Com base no seguinte texto médico extraído de um PDF, gere ${numQs} questões de múltipla escolha de dificuldade "${difficulty}". O texto é: \n\n"${materialContent}"`;
-                const generatedData = await callGeminiAPI(prompt, true, questionGenerationSchema);
+                let prompt;
+                if (currentQuizMode === 'generate') {
+                    prompt = `Com base no seguinte texto médico extraído de um PDF, gere ${numQs} questões de múltipla escolha de dificuldade "${difficulty}". O texto é: \n\n"${materialContent}"`;
+                } else { 
+                    prompt = `Você é um especialista em analisar e estruturar documentos. O texto a seguir foi extraído de um PDF que contém uma lista de questões de múltipla escolha prontas, com suas alternativas e, possivelmente, a indicação da resposta correta e uma explicação. Sua tarefa é identificar cada questão individual, suas alternativas (A, B, C, D, E, etc.), a LETRA da alternativa que é a correta, e qualquer explicação/gabarito comentado associado à questão. Se a resposta correta ou a explicação não estiverem explicitamente claras para uma questão, retorne 'null' para 'respostaCorreta' e/ou 'explicacao' para essa questão específica, mas tente ao máximo inferir a resposta correta se houver alguma indicação (ex: asterisco, negrito, ou uma seção de gabarito no texto). Formate cada questão como um objeto JSON. Retorne uma lista (array) destes objetos JSON. \n\nTexto do PDF:\n${materialContent}`;
+                }
+                
+                const generatedData = await callGeminiAPI(prompt, true, questionSchema);
                     
                 if (!generatedData.questoes || generatedData.questoes.length === 0) {
-                    throw new Error("A API não retornou questões válidas. Verifique o texto do PDF e tente novamente.");
+                    throw new Error(`A API não retornou questões válidas no modo '${currentQuizMode}'. Verifique o texto do PDF e tente novamente.`);
                 }
+                
                 questions = generatedData.questoes.map(q => ({
                     text: q.pergunta,
                     options: q.opcoes, 
-                    correctAnswerLetter: q.respostaCorreta.toUpperCase(),
-                    explanation: q.explicacao
+                    correctAnswerLetter: q.respostaCorreta ? q.respostaCorreta.toUpperCase() : null, 
+                    explanation: q.explicacao || "Explicação não fornecida." 
                 }));
 
+
                 if (questions.length === 0) {
-                     throw new Error("Nenhuma questão foi gerada. Tente refinar o texto ou as configurações.");
+                     throw new Error("Nenhuma questão utilizável foi encontrada/gerada.");
                 }
                 
-                if (questions.length < numQs) {
-                    console.warn(`A API gerou ${questions.length} questões, menos que as ${numQs} solicitadas.`);
+                if (currentQuizMode === 'extract' && numQs === 0) {
+                } else if (numQs > 0) {
+                    if (questions.length < numQs) {
+                        console.warn(`A API ${currentQuizMode === 'generate' ? 'gerou' : 'extraiu'} ${questions.length} questões, menos que as ${numQs} solicitadas.`);
+                    }
+                    questions = questions.slice(0, numQs); 
                 }
-                questions = questions.slice(0, numQs); 
+
 
                 quizState = questions.map(() => ({
                     selectedAnswerLetter: null,
@@ -751,15 +861,14 @@
                 displayCurrentQuestion();
 
             } catch (error) {
-                console.error('Erro ao gerar questões:', error);
-                errorMessage.textContent = `Erro ao gerar questões: ${error.message}. Tente novamente ou ajuste o PDF.`;
-                errorMessage.classList.add('text-red-400');
+                console.error(`Erro ao ${currentQuizMode === 'generate' ? 'gerar' : 'extrair'} questões:`, error);
+                errorMessage.textContent = `Erro ao ${currentQuizMode === 'generate' ? 'gerar' : 'extrair'} questões: ${error.message}.`;
+                errorMessage.classList.add('error-text');
                 errorMessage.classList.remove('text-green-400');
             } finally {
                 loadingIndicator.classList.add('hidden');
                 generationWarning.classList.add('hidden'); 
                 startQuizButton.disabled = false;
-                startQuizButton.innerHTML = '<i class="fas fa-play mr-2"></i>Gerar e Iniciar Simulado';
             }
         }
         
@@ -800,7 +909,7 @@
             }
 
 
-            ['A', 'B', 'C', 'D'].forEach(key => {
+            ['A', 'B', 'C', 'D', 'E'].forEach(key => { 
                 if (question.options && question.options[key]) { 
                     const optionContainer = document.createElement('div');
                     optionContainer.className = 'option-button-container';
@@ -831,12 +940,12 @@
                         eliminateBtn.style.display = 'none'; 
                         if (key === currentQState.selectedAnswerLetter) {
                             button.classList.add('selected'); 
-                            if (key === question.correctAnswerLetter) {
+                            if (question.correctAnswerLetter && key === question.correctAnswerLetter) { 
                                 button.classList.add('correct');
-                            } else {
+                            } else if (question.correctAnswerLetter) { 
                                 button.classList.add('incorrect');
                             }
-                        } else if (key === question.correctAnswerLetter) {
+                        } else if (question.correctAnswerLetter && key === question.correctAnswerLetter) {
                              button.classList.add('correct'); 
                         }
                     } else { 
@@ -850,7 +959,8 @@
             });
 
             if (currentQState.isAnswered) {
-                showFeedback(currentQState.selectedAnswerLetter === question.correctAnswerLetter, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
+                const isActuallyCorrect = question.correctAnswerLetter ? (currentQState.selectedAnswerLetter === question.correctAnswerLetter) : null; 
+                showFeedback(isActuallyCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
                 nextQuestionButton.disabled = false; 
             } else {
                  questionStartTime = new Date(); 
@@ -944,7 +1054,7 @@
             const answerData = {
                 questionIndex: currentQuestionIndex, questionText: question.text, options: question.options,
                 userAnswer: null, userAnswerText: "Tempo Esgotado", correctAnswer: question.correctAnswerLetter,
-                correctAnswerText: (question.options && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
+                correctAnswerText: (question.options && question.correctAnswerLetter && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
                 isCorrect: false, explanation: question.explanation, timeTaken: quizState[currentQuestionIndex].timeTaken,
                 eliminatedOptions: Array.from(quizState[currentQuestionIndex].eliminatedOptions)
             };
@@ -965,20 +1075,29 @@
             feedbackContainer.classList.remove('hidden');
             deeperExplanationButton.classList.remove('hidden'); 
             deeperExplanationOutput.textContent = ''; 
-            if (userAnswerLetter === null) { 
+
+            const correctOptionText = (correctAnswerLetter && optionsObj[correctAnswerLetter]) ? optionsObj[correctAnswerLetter] : "desconhecida";
+            const userAnswerOptionText = (userAnswerLetter && optionsObj[userAnswerLetter]) ? optionsObj[userAnswerLetter] : "nenhuma";
+
+
+            if (userAnswerLetter === null) { // Timeout
                  feedbackTitle.textContent = 'Tempo Esgotado!';
-                 feedbackTitle.className = 'text-lg font-semibold mb-2 text-yellow-400';
-                 feedbackText.textContent = `A resposta correta era: ${correctAnswerLetter}. ${optionsObj[correctAnswerLetter]}`;
+                 feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
+                 feedbackText.textContent = `A resposta correta era: ${correctAnswerLetter || 'N/A'}. ${correctOptionText}`;
+            } else if (isCorrect === null) { // Correct answer unknown from PDF
+                 feedbackTitle.textContent = 'Resposta Registada';
+                 feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-info'; 
+                 feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. (Não foi possível verificar a correção automaticamente para esta questão).`;
             } else if (isCorrect) {
                 feedbackTitle.textContent = 'Correto!';
-                feedbackTitle.className = 'text-lg font-semibold mb-2 text-green-400';
+                feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-correct';
                 feedbackText.textContent = '';
             } else {
                 feedbackTitle.textContent = 'Incorreto!';
-                feedbackTitle.className = 'text-lg font-semibold mb-2 text-red-400';
-                feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${optionsObj[userAnswerLetter]}. A correta era: ${correctAnswerLetter}. ${optionsObj[correctAnswerLetter]}`;
+                feedbackTitle.className = 'text-lg font-semibold mb-2 feedback-title-color-incorrect';
+                feedbackText.textContent = `Sua resposta: ${userAnswerLetter}. ${userAnswerOptionText}. A correta era: ${correctAnswerLetter}. ${correctOptionText}`;
             }
-            feedbackExplanation.textContent = `Explicação: ${explanation}`;
+            feedbackExplanation.textContent = `Explicação: ${explanation || "Não fornecida."}`;
         }
 
 
@@ -996,7 +1115,7 @@
 
             currentQState.selectedAnswerLetter = temporarilySelectedOption;
             currentQState.isAnswered = true;
-            const isCorrect = currentQState.selectedAnswerLetter === question.correctAnswerLetter;
+            const isCorrect = question.correctAnswerLetter ? (currentQState.selectedAnswerLetter === question.correctAnswerLetter) : null; 
 
             const existingAnswerIndex = userAnswers.findIndex(ans => ans.questionIndex === currentQuestionIndex);
             const answerData = {
@@ -1006,7 +1125,7 @@
                 userAnswer: currentQState.selectedAnswerLetter,
                 userAnswerText: (question.options && question.options[currentQState.selectedAnswerLetter]) ? question.options[currentQState.selectedAnswerLetter] : "N/A",
                 correctAnswer: question.correctAnswerLetter,
-                correctAnswerText: (question.options && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
+                correctAnswerText: (question.options && question.correctAnswerLetter && question.options[question.correctAnswerLetter]) ? question.options[question.correctAnswerLetter] : "N/A",
                 isCorrect: isCorrect,
                 explanation: question.explanation,
                 timeTaken: currentQState.timeTaken,
@@ -1028,12 +1147,12 @@
                 const optKey = btn.dataset.option;
                 if (optKey === currentQState.selectedAnswerLetter) { 
                     btn.classList.add('selected'); 
-                    if (isCorrect) {
+                    if (isCorrect === true) {
                         btn.classList.add('correct');
-                    } else {
+                    } else if (isCorrect === false) {
                         btn.classList.add('incorrect');
                     }
-                } else if (optKey === question.correctAnswerLetter) { 
+                } else if (question.correctAnswerLetter && optKey === question.correctAnswerLetter) { 
                     btn.classList.add('correct'); 
                 }
             });
@@ -1084,7 +1203,7 @@
                                 userAnswer: null, 
                                 userAnswerText: "N/A",
                                 correctAnswer: questions[idx].correctAnswerLetter,
-                                correctAnswerText: (questions[idx].options && questions[idx].options[questions[idx].correctAnswerLetter]) ? questions[idx].options[questions[idx].correctAnswerLetter] : "N/A",
+                                correctAnswerText: (questions[idx].options && questions[idx].correctAnswerLetter && questions[idx].options[questions[idx].correctAnswerLetter]) ? questions[idx].options[questions[idx].correctAnswerLetter] : "N/A",
                                 isCorrect: false,
                                 explanation: questions[idx].explanation,
                                 timeTaken: qState.timeTakenOnPause || 0, 
@@ -1102,8 +1221,7 @@
             const quizEndTime = new Date();
             const totalQuizDurationSec = userAnswers.length > 0 ? Math.round((quizEndTime - quizStartTime) / 1000) : 0;
 
-            const answeredQuestions = userAnswers.filter(ans => ans.userAnswer !== null); 
-            const correctCount = userAnswers.filter(ans => ans.isCorrect).length;
+            const correctCount = userAnswers.filter(ans => ans.isCorrect === true).length; 
             const totalAnsweredOrTimedOut = userAnswers.length; 
 
             const accuracy = totalAnsweredOrTimedOut > 0 ? (correctCount / totalAnsweredOrTimedOut * 100).toFixed(1) : 0;
@@ -1117,8 +1235,12 @@
 
             resultsTotalQuestions.textContent = questions.length; 
             resultsCorrectAnswers.textContent = `${correctCount} (${accuracy}%)`;
-            resultsIncorrectAnswers.textContent = `${totalAnsweredOrTimedOut - correctCount} (${(totalAnsweredOrTimedOut > 0 ? (100 - parseFloat(accuracy)) : 0).toFixed(1)}%)`;
-            resultsAccuracy.textContent = `${accuracy}%`;
+            const scorableAnswers = userAnswers.filter(ans => ans.correctAnswer !== null);
+            const incorrectCount = scorableAnswers.filter(ans => !ans.isCorrect).length;
+            const accuracyOfScorable = scorableAnswers.length > 0 ? (correctCount / scorableAnswers.length * 100).toFixed(1) : accuracy; 
+            
+            resultsIncorrectAnswers.textContent = `${incorrectCount} (${(scorableAnswers.length > 0 ? (100 - parseFloat(accuracyOfScorable)) : (100 - parseFloat(accuracy))).toFixed(1)}%)`;
+            resultsAccuracy.textContent = `${accuracy}%`; 
             
             const totalMinutes = Math.floor(totalQuizDurationSec / 60);
             const totalSeconds = totalQuizDurationSec % 60;
@@ -1153,7 +1275,7 @@
                     userAnswer: null, 
                     userAnswerText: "Não respondida",
                     correctAnswer: q.correctAnswerLetter,
-                    correctAnswerText: (q.options && q.options[q.correctAnswerLetter]) ? q.options[q.correctAnswerLetter] : "N/A",
+                    correctAnswerText: (q.options && q.correctAnswerLetter && q.options[q.correctAnswerLetter]) ? q.options[q.correctAnswerLetter] : "N/A",
                     isCorrect: false, 
                     explanation: q.explanation,
                     timeTaken: quizState[idx]?.timeTakenOnPause || 0, 
@@ -1166,19 +1288,19 @@
                 questionDiv.className = 'dark-card p-4 rounded-md';
 
                 let optionsHTML = '<ul class="list-none space-y-1 mt-2">';
-                ['A', 'B', 'C', 'D'].forEach(optKey => {
+                ['A', 'B', 'C', 'D', 'E'].forEach(optKey => { 
                     if (answer.options && answer.options[optKey]) { 
-                        let optClass = 'text-gray-300';
+                        let optClass = 'review-option-default-text';
                         if (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey)) {
                             optClass += ' line-through opacity-60';
                         }
-                        if (optKey === answer.correctAnswer) optClass = 'text-green-400 font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
+                        if (optKey === answer.correctAnswer) optClass = 'review-option-correct-text font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
                         
                         if (optKey === answer.userAnswer) { 
                             if(answer.isCorrect) {
-                                optClass = 'text-green-400 font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
+                                optClass = 'review-option-correct-text font-semibold ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : '');
                             } else {
-                                 optClass = 'text-red-400 ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : 'font-semibold');
+                                 optClass = 'review-option-incorrect-text ' + (answer.eliminatedOptions && answer.eliminatedOptions.includes(optKey) ? 'line-through opacity-60' : 'font-semibold');
                             }
                         }
                         optionsHTML += `<li class="${optClass}"><span class="font-bold">${optKey}.</span> ${answer.options[optKey]}</li>`;
@@ -1187,21 +1309,24 @@
                 optionsHTML += '</ul>';
                 
                 let statusText = '';
-                if (answer.userAnswer === null) { 
-                    statusText = `<p class="text-sm text-yellow-400">Não respondida ou tempo esgotado.</p>`; 
+                 if (answer.isCorrect === null && answer.userAnswer) { 
+                    statusText = `<p class="text-sm review-status-info-text">Sua resposta: ${answer.userAnswer} (Correção não disponível)</p>`;
+                } else if (answer.userAnswer === null) { 
+                    statusText = `<p class="text-sm warning-text">Não respondida ou tempo esgotado.</p>`; 
                 } else if (answer.isCorrect) {
-                    statusText = `<p class="text-sm text-green-400">Sua resposta: ${answer.userAnswer} (Correta)</p>`;
+                    statusText = `<p class="text-sm review-status-correct-text">Sua resposta: ${answer.userAnswer} (Correta)</p>`;
                 } else {
-                    statusText = `<p class="text-sm text-red-400">Sua resposta: ${answer.userAnswer} (Incorreta)</p>`;
+                    statusText = `<p class="text-sm review-status-incorrect-text">Sua resposta: ${answer.userAnswer} (Incorreta)</p>`;
                 }
 
+
                 questionDiv.innerHTML = `
-                    <h4 class="text-md font-semibold text-yellow-300 mb-1">Questão ${index + 1}: ${answer.questionText}</h4>
+                    <h4 class="text-md font-semibold review-question-title-text mb-1">Questão ${index + 1}: ${answer.questionText}</h4>
                     ${optionsHTML}
                     ${statusText}
-                    <p class="text-sm text-gray-400 mt-1">Resposta Correta: ${answer.correctAnswer}. ${answer.correctAnswerText || 'N/A'}</p>
-                    <p class="text-sm text-gray-300 mt-1 italic">Explicação: ${answer.explanation || 'N/A'}</p>
-                    <p class="text-xs text-gray-500 mt-1">Tempo gasto: ${answer.timeTaken !== null ? answer.timeTaken + 's' : 'N/A'}</p>
+                    <p class="text-sm review-status-info-text mt-1">Resposta Correta: ${answer.correctAnswer || 'N/A'}. ${answer.correctAnswerText || 'N/A'}</p>
+                    <p class="text-sm italic review-explanation-text mt-1">Explicação: ${answer.explanation || 'Não fornecida.'}</p>
+                    <p class="text-xs review-time-text mt-1">Tempo gasto: ${answer.timeTaken !== null ? answer.timeTaken + 's' : 'N/A'}</p>
                 `;
                 reviewQuestionsContainer.appendChild(questionDiv);
             });
