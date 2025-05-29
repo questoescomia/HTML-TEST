@@ -12,34 +12,104 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --body-bg-light: #E5E7EB; /* Gray 200 */
+            --body-text-light: #1F2937; /* Gray 800 */
+            --card-bg-light: #FFFFFF;
+            --card-text-light: #1F2937;
+            --inner-card-bg-light: #F9FAFB;
+            --inner-card-border-light: #E5E7EB;
+            --input-bg-light: #FFFFFF;
+            --input-border-light: #D1D5DB;
+            --input-text-light: #111827;
+            --focus-ring-color: #10B981; /* Green 500 */
+
+            --body-bg-dark: #111827; /* Gray 900 */
+            --body-text-dark: #E5E7EB; /* Gray 200 */
+            --card-bg-dark: #1F2937; /* Gray 800 */
+            --card-text-dark: #E5E7EB;
+            --inner-card-bg-dark: #374151; /* Gray 700 */
+            --inner-card-border-dark: #4B5563; /* Gray 600 */
+            --input-bg-dark: #374151;
+            --input-border-dark: #4B5563;
+            --input-text-dark: #F3F4F6; /* Gray 100 */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #E5E7EB; /* Gray 200 - Fundo da página claro */
-            color: #1F2937; /* Gray 800 - Texto padrão escuro */
+            background-color: var(--body-bg-light);
+            color: var(--body-text-light);
+            transition: background-color 0.3s, color 0.3s;
         }
-        /* Card principal (setup, quiz, results) - agora se expande */
+        body.dark-theme {
+            background-color: var(--body-bg-dark);
+            color: var(--body-text-dark);
+        }
+
         .content-card { 
-            background-color: #FFFFFF; 
-            color: #1F2937; 
-            width: 100%; /* Ocupa toda a largura */
-            min-height: 100vh; /* Ocupa toda a altura da viewport */
+            background-color: var(--card-bg-light); 
+            color: var(--card-text-light); 
+            width: 100%; 
+            min-height: 100vh; 
             display: flex;
             flex-direction: column;
-            /* padding é adicionado diretamente aos elementos para controle */
+            padding: 1rem; 
+            transition: background-color 0.3s, color 0.3s;
         }
+        body.dark-theme .content-card {
+            background-color: var(--card-bg-dark);
+            color: var(--card-text-dark);
+        }
+
+        @media (min-width: 768px) { 
+            .content-card {
+                padding: 2rem; 
+                border-radius: 0.75rem; 
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+                min-height: auto; 
+                width: auto; 
+                max-width: 56rem; 
+                margin-top: 1rem; 
+                margin-bottom: 1rem; 
+            }
+            body { 
+                 display: flex;
+                 justify-content: center;
+                 align-items: flex-start; 
+                 padding-top: 1rem; 
+                 padding-bottom: 1rem; 
+            }
+             #app {
+                align-items: center; 
+            }
+        }
+
+
         .inner-card { 
-            background-color: #F9FAFB; 
-            border: 1px solid #E5E7EB; 
-            color: #374151; 
+            background-color: var(--inner-card-bg-light); 
+            border: 1px solid var(--inner-card-border-light); 
+            color: var(--card-text-light); 
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        body.dark-theme .inner-card {
+            background-color: var(--inner-card-bg-dark);
+            border: 1px solid var(--inner-card-border-dark);
+            color: var(--body-text-dark);
         }
         
         .input-field, .select-field { 
-            background-color: #FFFFFF; 
-            border-color: #D1D5DB; 
-            color: #111827; 
+            background-color: var(--input-bg-light); 
+            border-color: var(--input-border-light); 
+            color: var(--input-text-light); 
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+        body.dark-theme .input-field, body.dark-theme .select-field {
+            background-color: var(--input-bg-dark);
+            border-color: var(--input-border-dark);
+            color: var(--input-text-dark);
         }
         .input-field:focus, .select-field:focus { 
-            border-color: #10B981; 
+            border-color: var(--focus-ring-color); 
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5); 
         }
         
@@ -51,7 +121,9 @@
         .btn-yellow:hover { background-color: #F59E0B; }
 
         .btn-gray { background-color: #6B7280; color: white; } 
-        .btn-gray:hover { background-color: #4B5563; } 
+        .btn-gray:hover:not(:disabled) { background-color: #4B5563; } 
+        .btn-gray:disabled { background-color: #D1D5DB; color: #9CA3AF; cursor: not-allowed; }
+
 
         .btn-red { background-color: #EF4444; color: white;}
         .btn-red:hover { background-color: #DC2626; }
@@ -61,28 +133,46 @@
 
         .mode-selector button {
             transition: all 0.2s ease-in-out;
-            border: 2px solid #D1D5DB; 
-            background-color: #F9FAFB; 
-            color: #374151; 
+            border: 2px solid var(--input-border-light); 
+            background-color: var(--inner-card-bg-light); 
+            color: var(--card-text-light); 
+        }
+        body.dark-theme .mode-selector button {
+            border-color: var(--input-border-dark);
+            background-color: var(--inner-card-bg-dark);
+            color: var(--card-text-dark);
         }
         .mode-selector button.active {
-            border-color: #10B981; 
+            border-color: var(--focus-ring-color); 
             background-color: #D1FAE5; 
             color: #065F46; 
         }
+        body.dark-theme .mode-selector button.active {
+            background-color: #065F46; 
+            color: #D1FAE5;
+        }
+
         .mode-description {
             font-size: 0.75rem; 
             color: #6B7280; 
             margin-top: 0.25rem; 
             min-height: 2.25rem; 
         }
+        body.dark-theme .mode-description {
+            color: #9CA3AF;
+        }
+
 
         .question-block-vertical { 
-            border: 1px solid #E5E7EB; 
+            border: 1px solid var(--inner-card-border-light); 
             padding: 1rem; 
             border-radius: 0.5rem; 
             margin-bottom: 1.5rem; 
-            background-color: #F9FAFB; 
+            background-color: var(--inner-card-bg-light); 
+        }
+        body.dark-theme .question-block-vertical {
+            border-color: var(--inner-card-border-dark);
+            background-color: var(--inner-card-bg-dark);
         }
 
 
@@ -90,13 +180,22 @@
         .option-button {
             transition: all 0.2s ease-in-out;
             flex-grow: 1;
-            background-color: #FFFFFF; 
-            border: 1px solid #D1D5DB; 
-            color: #1F2937; 
+            background-color: var(--input-bg-light); 
+            border: 1px solid var(--input-border-light); 
+            color: var(--input-text-light); 
+        }
+        body.dark-theme .option-button {
+            background-color: var(--input-bg-dark);
+            border-color: var(--input-border-dark);
+            color: var(--input-text-dark);
         }
         .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
              background-color: #F3F4F6; 
         }
+        body.dark-theme .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
+             background-color: #4B5563; 
+        }
+
         .option-button.selected-temporary { 
             background-color: #60A5FA; 
             border-color: #3B82F6; 
@@ -120,10 +219,16 @@
         .option-button.eliminated {
             text-decoration: line-through;
             opacity: 0.6;
-            background-color: #E5E7EB !important; 
+            background-color: #D1D5DB !important; 
             color: #6B7280 !important; 
-            border-color: #D1D5DB !important;
+            border-color: #9CA3AF !important; 
         }
+        body.dark-theme .option-button.eliminated {
+            background-color: #4B5563 !important; 
+            color: #9CA3AF !important; 
+            border-color: #374151 !important; 
+        }
+
         .eliminate-icon {
             cursor: pointer;
             color: #9CA3AF; 
@@ -131,18 +236,25 @@
             border-radius: 0.375rem; 
             transition: all 0.2s ease-in-out;
         }
+        body.dark-theme .eliminate-icon {
+            color: #6B7280;
+        }
         .eliminate-icon:hover {
             color: #10B981; 
             background-color: #F3F4F6; 
         }
-        .eliminate-icon.eliminated-active {
-            color: #EF4444; 
+        body.dark-theme .eliminate-icon:hover {
+            background-color: #374151;
         }
+        .eliminate-icon.eliminated-active { color: #EF4444; }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #E5E7EB;  }
+        ::-webkit-scrollbar-track { background: var(--body-bg-light); }
         ::-webkit-scrollbar-thumb { background: #D1D5DB;  border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9CA3AF;  }
+        body.dark-theme ::-webkit-scrollbar-track { background: var(--body-bg-dark); }
+        body.dark-theme ::-webkit-scrollbar-thumb { background: #4B5563; }
+        body.dark-theme ::-webkit-scrollbar-thumb:hover { background: #6B7280; }
         
         .loader, .small-loader {
             border-radius: 50%;
@@ -150,14 +262,14 @@
         }
         .loader { 
             border: 4px solid rgba(16, 185, 129, 0.2); 
-            border-top: 4px solid #10B981; 
+            border-top: 4px solid var(--focus-ring-color); 
             width: 40px;
             height: 40px;
             margin: 20px auto;
         }
         .small-loader { 
             border: 2px solid rgba(16, 185, 129, 0.2); 
-            border-top: 2px solid #10B981; 
+            border-top: 2px solid var(--focus-ring-color); 
             width: 16px;
             height: 16px;
             display: inline-block;
@@ -168,50 +280,229 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        html, body { height: 100%; margin: 0; padding: 0; } /* Ensure no default margin/padding */
+        html, body { height: 100%; margin: 0; padding: 0; } 
         #app {
             display: flex;
             flex-direction: column;
-            align-items: center; /* This will center the content-card if it's not w-full */
-            /* justify-content: center; */ /* Remove if content-card takes full height */
+            align-items: center; 
             width: 100%;
             min-height: 100vh;
         }
 
-
         .header-title { color: #10B981; }
+        body.dark-theme .header-title { color: #34D399; } 
         .header-subtitle { color: #4B5563; }
+        body.dark-theme .header-subtitle { color: #9CA3AF; }
         .label-text { color: #374151; }
+        body.dark-theme .label-text { color: #D1D5DB; }
         .file-name-text { color: #4B5563; }
+        body.dark-theme .file-name-text { color: #9CA3AF; }
         .loading-text { color: #059669; }
+        body.dark-theme .loading-text { color: #6EE7B7; }
         .warning-text { color: #D97706; }
+        body.dark-theme .warning-text { color: #FBBF24; }
         .error-text { color: #DC2626; }
-        .quiz-title-text { color: #1F2937; }
+        body.dark-theme .error-text { color: #F87171; }
+        
+        .quiz-title-text { color: #1F2937; } 
+        body.dark-theme .quiz-title-text { color: #E5E7EB; }
+        .quiz-main-title { color: #10B981; } 
+        body.dark-theme .quiz-main-title { color: #34D399; }
         .timer-text { color: #D97706; }
+        body.dark-theme .timer-text { color: #FBBF24; }
         .question-text-color { color: #111827; }
+        body.dark-theme .question-text-color { color: #F3F4F6; }
+        
         .feedback-title-color-correct { color: #059669; }
+        body.dark-theme .feedback-title-color-correct { color: #34D399; }
         .feedback-title-color-incorrect { color: #DC2626; }
+        body.dark-theme .feedback-title-color-incorrect { color: #F87171; }
         .feedback-title-color-info { color: #4B5563; }
+        body.dark-theme .feedback-title-color-info { color: #9CA3AF; }
+        
         .feedback-text-color { color: #374151; }
+        body.dark-theme .feedback-text-color { color: #D1D5DB; }
         .feedback-explanation-color { color: #4B5563; }
+        body.dark-theme .feedback-explanation-color { color: #9CA3AF; }
         .deeper-explanation-output-color { color: #374151; }
+        body.dark-theme .deeper-explanation-output-color { color: #D1D5DB; }
+        
         .results-title-text { color: #1F2937; }
+        body.dark-theme .results-title-text { color: #E5E7EB; }
         .results-label-text { color: #4B5563; }
+        body.dark-theme .results-label-text { color: #9CA3AF; }
         .results-value-text { color: #111827; }
+        body.dark-theme .results-value-text { color: #F3F4F6; }
         .results-value-correct-text { color: #059669; }
+        body.dark-theme .results-value-correct-text { color: #34D399; }
         .results-value-incorrect-text { color: #DC2626; }
+        body.dark-theme .results-value-incorrect-text { color: #F87171; }
+        
         .modal-title-text { color: #1F2937; }
+        body.dark-theme .modal-title-text { color: #E5E7EB; }
         .modal-close-button-text { color: #6B7280; }
+        body.dark-theme .modal-close-button-text { color: #9CA3AF; }
         .modal-close-button-text:hover { color: #111827; }
+        body.dark-theme .modal-close-button-text:hover { color: #FFFFFF; }
+
         .review-question-title-text { color: #1F2937; }
+        body.dark-theme .review-question-title-text { color: #E5E7EB; }
         .review-option-default-text { color: #374151; }
+        body.dark-theme .review-option-default-text { color: #D1D5DB; }
         .review-option-correct-text { color: #059669; }
+        body.dark-theme .review-option-correct-text { color: #34D399; }
         .review-option-incorrect-text { color: #DC2626; }
+        body.dark-theme .review-option-incorrect-text { color: #F87171; }
         .review-status-info-text { color: #4B5563; }
+        body.dark-theme .review-status-info-text { color: #9CA3AF; }
         .review-status-correct-text { color: #059669; }
+        body.dark-theme .review-status-correct-text { color: #34D399; }
         .review-status-incorrect-text { color: #DC2626; }
+        body.dark-theme .review-status-incorrect-text { color: #F87171; }
         .review-explanation-text { color: #4B5563; }
+        body.dark-theme .review-explanation-text { color: #9CA3AF; }
         .review-time-text { color: #6B7280; }
+        body.dark-theme .review-time-text { color: #9CA3AF; }
+
+        .font-size-controls button {
+            background-color: #F9FAFB;
+            border: 1px solid #D1D5DB;
+            color: #374151;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.375rem;
+            margin-left: 0.5rem;
+        }
+        body.dark-theme .font-size-controls button {
+            background-color: var(--inner-card-bg-dark);
+            border-color: var(--inner-card-border-dark);
+            color: var(--body-text-dark);
+        }
+        .font-size-controls button:hover {
+            background-color: #F3F4F6;
+        }
+        body.dark-theme .font-size-controls button:hover {
+            background-color: #4B5563;
+        }
+
+        .pagination-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.25rem; /* Reduced gap for tighter pagination */
+        }
+        .pagination-button {
+            background-color: var(--inner-card-bg-light);
+            border: 1px solid var(--input-border-light);
+            color: var(--card-text-light);
+            padding: 0.5rem 0.75rem; 
+            border-radius: 0.375rem; 
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        body.dark-theme .pagination-button {
+            background-color: var(--inner-card-bg-dark);
+            border-color: var(--input-border-dark);
+            color: var(--card-text-dark);
+        }
+        .pagination-button:hover:not(:disabled) {
+            background-color: #F3F4F6; 
+        }
+        body.dark-theme .pagination-button:hover:not(:disabled) {
+            background-color: #4B5563;
+        }
+        .pagination-button.active {
+            background-color: var(--focus-ring-color); 
+            color: white;
+            border-color: var(--focus-ring-color);
+        }
+        .pagination-button:disabled {
+            color: #9CA3AF; 
+            cursor: not-allowed;
+            background-color: var(--inner-card-bg-light);
+            opacity: 0.7;
+        }
+        body.dark-theme .pagination-button:disabled {
+            color: #6B7280;
+            background-color: var(--inner-card-bg-dark);
+        }
+
+
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: #FFFFFF !important;
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #app > div:not(#printableQuizArea) {
+                display: none !important;
+            }
+            #printableQuizArea {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 10px !important; 
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .printable-question-block {
+                page-break-inside: avoid !important;
+                margin-bottom: 20px !important;
+                padding: 15px !important;
+                border: 1px solid #ccc !important;
+                border-radius: 5px !important;
+            }
+            .printable-question-block h3, .printable-question-block h4 {
+                color: #000000 !important;
+                font-size: 14pt !important;
+                margin-bottom: 10px !important;
+            }
+            .printable-question-block p, .printable-question-block li {
+                color: #000000 !important;
+                font-size: 11pt !important;
+                line-height: 1.4 !important;
+            }
+            .printable-question-block ul {
+                list-style-type: none !important;
+                padding-left: 0 !important;
+            }
+            .printable-option-correct {
+                font-weight: bold !important;
+                color: #006400 !important; 
+            }
+             .printable-user-answer-correct {
+                background-color: #e6ffe6 !important; 
+            }
+            .printable-user-answer-incorrect {
+                background-color: #ffe6e6 !important; 
+                text-decoration: line-through !important;
+            }
+            .printable-explanation {
+                margin-top: 10px !important;
+                padding-top: 5px !important;
+                border-top: 1px dashed #ccc !important;
+                font-style: italic !important;
+            }
+            .eliminate-icon, 
+            .question-block-vertical button:not(.option-button), 
+            .small-loader,
+            #deeperExplanationLoader, 
+            #deeperExplanationOutput, 
+            .btn-purple, 
+            .feedback-title-color-correct, 
+            .feedback-title-color-incorrect,
+            .feedback-title-color-info,
+            .deeper-explanation-output-color,
+            [id^=deeperExplanationButton_], 
+            [id^=deeperExplanationLoader_],
+            [id^=deeperExplanationOutput_],
+            [id^=confirmAnswerButton_],
+            .quiz-controls 
+             {
+                display: none !important;
+            }
+        }
 
     </style>
 </head>
@@ -219,101 +510,119 @@
 
     <div id="app">
 
-        <div id="setupScreen" class="content-card p-6 md:p-8">
-            <header class="mb-6 text-center">
-                <h1 class="text-4xl font-bold header-title">MedQUEST</h1> 
-                <p class="mt-2 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> 
+        <div id="setupScreen" class="content-card">
+            <header class="mb-6 text-center pt-6 px-6 md:pt-8 md:px-8"> 
+                <div class="flex justify-center items-center mb-2">
+                    <h1 class="text-4xl font-bold header-title">MedQUEST</h1> 
+                    <button id="themeToggle" class="ml-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>
+                    </button>
+                </div>
+                <p class="mt-1 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> 
             </header>
 
-            <div class="mb-6 mode-selector grid grid-cols-2 gap-2 sm:gap-4">
-                <div class="text-center">
-                    <button id="modeGenerateButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base active w-full">
-                        <i class="fas fa-magic-sparkles mr-1 sm:mr-2"></i>Gerar Questões com IA
-                    </button>
-                    <p id="modeGenerateDescription" class="mode-description">As questões serão criadas pela IA a partir de um resumo/livro em PDF.</p>
+            <div class="px-6 md:px-8"> 
+                <div class="mb-6 mode-selector grid grid-cols-2 gap-2 sm:gap-4">
+                    <div class="text-center">
+                        <button id="modeGenerateButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base active w-full">
+                            <i class="fas fa-magic-sparkles mr-1 sm:mr-2"></i>Gerar Questões com IA
+                        </button>
+                        <p id="modeGenerateDescription" class="mode-description">As questões serão criadas pela IA a partir de um resumo/livro em PDF.</p>
+                    </div>
+                    <div class="text-center">
+                        <button id="modeExtractButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base w-full">
+                            <i class="fas fa-file-import mr-1 sm:mr-2"></i>Extrair Questões de PDF
+                        </button>
+                        <p id="modeExtractDescription" class="mode-description hidden">As questões serão extraídas de um PDF de questões prontas, utilizando a interface do site.</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <button id="modeExtractButton" class="py-2 px-3 sm:px-6 rounded-md text-sm sm:text-base w-full">
-                        <i class="fas fa-file-import mr-1 sm:mr-2"></i>Extrair Questões de PDF
-                    </button>
-                    <p id="modeExtractDescription" class="mode-description hidden">As questões serão extraídas de um PDF de questões prontas, utilizando a interface do site.</p>
-                </div>
-            </div>
 
-            <div class="mb-8"> 
-                <label for="fileInput" class="block text-sm font-medium label-text mb-1">Escolher arquivo PDF</label>
-                <div class="flex items-center">
-                    <input type="file" id="fileInput" accept=".pdf" class="hidden">
-                    <button onclick="document.getElementById('fileInput').click()" class="input-field px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-100"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
-                    </button>
-                    <span id="fileName" class="input-field px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6"> 
-                <div>
-                    <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
-                    <select id="numQuestions" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
-                        <option value="5">5 Questões</option>
-                        <option value="10" selected>10 Questões</option>
-                        <option value="15">15 Questões</option>
-                        <option value="20">20 Questões</option>
-                        <option value="0" class="hidden">Todas do PDF</option> 
-                    </select>
+                <div class="mb-8"> 
+                    <label for="fileInput" class="block text-sm font-medium label-text mb-1">Escolher arquivo PDF</label>
+                    <div class="flex items-center">
+                        <input type="file" id="fileInput" accept=".pdf" class="hidden">
+                        <button onclick="document.getElementById('fileInput').click()" class="input-field px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-100"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
+                        </button>
+                        <span id="fileName" class="input-field px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
                 </div>
-                <div id="difficultyContainer"> 
-                    <label for="difficulty" class="block text-sm font-medium label-text mb-1">Dificuldade</label>
-                    <select id="difficulty" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
-                        <option value="Fácil">Fácil</option>
-                        <option value="Médio" selected>Médio</option>
-                        <option value="Difícil">Difícil</option>
-                    </select>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6"> 
+                    <div>
+                        <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
+                        <select id="numQuestions" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                            <option value="5">5 Questões</option>
+                            <option value="10" selected>10 Questões</option>
+                            <option value="15">15 Questões</option>
+                            <option value="20">20 Questões</option>
+                            <option value="0" class="hidden">Todas do PDF</option> 
+                        </select>
+                    </div>
+                    <div id="difficultyContainer"> 
+                        <label for="difficulty" class="block text-sm font-medium label-text mb-1">Dificuldade</label>
+                        <select id="difficulty" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                            <option value="Fácil">Fácil</option>
+                            <option value="Médio" selected>Médio</option>
+                            <option value="Difícil">Difícil</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="timePerQuestion" class="block text-sm font-medium label-text mb-1">Tempo por Questão</label>
+                        <select id="timePerQuestion" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                            <option value="0">Sem limite</option>
+                            <option value="30">30 Segundos</option>
+                            <option value="60" selected>1 Minuto</option>
+                            <option value="120">2 Minutos</option>
+                            <option value="180">3 Minutos</option>
+                            <option value="300">5 Minutos</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label for="timePerQuestion" class="block text-sm font-medium label-text mb-1">Tempo por Questão</label>
-                    <select id="timePerQuestion" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
-                        <option value="0">Sem limite</option>
-                        <option value="30">30 Segundos</option>
-                        <option value="60" selected>1 Minuto</option>
-                        <option value="120">2 Minutos</option>
-                        <option value="180">3 Minutos</option>
-                        <option value="300">5 Minutos</option>
-                    </select>
+                
+                <button id="startQuizButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md transition duration-150 flex items-center justify-center text-lg">
+                    <i class="fas fa-play mr-2"></i><span id="startQuizButtonText">Gerar Questões e Iniciar</span>
+                </button>
+                <div id="loadingIndicator" class="hidden text-center mt-4">
+                    <div class="loader"></div>
+                    <p class="loading-text" id="loadingIndicatorText">Gerando questões... Por favor, aguarde.</p> 
                 </div>
+                <div id="generalProcessWarning" class="text-xs mt-3 text-center warning-text">
+                     <i class="fas fa-info-circle mr-1"></i>Nota: A IA pode cometer erros. Verifique informações críticas.
+                </div>
+                <div id="generationWarning" class="text-xs mt-2 text-center warning-text hidden">
+                    <i class="fas fa-exclamation-triangle mr-1"></i>A geração/extração de questões pode demorar. Se já enviou o PDF e clicou em gerar/extrair, fique tranquilo, logo ficará pronto.
+                </div>
+                <p id="errorMessage" class="error-text text-center mt-4"></p>
             </div>
-            
-            <button id="startQuizButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md transition duration-150 flex items-center justify-center text-lg">
-                <i class="fas fa-play mr-2"></i><span id="startQuizButtonText">Gerar Questões e Iniciar</span>
-            </button>
-            <div id="loadingIndicator" class="hidden text-center mt-4">
-                <div class="loader"></div>
-                <p class="loading-text" id="loadingIndicatorText">Gerando questões... Por favor, aguarde.</p> 
-            </div>
-            <div id="generalProcessWarning" class="text-xs mt-3 text-center warning-text">
-                 <i class="fas fa-info-circle mr-1"></i>Nota: A IA pode cometer erros. Verifique informações críticas.
-            </div>
-            <div id="generationWarning" class="text-xs mt-2 text-center warning-text hidden">
-                <i class="fas fa-exclamation-triangle mr-1"></i>A geração/extração de questões pode demorar. Se já enviou o PDF e clicou em gerar/extrair, fique tranquilo, logo ficará pronto.
-            </div>
-            <p id="errorMessage" class="error-text text-center mt-4"></p>
         </div>
 
         <div id="quizScreen" class="hidden w-full content-card p-6 md:p-8">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold quiz-title-text" id="quizScreenTitle">Página X de Y (Questões X-Y)</h2> 
+            <div class="flex justify-between items-center mb-2 quiz-controls">
+                <h2 class="text-3xl font-bold quiz-main-title">MedQUEST</h2>
+                <div class="flex items-center">
+                    <div class="font-size-controls mr-3">
+                        <button id="decreaseFontButton" title="Diminuir Fonte">A-</button>
+                        <button id="increaseFontButton" title="Aumentar Fonte">A+</button>
+                    </div>
+                    <button id="printPdfButtonQuiz" class="btn-purple text-white font-semibold py-2 px-3 rounded-md shadow-md transition duration-150 text-lg">
+                        <i class="fas fa-print"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex justify-between items-center mb-6"> 
+                <h3 class="text-xl font-semibold quiz-title-text" id="quizScreenTitle">Página X de Y (Questões X-Y)</h3> 
                 <div id="questionTimerDisplay" class="text-xl font-bold timer-text">Múltiplas Questões</div> 
             </div>
             
             <div id="questionsDisplayArea" class="mb-6 flex-grow overflow-y-auto"> 
                 </div>
             
-            <div class="flex justify-between items-center mt-6">
-                <button id="prevQuestionButton" class="btn-gray text-white font-semibold py-3 px-4 sm:px-6 rounded-md shadow-md transition duration-150">
-                    <i class="fas fa-arrow-left mr-2"></i><span id="prevButtonText">Página Anterior</span>
-                </button>
-                <button id="nextQuestionButton" class="btn-yellow text-gray-900 font-semibold py-3 px-4 sm:px-6 rounded-md shadow-md transition duration-150"> 
-                    <span id="nextButtonText">Próxima Página</span> <i class="fas fa-arrow-right ml-2"></i>
-                </button>
+            <div class="flex justify-center items-center mt-6 quiz-controls"> 
+                <div id="paginationControlsContainer" class="pagination-controls">
+                    </div>
             </div>
+             <button id="verResultadoQuizButton" class="w-full md:w-1/2 mx-auto mt-6 btn-yellow text-gray-900 font-semibold py-3 px-6 rounded-md shadow-md transition duration-150 flex items-center justify-center quiz-controls"> 
+                Ver Resultado <i class="fas fa-poll-h ml-2"></i>
+            </button>
         </div>
 
         <div id="resultsScreen" class="hidden w-full content-card p-6 md:p-8 text-center">
@@ -372,6 +681,8 @@
                     </div>
             </div>
         </div>
+        
+        <div id="printableQuizArea" class="hidden"></div>
 
     </div>
 
@@ -392,6 +703,11 @@
         const generalProcessWarning = document.getElementById('generalProcessWarning'); 
         const questionsDisplayArea = document.getElementById('questionsDisplayArea');
         const quizScreenTitle = document.getElementById('quizScreenTitle');
+        const themeToggleButton = document.getElementById('themeToggle'); 
+        const increaseFontButton = document.getElementById('increaseFontButton'); 
+        const decreaseFontButton = document.getElementById('decreaseFontButton'); 
+        const printPdfButtonQuiz = document.getElementById('printPdfButtonQuiz'); 
+        const verResultadoQuizButton = document.getElementById('verResultadoQuizButton'); 
 
 
         const fileInput = document.getElementById('fileInput');
@@ -407,10 +723,7 @@
 
         const questionTimerDisplay = document.getElementById('questionTimerDisplay');
         
-        const prevQuestionButton = document.getElementById('prevQuestionButton'); 
-        const nextQuestionButton = document.getElementById('nextQuestionButton');
-        const prevButtonText = document.getElementById('prevButtonText'); 
-        const nextButtonText = document.getElementById('nextButtonText'); 
+        const paginationControlsContainer = document.getElementById('paginationControlsContainer'); 
         
         const resultsTotalQuestions = document.getElementById('resultsTotalQuestions');
         const resultsCorrectAnswers = document.getElementById('resultsCorrectAnswers');
@@ -438,16 +751,69 @@
         let quizState = []; 
         let temporarilySelectedOption = null; 
         let currentQuizMode = 'generate'; 
-        const currentLayoutMode = 'vertical'; // Fixed to vertical
+        const currentLayoutMode = 'vertical'; 
         const QUESTIONS_PER_VERTICAL_PAGE = 10;
         let currentVerticalPage = 0;
         const MAX_PDF_TEXT_LENGTH = 35000; 
+        let currentFontSize = 1; 
+
+
+        // --- THEME AND FONT SIZE ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+                themeToggleButton.innerHTML = '<i class="fas fa-sun text-xl text-yellow-400"></i>';
+            } else {
+                document.body.classList.remove('dark-theme');
+                themeToggleButton.innerHTML = '<i class="fas fa-moon text-xl text-gray-700"></i>';
+            }
+            localStorage.setItem('medQuestTheme', theme);
+        }
+
+        function applyFontSize(sizeMultiplier) {
+            const questionBlocks = document.querySelectorAll('.question-block-vertical, #questionsDisplayArea > div:not(.question-block-vertical)'); // Target individual blocks or direct children
+            
+            questionBlocks.forEach(block => {
+                const questionTextEl = block.querySelector('.question-text-color');
+                const optionButtons = block.querySelectorAll('.option-button');
+
+                if (questionTextEl) {
+                     questionTextEl.style.fontSize = `${1.125 * sizeMultiplier}rem`; // text-lg base
+                }
+                optionButtons.forEach(btn => {
+                     btn.style.fontSize = `${1 * sizeMultiplier}rem`; // text-base base
+                });
+            });
+            localStorage.setItem('medQuestFontSize', sizeMultiplier);
+            currentFontSize = sizeMultiplier;
+        }
+
+        themeToggleButton.addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
+            applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        });
+
+        increaseFontButton.addEventListener('click', () => {
+            let newSize = Math.min(currentFontSize + 0.1, 1.5); 
+            applyFontSize(newSize);
+        });
+        decreaseFontButton.addEventListener('click', () => {
+            let newSize = Math.max(currentFontSize - 0.1, 0.8); 
+            applyFontSize(newSize);
+        });
+
+        const savedTheme = localStorage.getItem('medQuestTheme') || 'light';
+        const savedFontSize = parseFloat(localStorage.getItem('medQuestFontSize')) || 1;
+        applyTheme(savedTheme);
+        // Apply font size after questions are rendered for the first time
+        // or call applyFontSize() inside displayCurrentPageOrQuestion if needed immediately
 
 
         // Event Listeners
         modeGenerateButton.addEventListener('click', () => setQuizMode('generate'));
         modeExtractButton.addEventListener('click', () => setQuizMode('extract'));
-        // Removed layout button listeners
+        
+        if(printPdfButtonQuiz) printPdfButtonQuiz.addEventListener('click', handlePrintToPdf); 
 
 
         fileInput.addEventListener('change', async () => {
@@ -512,8 +878,7 @@
 
 
         startQuizButton.addEventListener('click', generateOrExtractAndStartQuiz); 
-        prevQuestionButton.addEventListener('click', handlePrevNavigation); 
-        nextQuestionButton.addEventListener('click', handleNextNavigation);
+        if(verResultadoQuizButton) verResultadoQuizButton.addEventListener('click', endQuiz);
         
         newQuizButton.addEventListener('click', () => {
             showScreen('setup');
@@ -523,7 +888,6 @@
         closeReviewModalButton.addEventListener('click', () => reviewModal.classList.add('hidden'));
 
         // Functions
-        // Removed setLayoutMode function
 
         function setQuizMode(mode) {
             currentQuizMode = mode;
@@ -573,7 +937,6 @@
             if (screenName === 'setup') {
                 setupScreen.classList.remove('hidden');
                 setQuizMode(currentQuizMode); 
-                // setLayoutMode no longer needed
             }
             else if (screenName === 'quiz') quizScreen.classList.remove('hidden');
             else if (screenName === 'results') resultsScreen.classList.remove('hidden');
@@ -600,7 +963,6 @@
             performanceAnalysisOutputText.textContent = '';
             startQuizButton.disabled = false;
             setQuizMode('generate'); 
-            // setLayoutMode no longer needed
         }
 
         async function callGeminiAPI(promptText, isJsonOutput = false, schema = null) {
@@ -897,6 +1259,7 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
             }
             questionTimerDisplay.textContent = 'Múltiplas Questões'; 
             updateNavigationButtons();
+            applyFontSize(currentFontSize); // Re-apply font size when questions are re-rendered
         }
 
         function renderQuestionBlock(questionAbsoluteIndex, parentContainer) { 
@@ -1203,17 +1566,118 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
         }
 
         function updateNavigationButtons() {
-            const prevBtnTextEl = document.getElementById('prevButtonText');
-            const nextBtnTextEl = document.getElementById('nextButtonText');
-
             const totalPages = Math.ceil(questions.length / QUESTIONS_PER_VERTICAL_PAGE);
-            prevQuestionButton.disabled = currentVerticalPage === 0;
-            if (prevBtnTextEl) prevBtnTextEl.textContent = "Página Anterior";
-
-            const isLastPage = currentVerticalPage === totalPages - 1;
-            if (nextBtnTextEl) nextBtnTextEl.textContent = isLastPage ? "Ver Resultado" : "Próxima Página";
             
-            nextQuestionButton.disabled = false; 
+            paginationControlsContainer.innerHTML = ''; 
+
+            const prevArrow = document.createElement('button');
+            prevArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            prevArrow.className = 'pagination-button';
+            prevArrow.disabled = currentVerticalPage === 0;
+            prevArrow.onclick = handlePrevNavigation;
+            paginationControlsContainer.appendChild(prevArrow);
+
+            let startPage = Math.max(0, currentVerticalPage - 2);
+            let endPage = Math.min(totalPages - 1, currentVerticalPage + 2);
+
+            if (currentVerticalPage < 2) { 
+                endPage = Math.min(totalPages - 1, 4);
+            }
+            if (currentVerticalPage > totalPages - 3) { 
+                startPage = Math.max(0, totalPages - 5);
+            }
+
+
+            if (startPage > 0) {
+                const firstPageButton = document.createElement('button');
+                firstPageButton.textContent = 1;
+                firstPageButton.className = 'pagination-button';
+                firstPageButton.onclick = () => goToPage(0);
+                paginationControlsContainer.appendChild(firstPageButton);
+                if (startPage > 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'px-2 text-gray-500 dark:text-gray-400';
+                    paginationControlsContainer.appendChild(ellipsis);
+                }
+            }
+
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i + 1;
+                pageButton.className = 'pagination-button';
+                if (i === currentVerticalPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.onclick = () => goToPage(i);
+                paginationControlsContainer.appendChild(pageButton);
+            }
+
+            if (endPage < totalPages - 1) {
+                 if (endPage < totalPages - 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'px-2 text-gray-500 dark:text-gray-400';
+                    paginationControlsContainer.appendChild(ellipsis);
+                }
+                const lastPageButton = document.createElement('button');
+                lastPageButton.textContent = totalPages;
+                lastPageButton.className = 'pagination-button';
+                lastPageButton.onclick = () => goToPage(totalPages - 1);
+                paginationControlsContainer.appendChild(lastPageButton);
+            }
+
+
+            const nextArrow = document.createElement('button');
+            const isLastPage = currentVerticalPage === totalPages - 1;
+            
+            if (isLastPage && questions.length > 0) { 
+                nextArrow.innerHTML = 'Ver Resultado <i class="fas fa-poll-h ml-1"></i>';
+                nextArrow.className = 'btn-yellow text-gray-900 font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ml-2'; 
+                nextArrow.disabled = false; 
+            } else if (questions.length > 0) { 
+                nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextArrow.className = 'pagination-button ml-2'; 
+                nextArrow.disabled = isLastPage; 
+            } else { 
+                nextArrow.style.display = 'none'; 
+            }
+            nextArrow.onclick = handleNextNavigation; 
+            if (questions.length > 0) { 
+                paginationControlsContainer.appendChild(nextArrow);
+            }
+            
+            if (totalPages <= 1 && questions.length > 0) { 
+                paginationControlsContainer.innerHTML = ''; 
+                const verResultadoBtn = document.getElementById('verResultadoQuizButton'); // Use the global button
+                if (verResultadoBtn) {
+                    verResultadoBtn.classList.remove('hidden');
+                    verResultadoBtn.disabled = false;
+                }
+                paginationControlsContainer.classList.add('hidden'); // Hide pagination if only one page
+            } else if (questions.length === 0) {
+                 paginationControlsContainer.classList.add('hidden');
+                 if(verResultadoQuizButton) verResultadoQuizButton.classList.add('hidden');
+            }
+            else {
+                 paginationControlsContainer.classList.remove('hidden');
+                 if(verResultadoQuizButton) verResultadoQuizButton.classList.add('hidden'); // Hide global button if pagination is shown
+            }
+             // Ensure "Ver Resultado" button is always visible and enabled if there are questions
+            if (questions.length > 0) {
+                verResultadoQuizButton.classList.remove('hidden');
+                verResultadoQuizButton.disabled = false;
+            } else {
+                verResultadoQuizButton.classList.add('hidden');
+            }
+        }
+        
+        function goToPage(pageNumber) {
+            if (pageNumber >= 0 && pageNumber < Math.ceil(questions.length / QUESTIONS_PER_VERTICAL_PAGE)) {
+                currentVerticalPage = pageNumber;
+                displayCurrentPageOrQuestion();
+            }
         }
 
 
@@ -1376,6 +1840,61 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
             });
             reviewModal.classList.remove('hidden');
         }
+
+        function handlePrintToPdf() {
+            const printableArea = document.getElementById('printableQuizArea');
+            printableArea.innerHTML = ''; 
+
+            const quizTitleForPrint = document.createElement('h2');
+            quizTitleForPrint.textContent = 'MedQUEST - Simulado de Questões';
+            quizTitleForPrint.className = 'text-2xl font-bold text-center mb-6'; 
+            printableArea.appendChild(quizTitleForPrint);
+
+            questions.forEach((question, index) => {
+                const qState = quizState[index];
+                const userAnswerData = userAnswers.find(ua => ua.questionIndex === index) || qState; 
+
+                const questionBlock = document.createElement('div');
+                questionBlock.className = 'printable-question-block';
+
+                const questionHeader = document.createElement('h4');
+                questionHeader.textContent = `Questão ${index + 1}: ${question.text}`;
+                questionBlock.appendChild(questionHeader);
+
+                const optionsList = document.createElement('ul');
+                ['A', 'B', 'C', 'D', 'E'].forEach(optKey => {
+                    if (question.options && question.options[optKey]) {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${optKey}. ${question.options[optKey]}`;
+                        if (userAnswerData.isAnswered && optKey === userAnswerData.selectedAnswerLetter) {
+                            listItem.classList.add(userAnswerData.isCorrect ? 'printable-user-answer-correct' : 'printable-user-answer-incorrect');
+                        }
+                        if (optKey === question.correctAnswerLetter) {
+                            listItem.classList.add('printable-option-correct');
+                        }
+                        optionsList.appendChild(listItem);
+                    }
+                });
+                questionBlock.appendChild(optionsList);
+
+                if (userAnswerData.isAnswered) {
+                    const explanationP = document.createElement('p');
+                    explanationP.className = 'printable-explanation';
+                    explanationP.innerHTML = `<b>Explicação:</b> ${question.explanation || 'Não fornecida.'}`;
+                    questionBlock.appendChild(explanationP);
+
+                    if (userAnswerData.userAnswer && userAnswerData.userAnswer !== question.correctAnswerLetter && question.correctAnswerLetter) {
+                         const correctAnswerInfo = document.createElement('p');
+                         correctAnswerInfo.innerHTML = `<b>Resposta Correta:</b> ${question.correctAnswerLetter}. ${question.options[question.correctAnswerLetter]}`;
+                         correctAnswerInfo.style.marginTop = '5px';
+                         questionBlock.appendChild(correctAnswerInfo);
+                    }
+                }
+                printableArea.appendChild(questionBlock);
+            });
+            window.print();
+        }
+
 
         // Initial setup
         showScreen('setup');
