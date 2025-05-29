@@ -8,21 +8,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuestMaster - Gerador de Questões Médicas</title>
+    <title>MedQUEST - Gerador de Questões Médicas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --body-bg-light: #E5E7EB; /* Gray 200 */
+            --body-bg-light: #F3F4F6; /* Gray 100 - Um cinza ainda mais claro para o fundo */
             --body-text-light: #1F2937; /* Gray 800 */
             --card-bg-light: #FFFFFF;
             --card-text-light: #1F2937;
-            --inner-card-bg-light: #F9FAFB;
-            --inner-card-border-light: #E5E7EB;
+            --inner-card-bg-light: #F9FAFB; /* Gray 50 */
+            --inner-card-border-light: #E5E7EB; /* Gray 200 */
             --input-bg-light: #FFFFFF;
-            --input-border-light: #D1D5DB;
-            --input-text-light: #111827;
+            --input-border-light: #D1D5DB; /* Gray 300 */
+            --input-text-light: #111827; /* Gray 900 */
             --focus-ring-color: #10B981; /* Green 500 */
+            --header-title-color-light: #10B981; /* Green 500 */
+            --header-subtitle-color-light: #4B5563; /* Gray 600 */
+            --text-color-light: #374151; /* Gray 700 */
+            --text-muted-light: #6B7280; /* Gray 500 */
+
 
             --body-bg-dark: #111827; /* Gray 900 */
             --body-text-dark: #E5E7EB; /* Gray 200 */
@@ -33,80 +38,71 @@
             --input-bg-dark: #374151;
             --input-border-dark: #4B5563;
             --input-text-dark: #F3F4F6; /* Gray 100 */
+            --header-title-color-dark: #34D399; /* Lighter Green for dark */
+            --header-subtitle-color-dark: #9CA3AF; /* Gray 400 */
+            --text-color-dark: #D1D5DB; /* Gray 300 */
+            --text-muted-dark: #9CA3AF; /* Gray 400 */
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--body-bg-light);
-            color: var(--body-text-light);
+            background-color: var(--body-bg); /* Applied by JS */
+            color: var(--body-text); /* Applied by JS */
             transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            display: flex; /* Ensure body takes full height for centering #app */
+            flex-direction: column; /* Allow #app to grow */
+            min-height: 100vh;
         }
-        body.dark-theme {
-            background-color: var(--body-bg-dark);
-            color: var(--body-text-dark);
+      
+        #app {
+            width: 100%;
+            flex-grow: 1; /* Allow #app to take available space */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content-card horizontally */
+            justify-content: flex-start; /* Align content-card to the top */
+            padding: 1rem 0; /* Add some padding top/bottom for the body */
         }
 
         .content-card { 
-            background-color: var(--card-bg-light); 
-            color: var(--card-text-light); 
+            background-color: var(--card-bg); 
+            color: var(--card-text); 
             width: 100%; 
-            min-height: 100vh; 
+            max-width: 64rem; /* max-w-5xl, a bit wider */
+            min-height: calc(100vh - 2rem); /* Adjust based on #app padding */
             display: flex;
             flex-direction: column;
-            padding: 1rem; 
+            padding: 1.5rem; 
+            border-radius: 0; /* No border radius for full screen feel on small screens */
+            box-shadow: none; /* No shadow for full screen feel on small screens */
             transition: background-color 0.3s, color 0.3s;
         }
-        body.dark-theme .content-card {
-            background-color: var(--card-bg-dark);
-            color: var(--card-text-dark);
-        }
-
-        @media (min-width: 768px) { 
+        @media (min-width: 1024px) { /* lg and up for carded look */
             .content-card {
-                padding: 2rem; 
                 border-radius: 0.75rem; 
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
-                min-height: auto; 
-                width: auto; 
-                max-width: 56rem; 
-                margin-top: 1rem; 
-                margin-bottom: 1rem; 
-            }
-            body { 
-                 display: flex;
-                 justify-content: center;
-                 align-items: flex-start; 
-                 padding-top: 1rem; 
-                 padding-bottom: 1rem; 
+                min-height: auto; /* Allow card to size to content on large screens */
             }
              #app {
-                align-items: center; 
+                padding: 2rem; /* More padding on larger screens for the body */
             }
         }
 
 
         .inner-card { 
-            background-color: var(--inner-card-bg-light); 
-            border: 1px solid var(--inner-card-border-light); 
-            color: var(--card-text-light); 
+            background-color: var(--inner-card-bg); 
+            border: 1px solid var(--inner-card-border); 
+            color: var(--card-text); 
             transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-        }
-        body.dark-theme .inner-card {
-            background-color: var(--inner-card-bg-dark);
-            border: 1px solid var(--inner-card-border-dark);
-            color: var(--body-text-dark);
         }
         
         .input-field, .select-field { 
-            background-color: var(--input-bg-light); 
-            border-color: var(--input-border-light); 
-            color: var(--input-text-light); 
+            background-color: var(--input-bg); 
+            border-color: var(--input-border); 
+            color: var(--input-text); 
             transition: background-color 0.3s, border-color 0.3s, color 0.3s;
-        }
-        body.dark-theme .input-field, body.dark-theme .select-field {
-            background-color: var(--input-bg-dark);
-            border-color: var(--input-border-dark);
-            color: var(--input-text-dark);
         }
         .input-field:focus, .select-field:focus { 
             border-color: var(--focus-ring-color); 
@@ -133,14 +129,9 @@
 
         .mode-selector button {
             transition: all 0.2s ease-in-out;
-            border: 2px solid var(--input-border-light); 
-            background-color: var(--inner-card-bg-light); 
-            color: var(--card-text-light); 
-        }
-        body.dark-theme .mode-selector button {
-            border-color: var(--input-border-dark);
-            background-color: var(--inner-card-bg-dark);
-            color: var(--card-text-dark);
+            border: 2px solid var(--input-border); 
+            background-color: var(--inner-card-bg); 
+            color: var(--card-text); 
         }
         .mode-selector button.active {
             border-color: var(--focus-ring-color); 
@@ -154,40 +145,26 @@
 
         .mode-description {
             font-size: 0.75rem; 
-            color: #6B7280; 
+            color: var(--text-muted); 
             margin-top: 0.25rem; 
             min-height: 2.25rem; 
         }
-        body.dark-theme .mode-description {
-            color: #9CA3AF;
-        }
-
 
         .question-block-vertical { 
-            border: 1px solid var(--inner-card-border-light); 
+            border: 1px solid var(--inner-card-border); 
             padding: 1rem; 
             border-radius: 0.5rem; 
             margin-bottom: 1.5rem; 
-            background-color: var(--inner-card-bg-light); 
+            background-color: var(--inner-card-bg); 
         }
-        body.dark-theme .question-block-vertical {
-            border-color: var(--inner-card-border-dark);
-            background-color: var(--inner-card-bg-dark);
-        }
-
 
         .option-button-container { display: flex; align-items: center; gap: 0.5rem; }
         .option-button {
             transition: all 0.2s ease-in-out;
             flex-grow: 1;
-            background-color: var(--input-bg-light); 
-            border: 1px solid var(--input-border-light); 
-            color: var(--input-text-light); 
-        }
-        body.dark-theme .option-button {
-            background-color: var(--input-bg-dark);
-            border-color: var(--input-border-dark);
-            color: var(--input-text-dark);
+            background-color: var(--input-bg); 
+            border: 1px solid var(--input-border); 
+            color: var(--input-text); 
         }
         .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
              background-color: #F3F4F6; 
@@ -219,14 +196,14 @@
         .option-button.eliminated {
             text-decoration: line-through;
             opacity: 0.6;
-            background-color: #D1D5DB !important; 
-            color: #6B7280 !important; 
-            border-color: #9CA3AF !important; 
+            background-color: var(--body-bg-light) !important; 
+            color: var(--text-muted-light) !important; 
+            border-color: var(--input-border-light) !important;
         }
         body.dark-theme .option-button.eliminated {
-            background-color: #4B5563 !important; 
-            color: #9CA3AF !important; 
-            border-color: #374151 !important; 
+            background-color: var(--input-bg-dark) !important; 
+            color: var(--text-muted-dark) !important; 
+            border-color: var(--input-border-dark) !important; 
         }
 
         .eliminate-icon {
@@ -249,11 +226,10 @@
         .eliminate-icon.eliminated-active { color: #EF4444; }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--body-bg-light); }
+        ::-webkit-scrollbar-track { background: var(--body-bg); }
         ::-webkit-scrollbar-thumb { background: #D1D5DB;  border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF;  }
-        body.dark-theme ::-webkit-scrollbar-track { background: var(--body-bg-dark); }
         body.dark-theme ::-webkit-scrollbar-thumb { background: #4B5563; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF;  }
         body.dark-theme ::-webkit-scrollbar-thumb:hover { background: #6B7280; }
         
         .loader, .small-loader {
@@ -280,23 +256,15 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        html, body { height: 100%; margin: 0; padding: 0; } 
-        #app {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            width: 100%;
-            min-height: 100vh;
-        }
-
-        .header-title { color: #10B981; }
-        body.dark-theme .header-title { color: #34D399; } 
-        .header-subtitle { color: #4B5563; }
-        body.dark-theme .header-subtitle { color: #9CA3AF; }
-        .label-text { color: #374151; }
-        body.dark-theme .label-text { color: #D1D5DB; }
-        .file-name-text { color: #4B5563; }
-        body.dark-theme .file-name-text { color: #9CA3AF; }
+        
+        .header-title { color: var(--header-title-color-light); }
+        body.dark-theme .header-title { color: var(--header-title-color-dark); }
+        .header-subtitle { color: var(--header-subtitle-color-light); }
+        body.dark-theme .header-subtitle { color: var(--header-subtitle-color-dark); }
+        .label-text { color: var(--text-color-light); }
+        body.dark-theme .label-text { color: var(--text-color-dark); }
+        .file-name-text { color: var(--text-muted-light); }
+        body.dark-theme .file-name-text { color: var(--text-muted-dark); }
         .loading-text { color: #059669; }
         body.dark-theme .loading-text { color: #6EE7B7; }
         .warning-text { color: #D97706; }
@@ -304,14 +272,14 @@
         .error-text { color: #DC2626; }
         body.dark-theme .error-text { color: #F87171; }
         
-        .quiz-title-text { color: #1F2937; } 
-        body.dark-theme .quiz-title-text { color: #E5E7EB; }
-        .quiz-main-title { color: #10B981; } 
-        body.dark-theme .quiz-main-title { color: #34D399; }
+        .quiz-title-text { color: var(--card-text-light); } 
+        body.dark-theme .quiz-title-text { color: var(--card-text-dark); }
+        .quiz-main-title { color: var(--header-title-color-light); } 
+        body.dark-theme .quiz-main-title { color: var(--header-title-color-dark); }
         .timer-text { color: #D97706; }
         body.dark-theme .timer-text { color: #FBBF24; }
-        .question-text-color { color: #111827; }
-        body.dark-theme .question-text-color { color: #F3F4F6; }
+        .question-text-color { color: var(--card-text-light); }
+        body.dark-theme .question-text-color { color: var(--card-text-dark); }
         
         .feedback-title-color-correct { color: #059669; }
         body.dark-theme .feedback-title-color-correct { color: #34D399; }
@@ -320,62 +288,62 @@
         .feedback-title-color-info { color: #4B5563; }
         body.dark-theme .feedback-title-color-info { color: #9CA3AF; }
         
-        .feedback-text-color { color: #374151; }
-        body.dark-theme .feedback-text-color { color: #D1D5DB; }
-        .feedback-explanation-color { color: #4B5563; }
-        body.dark-theme .feedback-explanation-color { color: #9CA3AF; }
-        .deeper-explanation-output-color { color: #374151; }
-        body.dark-theme .deeper-explanation-output-color { color: #D1D5DB; }
+        .feedback-text-color { color: var(--text-color-light); }
+        body.dark-theme .feedback-text-color { color: var(--text-color-dark); }
+        .feedback-explanation-color { color: var(--text-muted-light); }
+        body.dark-theme .feedback-explanation-color { color: var(--text-muted-dark); }
+        .deeper-explanation-output-color { color: var(--text-color-light); }
+        body.dark-theme .deeper-explanation-output-color { color: var(--text-color-dark); }
         
-        .results-title-text { color: #1F2937; }
-        body.dark-theme .results-title-text { color: #E5E7EB; }
-        .results-label-text { color: #4B5563; }
-        body.dark-theme .results-label-text { color: #9CA3AF; }
-        .results-value-text { color: #111827; }
-        body.dark-theme .results-value-text { color: #F3F4F6; }
+        .results-title-text { color: var(--card-text-light); }
+        body.dark-theme .results-title-text { color: var(--card-text-dark); }
+        .results-label-text { color: var(--text-muted-light); }
+        body.dark-theme .results-label-text { color: var(--text-muted-dark); }
+        .results-value-text { color: var(--card-text-light); }
+        body.dark-theme .results-value-text { color: var(--card-text-dark); }
         .results-value-correct-text { color: #059669; }
         body.dark-theme .results-value-correct-text { color: #34D399; }
         .results-value-incorrect-text { color: #DC2626; }
         body.dark-theme .results-value-incorrect-text { color: #F87171; }
         
-        .modal-title-text { color: #1F2937; }
-        body.dark-theme .modal-title-text { color: #E5E7EB; }
-        .modal-close-button-text { color: #6B7280; }
-        body.dark-theme .modal-close-button-text { color: #9CA3AF; }
-        .modal-close-button-text:hover { color: #111827; }
-        body.dark-theme .modal-close-button-text:hover { color: #FFFFFF; }
+        .modal-title-text { color: var(--card-text-light); }
+        body.dark-theme .modal-title-text { color: var(--card-text-dark); }
+        .modal-close-button-text { color: var(--text-muted-light); }
+        body.dark-theme .modal-close-button-text { color: var(--text-muted-dark); }
+        .modal-close-button-text:hover { color: var(--card-text-light); }
+        body.dark-theme .modal-close-button-text:hover { color: var(--card-text-dark); }
 
-        .review-question-title-text { color: #1F2937; }
-        body.dark-theme .review-question-title-text { color: #E5E7EB; }
-        .review-option-default-text { color: #374151; }
-        body.dark-theme .review-option-default-text { color: #D1D5DB; }
+        .review-question-title-text { color: var(--card-text-light); }
+        body.dark-theme .review-question-title-text { color: var(--card-text-dark); }
+        .review-option-default-text { color: var(--text-color-light); }
+        body.dark-theme .review-option-default-text { color: var(--text-color-dark); }
         .review-option-correct-text { color: #059669; }
         body.dark-theme .review-option-correct-text { color: #34D399; }
         .review-option-incorrect-text { color: #DC2626; }
         body.dark-theme .review-option-incorrect-text { color: #F87171; }
-        .review-status-info-text { color: #4B5563; }
-        body.dark-theme .review-status-info-text { color: #9CA3AF; }
+        .review-status-info-text { color: var(--text-muted-light); }
+        body.dark-theme .review-status-info-text { color: var(--text-muted-dark); }
         .review-status-correct-text { color: #059669; }
         body.dark-theme .review-status-correct-text { color: #34D399; }
         .review-status-incorrect-text { color: #DC2626; }
         body.dark-theme .review-status-incorrect-text { color: #F87171; }
-        .review-explanation-text { color: #4B5563; }
-        body.dark-theme .review-explanation-text { color: #9CA3AF; }
-        .review-time-text { color: #6B7280; }
-        body.dark-theme .review-time-text { color: #9CA3AF; }
+        .review-explanation-text { color: var(--text-muted-light); }
+        body.dark-theme .review-explanation-text { color: var(--text-muted-dark); }
+        .review-time-text { color: var(--text-muted-light); }
+        body.dark-theme .review-time-text { color: var(--text-muted-dark); }
 
         .font-size-controls button {
-            background-color: #F9FAFB;
-            border: 1px solid #D1D5DB;
-            color: #374151;
+            background-color: var(--inner-card-bg-light);
+            border: 1px solid var(--input-border-light);
+            color: var(--card-text-light);
             padding: 0.3rem 0.6rem;
             border-radius: 0.375rem;
             margin-left: 0.5rem;
         }
         body.dark-theme .font-size-controls button {
             background-color: var(--inner-card-bg-dark);
-            border-color: var(--inner-card-border-dark);
-            color: var(--body-text-dark);
+            border-color: var(--input-border-dark);
+            color: var(--card-text-dark);
         }
         .font-size-controls button:hover {
             background-color: #F3F4F6;
@@ -388,7 +356,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 0.25rem; /* Reduced gap for tighter pagination */
+            gap: 0.25rem; 
         }
         .pagination-button {
             background-color: var(--inner-card-bg-light);
@@ -448,28 +416,32 @@
             }
             .printable-question-block {
                 page-break-inside: avoid !important;
-                margin-bottom: 20px !important;
-                padding: 15px !important;
-                border: 1px solid #ccc !important;
-                border-radius: 5px !important;
+                margin-bottom: 15px !important; /* Reduced margin */
+                padding: 10px !important; /* Reduced padding */
+                /* border: 1px solid #ccc !important; Removed border */
+                border-bottom: 1px solid #ccc !important; /* Separator line */
+            }
+            .printable-question-block:last-child {
+                border-bottom: none !important; /* No line after the last question */
             }
             .printable-question-block h3, .printable-question-block h4 {
                 color: #000000 !important;
-                font-size: 14pt !important;
-                margin-bottom: 10px !important;
+                font-size: 13pt !important; /* Slightly smaller */
+                margin-bottom: 8px !important;
             }
             .printable-question-block p, .printable-question-block li {
                 color: #000000 !important;
-                font-size: 11pt !important;
-                line-height: 1.4 !important;
+                font-size: 10pt !important; /* Slightly smaller */
+                line-height: 1.3 !important;
             }
             .printable-question-block ul {
                 list-style-type: none !important;
                 padding-left: 0 !important;
+                margin-top: 5px !important;
             }
             .printable-option-correct {
                 font-weight: bold !important;
-                color: #006400 !important; 
+                color: #000000 !important; /* Black for correct answer in print for clarity */
             }
              .printable-user-answer-correct {
                 background-color: #e6ffe6 !important; 
@@ -479,10 +451,25 @@
                 text-decoration: line-through !important;
             }
             .printable-explanation {
-                margin-top: 10px !important;
-                padding-top: 5px !important;
-                border-top: 1px dashed #ccc !important;
+                margin-top: 8px !important;
+                padding-top: 4px !important;
+                border-top: 1px dashed #ddd !important;
                 font-style: italic !important;
+                font-size: 9pt !important;
+            }
+            .printable-answer-key {
+                margin-top: 30px !important;
+                padding-top: 15px !important;
+                border-top: 2px solid #000 !important;
+                page-break-before: auto !important; /* Try to put on new page if needed */
+            }
+            .printable-answer-key h3 {
+                font-size: 14pt !important;
+                margin-bottom: 10px !important;
+            }
+            .printable-answer-key p {
+                font-size: 10pt !important;
+                line-height: 1.5 !important;
             }
             .eliminate-icon, 
             .question-block-vertical button:not(.option-button), 
@@ -513,7 +500,7 @@
         <div id="setupScreen" class="content-card">
             <header class="mb-6 text-center pt-6 px-6 md:pt-8 md:px-8"> 
                 <div class="flex justify-center items-center mb-2">
-                    <h1 class="text-4xl font-bold header-title">MedQUEST</h1> 
+                    <h1 class="text-3xl font-bold header-title">MedQUEST</h1> 
                     <button id="themeToggle" class="ml-4 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-moon text-xl text-gray-700 dark:text-yellow-400"></i>
                     </button>
@@ -551,9 +538,11 @@
                         <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
                         <select id="numQuestions" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
                             <option value="5">5 Questões</option>
-                            <option value="10" selected>10 Questões</option>
-                            <option value="15">15 Questões</option>
+                            <option value="10">10 Questões</option>
+                            <option value="15" selected>15 Questões</option>
                             <option value="20">20 Questões</option>
+                            <option value="30">30 Questões</option>
+                            <option value="40">40 Questões</option>
                             <option value="0" class="hidden">Todas do PDF</option> 
                         </select>
                     </div>
@@ -570,9 +559,9 @@
                         <select id="timePerQuestion" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
                             <option value="0">Sem limite</option>
                             <option value="30">30 Segundos</option>
-                            <option value="60" selected>1 Minuto</option>
+                            <option value="60">1 Minuto</option>
                             <option value="120">2 Minutos</option>
-                            <option value="180">3 Minutos</option>
+                            <option value="180" selected>3 Minutos</option>
                             <option value="300">5 Minutos</option>
                         </select>
                     </div>
@@ -595,8 +584,8 @@
             </div>
         </div>
 
-        <div id="quizScreen" class="hidden w-full content-card p-6 md:p-8">
-            <div class="flex justify-between items-center mb-2 quiz-controls">
+        <div id="quizScreen" class="hidden w-full content-card">
+             <div class="flex justify-between items-center mb-2 quiz-controls px-6 md:px-0 pt-6 md:pt-0">
                 <h2 class="text-3xl font-bold quiz-main-title">MedQUEST</h2>
                 <div class="flex items-center">
                     <div class="font-size-controls mr-3">
@@ -608,15 +597,15 @@
                     </button>
                 </div>
             </div>
-            <div class="flex justify-between items-center mb-6"> 
+            <div class="flex justify-between items-center mb-6 px-6 md:px-0"> 
                 <h3 class="text-xl font-semibold quiz-title-text" id="quizScreenTitle">Página X de Y (Questões X-Y)</h3> 
                 <div id="questionTimerDisplay" class="text-xl font-bold timer-text">Múltiplas Questões</div> 
             </div>
             
-            <div id="questionsDisplayArea" class="mb-6 flex-grow overflow-y-auto"> 
+            <div id="questionsDisplayArea" class="mb-6 flex-grow overflow-y-auto px-6 md:px-0"> 
                 </div>
             
-            <div class="flex justify-center items-center mt-6 quiz-controls"> 
+            <div class="flex justify-center items-center mt-6 quiz-controls px-6 md:px-0 pb-6 md:pb-0"> 
                 <div id="paginationControlsContainer" class="pagination-controls">
                     </div>
             </div>
@@ -626,7 +615,10 @@
         </div>
 
         <div id="resultsScreen" class="hidden w-full content-card p-6 md:p-8 text-center">
-            <h2 class="text-3xl font-bold results-title-text mb-6">Resultado do Simulado</h2> 
+            <header class="mb-6 text-center">
+                <h1 class="text-4xl font-bold header-title">MedQUEST</h1>
+                <p class="mt-2 header-subtitle">Resultado do Simulado</p>
+            </header>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
                 <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Total de Questões:</p>
@@ -760,29 +752,55 @@
 
         // --- THEME AND FONT SIZE ---
         function applyTheme(theme) {
+            const root = document.documentElement;
             if (theme === 'dark') {
                 document.body.classList.add('dark-theme');
                 themeToggleButton.innerHTML = '<i class="fas fa-sun text-xl text-yellow-400"></i>';
+                // Set CSS variables for dark theme
+                root.style.setProperty('--body-bg', 'var(--body-bg-dark)');
+                root.style.setProperty('--body-text', 'var(--body-text-dark)');
+                root.style.setProperty('--card-bg', 'var(--card-bg-dark)');
+                root.style.setProperty('--card-text', 'var(--card-text-dark)');
+                root.style.setProperty('--inner-card-bg', 'var(--inner-card-bg-dark)');
+                root.style.setProperty('--inner-card-border', 'var(--inner-card-border-dark)');
+                root.style.setProperty('--input-bg', 'var(--input-bg-dark)');
+                root.style.setProperty('--input-border', 'var(--input-border-dark)');
+                root.style.setProperty('--input-text', 'var(--input-text-dark)');
+                root.style.setProperty('--header-title-color', 'var(--header-title-color-dark)');
+                root.style.setProperty('--header-subtitle-color', 'var(--header-subtitle-color-dark)');
+                root.style.setProperty('--text-color', 'var(--text-color-dark)');
+                root.style.setProperty('--text-muted', 'var(--text-muted-dark)');
+
             } else {
                 document.body.classList.remove('dark-theme');
                 themeToggleButton.innerHTML = '<i class="fas fa-moon text-xl text-gray-700"></i>';
+                // Set CSS variables for light theme
+                root.style.setProperty('--body-bg', 'var(--body-bg-light)');
+                root.style.setProperty('--body-text', 'var(--body-text-light)');
+                root.style.setProperty('--card-bg', 'var(--card-bg-light)');
+                root.style.setProperty('--card-text', 'var(--card-text-light)');
+                root.style.setProperty('--inner-card-bg', 'var(--inner-card-bg-light)');
+                root.style.setProperty('--inner-card-border', 'var(--inner-card-border-light)');
+                root.style.setProperty('--input-bg', 'var(--input-bg-light)');
+                root.style.setProperty('--input-border', 'var(--input-border-light)');
+                root.style.setProperty('--input-text', 'var(--input-text-light)');
+                root.style.setProperty('--header-title-color', 'var(--header-title-color-light)');
+                root.style.setProperty('--header-subtitle-color', 'var(--header-subtitle-color-light)');
+                root.style.setProperty('--text-color', 'var(--text-color-light)');
+                root.style.setProperty('--text-muted', 'var(--text-muted-light)');
             }
             localStorage.setItem('medQuestTheme', theme);
         }
 
         function applyFontSize(sizeMultiplier) {
-            const questionBlocks = document.querySelectorAll('.question-block-vertical, #questionsDisplayArea > div:not(.question-block-vertical)'); // Target individual blocks or direct children
+            const questionTextElements = document.querySelectorAll('.question-text-color');
+            const optionButtons = document.querySelectorAll('.option-button');
             
-            questionBlocks.forEach(block => {
-                const questionTextEl = block.querySelector('.question-text-color');
-                const optionButtons = block.querySelectorAll('.option-button');
-
-                if (questionTextEl) {
-                     questionTextEl.style.fontSize = `${1.125 * sizeMultiplier}rem`; // text-lg base
-                }
-                optionButtons.forEach(btn => {
-                     btn.style.fontSize = `${1 * sizeMultiplier}rem`; // text-base base
-                });
+            questionTextElements.forEach(el => {
+                 el.style.fontSize = `${1.125 * sizeMultiplier}rem`; 
+            });
+            optionButtons.forEach(btn => {
+                 btn.style.fontSize = `${1 * sizeMultiplier}rem`; 
             });
             localStorage.setItem('medQuestFontSize', sizeMultiplier);
             currentFontSize = sizeMultiplier;
@@ -804,9 +822,8 @@
 
         const savedTheme = localStorage.getItem('medQuestTheme') || 'light';
         const savedFontSize = parseFloat(localStorage.getItem('medQuestFontSize')) || 1;
-        applyTheme(savedTheme);
-        // Apply font size after questions are rendered for the first time
-        // or call applyFontSize() inside displayCurrentPageOrQuestion if needed immediately
+        applyTheme(savedTheme); // Apply theme first
+        // Font size will be applied when questions are rendered by displayCurrentPageOrQuestion
 
 
         // Event Listeners
@@ -904,7 +921,7 @@
                 loadingIndicatorText.textContent = "Gerando questões... Por favor, aguarde.";
                 difficultyContainer.classList.remove('hidden');
                 numQuestionsSelect.querySelector('option[value="0"]').classList.add('hidden'); 
-                if (numQuestionsSelect.value === "0") numQuestionsSelect.value = "10"; 
+                if (numQuestionsSelect.value === "0") numQuestionsSelect.value = "15"; // Default to 15
 
             } else { // extract mode
                 modeExtractButton.classList.add('active');
@@ -962,6 +979,12 @@
             performanceAnalysisOutputContainer.classList.add('hidden');
             performanceAnalysisOutputText.textContent = '';
             startQuizButton.disabled = false;
+            
+            // Set default values
+            numQuestionsSelect.value = "15";
+            difficultySelect.value = "Médio";
+            timePerQuestionSelect.value = "180"; // 3 minutes
+
             setQuizMode('generate'); 
         }
 
@@ -1259,7 +1282,7 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
             }
             questionTimerDisplay.textContent = 'Múltiplas Questões'; 
             updateNavigationButtons();
-            applyFontSize(currentFontSize); // Re-apply font size when questions are re-rendered
+            applyFontSize(currentFontSize); 
         }
 
         function renderQuestionBlock(questionAbsoluteIndex, parentContainer) { 
@@ -1632,44 +1655,30 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
             const nextArrow = document.createElement('button');
             const isLastPage = currentVerticalPage === totalPages - 1;
             
-            if (isLastPage && questions.length > 0) { 
-                nextArrow.innerHTML = 'Ver Resultado <i class="fas fa-poll-h ml-1"></i>';
-                nextArrow.className = 'btn-yellow text-gray-900 font-semibold py-2 px-4 rounded-md shadow-md transition duration-150 ml-2'; 
-                nextArrow.disabled = false; 
-            } else if (questions.length > 0) { 
+            // The "Ver Resultado" button is now separate and always visible if questions exist.
+            // So, the "next" arrow in pagination just handles going to the next page.
+            if (questions.length > 0 && !isLastPage) { 
                 nextArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
                 nextArrow.className = 'pagination-button ml-2'; 
                 nextArrow.disabled = isLastPage; 
-            } else { 
-                nextArrow.style.display = 'none'; 
-            }
-            nextArrow.onclick = handleNextNavigation; 
-            if (questions.length > 0) { 
+                nextArrow.onclick = handleNextNavigation; 
                 paginationControlsContainer.appendChild(nextArrow);
+            } else {
+                nextArrow.style.display = 'none';
             }
             
             if (totalPages <= 1 && questions.length > 0) { 
-                paginationControlsContainer.innerHTML = ''; 
-                const verResultadoBtn = document.getElementById('verResultadoQuizButton'); // Use the global button
-                if (verResultadoBtn) {
-                    verResultadoBtn.classList.remove('hidden');
-                    verResultadoBtn.disabled = false;
-                }
-                paginationControlsContainer.classList.add('hidden'); // Hide pagination if only one page
+                paginationControlsContainer.classList.add('hidden'); 
             } else if (questions.length === 0) {
                  paginationControlsContainer.classList.add('hidden');
-                 if(verResultadoQuizButton) verResultadoQuizButton.classList.add('hidden');
             }
             else {
                  paginationControlsContainer.classList.remove('hidden');
-                 if(verResultadoQuizButton) verResultadoQuizButton.classList.add('hidden'); // Hide global button if pagination is shown
             }
-             // Ensure "Ver Resultado" button is always visible and enabled if there are questions
-            if (questions.length > 0) {
-                verResultadoQuizButton.classList.remove('hidden');
-                verResultadoQuizButton.disabled = false;
-            } else {
-                verResultadoQuizButton.classList.add('hidden');
+            
+            if (verResultadoQuizButton) { 
+                verResultadoQuizButton.disabled = false; 
+                verResultadoQuizButton.classList.toggle('hidden', questions.length === 0);
             }
         }
         
@@ -1694,7 +1703,8 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
                 currentVerticalPage++;
                 displayCurrentPageOrQuestion();
             } else { 
-                endQuiz();
+                endQuiz(); // This will be triggered by the separate "Ver Resultado" button now.
+                           // Or if the last page's next arrow is clicked (if it's not "Ver Resultado")
             }
         }
 
@@ -1850,6 +1860,8 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
             quizTitleForPrint.className = 'text-2xl font-bold text-center mb-6'; 
             printableArea.appendChild(quizTitleForPrint);
 
+            let answerKeyHTML = '<h3>Gabarito</h3><ol style="list-style-type: decimal; padding-left: 20px;">';
+
             questions.forEach((question, index) => {
                 const qState = quizState[index];
                 const userAnswerData = userAnswers.find(ua => ua.questionIndex === index) || qState; 
@@ -1867,31 +1879,30 @@ IMPORTANTE: Assegure que todas as strings dentro do JSON (pergunta, opções, ex
                         const listItem = document.createElement('li');
                         listItem.textContent = `${optKey}. ${question.options[optKey]}`;
                         if (userAnswerData.isAnswered && optKey === userAnswerData.selectedAnswerLetter) {
-                            listItem.classList.add(userAnswerData.isCorrect ? 'printable-user-answer-correct' : 'printable-user-answer-incorrect');
-                        }
-                        if (optKey === question.correctAnswerLetter) {
-                            listItem.classList.add('printable-option-correct');
+                            // No visual indication of user's answer in the question list for this print style
                         }
                         optionsList.appendChild(listItem);
                     }
                 });
                 questionBlock.appendChild(optionsList);
-
-                if (userAnswerData.isAnswered) {
-                    const explanationP = document.createElement('p');
-                    explanationP.className = 'printable-explanation';
-                    explanationP.innerHTML = `<b>Explicação:</b> ${question.explanation || 'Não fornecida.'}`;
-                    questionBlock.appendChild(explanationP);
-
-                    if (userAnswerData.userAnswer && userAnswerData.userAnswer !== question.correctAnswerLetter && question.correctAnswerLetter) {
-                         const correctAnswerInfo = document.createElement('p');
-                         correctAnswerInfo.innerHTML = `<b>Resposta Correta:</b> ${question.correctAnswerLetter}. ${question.options[question.correctAnswerLetter]}`;
-                         correctAnswerInfo.style.marginTop = '5px';
-                         questionBlock.appendChild(correctAnswerInfo);
-                    }
-                }
                 printableArea.appendChild(questionBlock);
+                if(index < questions.length - 1) { // Add separator line
+                    const hr = document.createElement('hr');
+                    hr.style.borderTop = '1px dashed #ccc';
+                    hr.style.margin = '15px 0';
+                    printableArea.appendChild(hr);
+                }
+
+                // Add to answer key
+                answerKeyHTML += `<li>Questão ${index + 1}: ${question.correctAnswerLetter || 'N/A'}</li>`;
             });
+            
+            answerKeyHTML += '</ol>';
+            const answerKeyDiv = document.createElement('div');
+            answerKeyDiv.className = 'printable-answer-key';
+            answerKeyDiv.innerHTML = answerKeyHTML;
+            printableArea.appendChild(answerKeyDiv);
+
             window.print();
         }
 
