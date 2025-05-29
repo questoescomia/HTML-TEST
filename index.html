@@ -14,51 +14,62 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #B45309; /* Amber 700 - Fundo amarelo/laranja escuro */
-            color: #FFFFFF; /* Texto padrão branco */
+            background-color: #E5E7EB; /* Gray 200 - Fundo da página claro */
+            color: #1F2937; /* Gray 800 - Texto padrão escuro */
         }
-        .dark-bg { background-color: #111827; /* Gray 900 - Cards principais bem escuros */ }
-        .dark-card { background-color: #1F2937; /* Gray 800 - Cards menores escuros */ }
+        /* Card principal (setup, quiz, results) */
+        .content-card { 
+            background-color: #FFFFFF; /* Branco */
+            color: #1F2937; /* Gray 800 - Texto dentro do card */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+        }
+        /* Cards menores dentro dos cards principais (feedback, stats, etc.) */
+        .inner-card { 
+            background-color: #F9FAFB; /* Gray 50 - Um pouco off-white */
+            border: 1px solid #E5E7EB; /* Gray 200 */
+            color: #374151; /* Gray 700 */
+        }
         
-        .dark-input, .dark-select { 
-            background-color: #1F2937; /* Gray 800 */
-            border-color: #374151; /* Gray 700 */
-            color: #FFFFFF; 
+        .input-field, .select-field { 
+            background-color: #FFFFFF; 
+            border-color: #D1D5DB; /* Gray 300 */
+            color: #111827; /* Gray 900 */
         }
-        .dark-input:focus, .dark-select:focus { 
+        .input-field:focus, .select-field:focus { 
             border-color: #10B981; /* Green 500 - Foco verde */
             box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5); 
         }
         
-        .btn-green { background-color: #10B981; /* Green 500 */ color: white; }
-        .btn-green:hover { background-color: #059669; /* Green 600 */ }
+        .btn-green { background-color: #10B981; color: white; }
+        .btn-green:hover { background-color: #059669; }
         
-        .btn-yellow { background-color: #FBBF24; /* Amber 400 */ color: #111827; /* Texto escuro para contraste */ }
-        .btn-yellow:hover { background-color: #F59E0B; /* Amber 500 */ }
+        .btn-yellow { background-color: #FBBF24; color: #111827; }
+        .btn-yellow:hover { background-color: #F59E0B; }
 
-        .btn-gray { background-color: #374151; /* Gray 700 */ color: white; }
-        .btn-gray:hover { background-color: #4B5563; /* Gray 600 */ }
+        .btn-gray { background-color: #6B7280; color: white; } /* Gray 500 */
+        .btn-gray:hover { background-color: #4B5563; } /* Gray 600 */
 
-        .btn-red { background-color: #EF4444; /* Red 500 */ color: white;}
-        .btn-red:hover { background-color: #DC2626; /* Red 600 */ }
+        .btn-red { background-color: #EF4444; color: white;}
+        .btn-red:hover { background-color: #DC2626; }
 
-        .btn-purple { background-color: #8B5CF6; /* Purple 500 */ color: white; } 
-        .btn-purple:hover { background-color: #7C3AED; /* Purple 600 */ }
+        .btn-purple { background-color: #8B5CF6; color: white; } 
+        .btn-purple:hover { background-color: #7C3AED; }
 
         .mode-selector button {
             transition: all 0.2s ease-in-out;
-            border: 2px solid transparent;
-            background-color: #374151; /* Gray 700 */
-            color: #D1D5DB; /* Gray 300 */
+            border: 2px solid #D1D5DB; /* Gray 300 */
+            background-color: #F9FAFB; /* Gray 50 */
+            color: #374151; /* Gray 700 */
         }
         .mode-selector button.active {
-            border-color: #10B981; /* Green 500 */
-            background-color: #1F2937; /* Gray 800 */
-            color: white;
+            border-color: #10B981; 
+            background-color: #D1FAE5; /* Green 100 */
+            color: #065F46; /* Green 700 */
         }
         .mode-description {
             font-size: 0.75rem; 
-            color: #9CA3AF; /* Gray 400 - Ajustado para o fundo do card */
+            color: #6B7280; /* Gray 500 */
             margin-top: 0.25rem; 
             min-height: 2.25rem; 
         }
@@ -67,58 +78,59 @@
         .option-button {
             transition: all 0.2s ease-in-out;
             flex-grow: 1;
-            background-color: #1F2937; /* Default option button BG */
-            border-color: #374151; /* Default option button Border */
-            color: #FFFFFF; /* Default option button text */
+            background-color: #FFFFFF; 
+            border: 1px solid #D1D5DB; /* Gray 300 */
+            color: #1F2937; /* Gray 800 */
         }
         .option-button:hover:not(:disabled):not(.selected-temporary):not(.selected):not(.correct):not(.incorrect) {
-             background-color: #374151; /* Darker hover for default options */
+             background-color: #F3F4F6; /* Gray 100 */
         }
         .option-button.selected-temporary { 
-            background-color: #3B82F6; /* Blue 500 */ 
-            border-color: #3B82F6;
+            background-color: #60A5FA; /* Blue 400 */ 
+            border-color: #3B82F6; /* Blue 500 */
             color: white;
         }
         .option-button.selected { 
-            background-color: #FBBF24; /* Amber 400 */ 
+            background-color: #FBBF24; 
             color: #111827; 
-            border-color: #FBBF24;
+            border-color: #F59E0B; /* Amber 500 */
         }
         .option-button.correct {
-            background-color: #10B981; /* Green 500 */ 
+            background-color: #10B981; 
             color: white;
-            border-color: #10B981;
+            border-color: #059669; /* Green 600 */
         }
         .option-button.incorrect {
-            background-color: #EF4444; /* Red 500 */ 
+            background-color: #EF4444; 
             color: white;
-            border-color: #EF4444;
+            border-color: #DC2626; /* Red 600 */
         }
         .option-button.eliminated {
             text-decoration: line-through;
             opacity: 0.6;
-            background-color: #374151 !important; 
-            color: #9CA3AF !important; 
+            background-color: #E5E7EB !important; /* Gray 200 */
+            color: #6B7280 !important; /* Gray 500 */
+            border-color: #D1D5DB !important;
         }
         .eliminate-icon {
             cursor: pointer;
-            color: #D1D5DB; /* Gray 300 */
+            color: #9CA3AF; 
             padding: 0.5rem; 
             border-radius: 0.375rem; 
             transition: all 0.2s ease-in-out;
         }
         .eliminate-icon:hover {
-            color: #10B981; /* Green 500 */
-            background-color: #1F2937; /* Gray 800 */
+            color: #10B981; 
+            background-color: #F3F4F6; /* Gray 100 */
         }
         .eliminate-icon.eliminated-active {
-            color: #EF4444; /* Red 500 */
+            color: #EF4444; 
         }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #B45309; /* Body yellow */ }
-        ::-webkit-scrollbar-thumb { background: #111827; /* Darkest card gray */ border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #1F2937; /* Darker card gray */ }
+        ::-webkit-scrollbar-track { background: #E5E7EB; /* Body gray */ }
+        ::-webkit-scrollbar-thumb { background: #D1D5DB; /* Lighter gray */ border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9CA3AF; /* Medium gray */ }
         
         .loader, .small-loader {
             border-radius: 50%;
@@ -147,50 +159,53 @@
         html, body { height: 100%; }
         .min-h-screen-custom { min-height: 100vh; }
 
-        /* Specific text color adjustments for readability on dark cards */
-        .header-title { color: #FBBF24; /* Amber 400 */ }
-        .header-subtitle { color: #D1D5DB; /* Gray 300 */ }
-        .label-text { color: #E5E7EB; /* Gray 200 */ }
-        .file-name-text { color: #9CA3AF; /* Gray 400 */ }
-        .loading-text { color: #6EE7B7; /* Green 300 */ }
-        .warning-text { color: #FBBF24; /* Amber 400 */ }
-        .error-text { color: #F87171; /* Red 400 */ }
-        .quiz-title-text { color: #FBBF24; /* Amber 400 */ }
-        .timer-text { color: #FBBF24; /* Amber 400 */ }
-        .question-text-color { color: #F3F4F6; /* Gray 100 */ }
-        .hint-output-text-color { color: #FDE68A; /* Amber 200 */ }
-        .feedback-title-color-correct { color: #34D399; /* Green 400 */ }
-        .feedback-title-color-incorrect { color: #F87171; /* Red 400 */ }
-        .feedback-title-color-info { color: #9CA3AF; /* Gray 400 */ }
-        .feedback-text-color { color: #E5E7EB; /* Gray 200 */ }
-        .feedback-explanation-color { color: #D1D5DB; /* Gray 300 */ }
-        .deeper-explanation-output-color { color: #E5E7EB; /* Gray 200 */ }
-        .results-title-text { color: #FBBF24; /* Amber 400 */ }
-        .results-label-text { color: #9CA3AF; /* Gray 400 */ }
-        .results-value-text { color: #FFFFFF; }
-        .results-value-correct-text { color: #34D399; /* Green 400 */ }
-        .results-value-incorrect-text { color: #F87171; /* Red 400 */ }
-        .modal-title-text { color: #FBBF24; /* Amber 400 */ }
-        .modal-close-button-text { color: #9CA3AF; /* Gray 400 */ }
-        .modal-close-button-text:hover { color: #FFFFFF; }
-        .review-question-title-text { color: #FCD34D; /* Amber 300 */ }
-        .review-option-default-text { color: #D1D5DB; /* Gray 300 */ }
-        .review-option-correct-text { color: #34D399; /* Green 400 */ }
-        .review-option-incorrect-text { color: #F87171; /* Red 400 */ }
-        .review-status-info-text { color: #9CA3AF; /* Gray 400 */ }
-        .review-status-correct-text { color: #34D399; /* Green 400 */ }
-        .review-status-incorrect-text { color: #F87171; /* Red 400 */ }
-        .review-explanation-text { color: #D1D5DB; /* Gray 300 */ }
-        .review-time-text { color: #9CA3AF; /* Gray 400 */ }
-
+        /* Specific text color adjustments for readability */
+        .header-title { color: #10B981; /* Green 500 - ALTERADO */ }
+        .header-subtitle { color: #4B5563; /* Gray 600 */ }
+        .label-text { color: #374151; /* Gray 700 */ }
+        .file-name-text { color: #4B5563; /* Gray 600 */ }
+        .loading-text { color: #059669; /* Green 600 */ }
+        .warning-text { color: #D97706; /* Amber 600 */ }
+        .error-text { color: #DC2626; /* Red 600 */ }
+        .quiz-title-text { color: #1F2937; /* Gray 800 */ }
+        .timer-text { color: #D97706; /* Amber 600 */ }
+        .question-text-color { color: #111827; /* Gray 900 */ }
+        /* .hint-output-text-color { color: #CA8A04; } */ /* Hint feature removed */
+        .feedback-title-color-correct { color: #059669; /* Green 600 */ }
+        .feedback-title-color-incorrect { color: #DC2626; /* Red 600 */ }
+        .feedback-title-color-info { color: #4B5563; /* Gray 600 */ }
+        .feedback-text-color { color: #374151; /* Gray 700 */ }
+        .feedback-explanation-color { color: #4B5563; /* Gray 600 */ }
+        .deeper-explanation-output-color { color: #374151; /* Gray 700 */ }
+        .results-title-text { color: #1F2937; /* Gray 800 */ }
+        .results-label-text { color: #4B5563; /* Gray 600 */ }
+        .results-value-text { color: #111827; /* Gray 900 */ }
+        .results-value-correct-text { color: #059669; /* Green 600 */ }
+        .results-value-incorrect-text { color: #DC2626; /* Red 600 */ }
+        .modal-title-text { color: #1F2937; /* Gray 800 */ }
+        .modal-close-button-text { color: #6B7280; /* Gray 500 */ }
+        .modal-close-button-text:hover { color: #111827; /* Gray 900 */ }
+        .review-question-title-text { color: #1F2937; /* Gray 800 */ }
+        .review-option-default-text { color: #374151; /* Gray 700 */ }
+        .review-option-correct-text { color: #059669; /* Green 600 */ }
+        .review-option-incorrect-text { color: #DC2626; /* Red 600 */ }
+        .review-status-info-text { color: #4B5563; /* Gray 600 */ }
+        .review-status-correct-text { color: #059669; /* Green 600 */ }
+        .review-status-incorrect-text { color: #DC2626; /* Red 600 */ }
+        .review-explanation-text { color: #4B5563; /* Gray 600 */ }
+        .review-time-text { color: #6B7280; /* Gray 500 */ }
 
     </style>
 </head>
-<body class="text-gray-200">  <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
+<body> 
 
-        <div id="setupScreen" class="w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
+    <div id="app" class="min-h-screen-custom flex flex-col items-center justify-center p-4">
+
+        <div id="setupScreen" class="w-full max-w-3xl content-card p-6 md:p-8">
             <header class="mb-6 text-center">
-                <h1 class="text-4xl font-bold header-title">MedQUEST</h1> <p class="mt-2 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> </header>
+                <h1 class="text-4xl font-bold header-title">MedQUEST</h1> 
+                <p class="mt-2 header-subtitle" id="setupSubtitle">Fazer questões sempre é uma boa escolha!</p> 
+            </header>
 
             <div class="mb-6 mode-selector grid grid-cols-2 gap-2 sm:gap-4">
                 <div class="text-center">
@@ -207,18 +222,19 @@
                 </div>
             </div>
 
-
-            <div class="mb-8"> <label for="fileInput" class="block text-sm font-medium label-text mb-1">Escolher arquivo PDF</label>
+            <div class="mb-8"> 
+                <label for="fileInput" class="block text-sm font-medium label-text mb-1">Escolher arquivo PDF</label>
                 <div class="flex items-center">
                     <input type="file" id="fileInput" accept=".pdf" class="hidden">
-                    <button onclick="document.getElementById('fileInput').click()" class="dark-input px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-600"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
+                    <button onclick="document.getElementById('fileInput').click()" class="input-field px-4 py-2 rounded-l-md border border-r-0 hover:bg-gray-100"> <i class="fas fa-upload mr-2"></i>Escolher arquivo
                     </button>
-                    <span id="fileName" class="dark-input px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
+                    <span id="fileName" class="input-field px-4 py-2 rounded-r-md border flex-grow file-name-text italic">Nenhum arquivo escolhido</span> </div>
             </div>
+            
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
                 <div>
                     <label for="numQuestions" class="block text-sm font-medium label-text mb-1">Nº de Questões</label>
-                    <select id="numQuestions" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                    <select id="numQuestions" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="5">5 Questões</option>
                         <option value="10" selected>10 Questões</option>
                         <option value="15">15 Questões</option>
@@ -228,7 +244,7 @@
                 </div>
                 <div id="difficultyContainer"> 
                     <label for="difficulty" class="block text-sm font-medium label-text mb-1">Dificuldade</label>
-                    <select id="difficulty" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                    <select id="difficulty" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="Fácil">Fácil</option>
                         <option value="Médio" selected>Médio</option>
                         <option value="Difícil">Difícil</option>
@@ -236,7 +252,7 @@
                 </div>
                 <div>
                     <label for="timePerQuestion" class="block text-sm font-medium label-text mb-1">Tempo por Questão</label>
-                    <select id="timePerQuestion" class="w-full dark-select p-2.5 rounded-md shadow-sm focus:outline-none"> 
+                    <select id="timePerQuestion" class="w-full select-field p-2.5 rounded-md shadow-sm focus:outline-none"> 
                         <option value="0">Sem limite</option>
                         <option value="30">30 Segundos</option>
                         <option value="60" selected>1 Minuto</option>
@@ -263,7 +279,7 @@
             <p id="errorMessage" class="error-text text-center mt-4"></p>
         </div>
 
-        <div id="quizScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl">
+        <div id="quizScreen" class="hidden w-full max-w-3xl content-card p-6 md:p-8">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-2xl font-semibold quiz-title-text">Questão <span id="currentQuestionNumber"></span> de <span id="totalQuestionNumber"></span></h2> 
                 <div id="questionTimerDisplay" class="text-xl font-bold timer-text"></div> 
@@ -271,18 +287,11 @@
             <div id="questionContainer" class="mb-6">
                 <p id="questionText" class="text-lg leading-relaxed mb-6 question-text-color"></p>
                 <div id="optionsContainer" class="space-y-3"></div>
-                <button id="hintButton" class="mt-4 text-sm btn-purple py-1 px-3 rounded-md shadow-sm flex items-center justify-center w-full sm:w-auto">
-                    <i class="fas fa-lightbulb mr-2"></i>Gerar Dica ✨
-                    <div id="hintLoader" class="small-loader hidden"></div>
-                </button>
-                <div id="hintOutputContainer" class="hidden dark-card p-3 rounded-md mt-3">
-                     <p id="hintOutputText" class="text-sm hint-output-text-color"></p>
                 </div>
-            </div>
             <button id="confirmAnswerButton" class="w-full btn-green text-white font-semibold py-3 px-4 rounded-md shadow-md mb-4 transition duration-150 hidden">
                 <i class="fas fa-check-circle mr-2"></i>Responder
             </button>
-            <div id="feedbackContainer" class="hidden dark-card p-4 rounded-md mb-4"> 
+            <div id="feedbackContainer" class="hidden inner-card p-4 rounded-md mb-4"> 
                 <h3 id="feedbackTitle" class="text-lg font-semibold mb-2"></h3> <p id="feedbackText" class="text-sm mb-2 feedback-text-color"></p>
                 <p id="feedbackExplanation" class="text-sm italic feedback-explanation-color"></p>
                 <button id="deeperExplanationButton" class="mt-3 text-sm btn-yellow py-1 px-3 rounded-md shadow-sm flex items-center">
@@ -301,30 +310,30 @@
             </div>
         </div>
 
-        <div id="resultsScreen" class="hidden w-full max-w-3xl dark-bg p-6 md:p-8 rounded-lg shadow-xl text-center">
+        <div id="resultsScreen" class="hidden w-full max-w-3xl content-card p-6 md:p-8 text-center">
             <h2 class="text-3xl font-bold results-title-text mb-6">Resultado do Simulado</h2> 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-left">
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Total de Questões:</p>
                     <p id="resultsTotalQuestions" class="text-2xl font-semibold results-value-text"></p>
                 </div>
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Acertos:</p>
                     <p id="resultsCorrectAnswers" class="text-2xl font-semibold results-value-correct-text"></p>
                 </div>
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Erros:</p>
                     <p id="resultsIncorrectAnswers" class="text-2xl font-semibold results-value-incorrect-text"></p>
                 </div>
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Percentual de Acerto:</p>
                     <p id="resultsAccuracy" class="text-2xl font-semibold results-value-text"></p>
                 </div>
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Tempo Total:</p>
                     <p id="resultsTotalTime" class="text-2xl font-semibold results-value-text"></p>
                 </div>
-                <div class="dark-card p-4 rounded-md"> 
+                <div class="inner-card p-4 rounded-md"> 
                     <p class="text-sm results-label-text">Tempo Médio por Questão:</p>
                     <p id="resultsAvgTime" class="text-2xl font-semibold results-value-text"></p>
                 </div>
@@ -333,7 +342,7 @@
                 <i class="fas fa-chart-line mr-2"></i>Analisar Meu Desempenho ✨
                 <div id="analyzePerformanceLoader" class="small-loader hidden"></div>
             </button>
-            <div id="performanceAnalysisOutputContainer" class="hidden dark-card p-4 rounded-md mb-6 text-left max-h-60 overflow-y-auto">
+            <div id="performanceAnalysisOutputContainer" class="hidden inner-card p-4 rounded-md mb-6 text-left max-h-60 overflow-y-auto">
                 <h4 class="text-md font-semibold header-title mb-2">Análise de Desempenho:</h4>
                 <p id="performanceAnalysisOutputText" class="text-sm whitespace-pre-wrap"></p>
             </div>
@@ -347,8 +356,8 @@
             </div>
         </div>
         
-        <div id="reviewModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center p-4 hidden z-50"> 
-            <div class="dark-bg w-full max-w-2xl max-h-[90vh] p-6 rounded-lg shadow-xl overflow-y-auto"> 
+        <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50"> 
+            <div class="content-card w-full max-w-2xl max-h-[90vh] p-6 overflow-y-auto"> 
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-2xl font-semibold modal-title-text">Revisão das Questões</h3> 
                     <button id="closeReviewModalButton" class="modal-close-button-text text-2xl">&times;</button>
@@ -379,11 +388,7 @@
 
         const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('fileName');
-        // Removed summarizeTextButton, summarizeLoader, summaryOutputContainer, summaryOutputText
-        // const summarizeTextButton = document.getElementById('summarizeTextButton'); 
-        // const summarizeLoader = document.getElementById('summarizeLoader'); 
-        // const summaryOutputContainer = document.getElementById('summaryOutputContainer'); 
-        // const summaryOutputText = document.getElementById('summaryOutputText'); 
+        // Summarize elements are removed from JS as well
 
         const numQuestionsSelect = document.getElementById('numQuestions');
         const difficultySelect = document.getElementById('difficulty');
@@ -398,10 +403,7 @@
         const questionTimerDisplay = document.getElementById('questionTimerDisplay');
         const questionTextDisplay = document.getElementById('questionText');
         const optionsContainer = document.getElementById('optionsContainer');
-        const hintButton = document.getElementById('hintButton'); 
-        const hintLoader = document.getElementById('hintLoader'); 
-        const hintOutputContainer = document.getElementById('hintOutputContainer'); 
-        const hintOutputText = document.getElementById('hintOutputText'); 
+        // Hint elements removed
         const confirmAnswerButton = document.getElementById('confirmAnswerButton'); 
         const feedbackContainer = document.getElementById('feedbackContainer');
         const feedbackTitle = document.getElementById('feedbackTitle');
@@ -453,9 +455,6 @@
                 loadingIndicator.classList.remove('hidden');
                 generationWarning.classList.add('hidden'); 
                 errorMessage.textContent = '';
-                // summarizeTextButton.classList.add('hidden');  // No longer exists
-                // summaryOutputContainer.classList.add('hidden'); // No longer exists
-                // summaryOutputText.textContent = ''; // No longer exists
                 
                 if (typeof pdfjsLib === 'undefined') {
                     console.warn("pdf.js library is not loaded. PDF text extraction will not work.");
@@ -485,13 +484,11 @@
                              errorMessage.textContent = 'Não foi possível extrair texto do PDF. Tente um arquivo diferente.';
                              errorMessage.classList.add('error-text');
                              errorMessage.classList.remove('text-green-400'); 
-                             // summarizeTextButton.classList.add('hidden'); // No longer exists
                         } else {
                             console.log("Texto extraído do PDF:", extractedPdfText.substring(0, 200) + "..."); 
-                            errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`; // Adjusted message
+                            errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`;
                             errorMessage.classList.remove('error-text');
                             errorMessage.classList.add('text-green-400'); 
-                            // summarizeTextButton.classList.remove('hidden'); // No longer exists
                         }
                     } catch (error) {
                         console.error("Erro ao processar PDF:", error);
@@ -499,7 +496,6 @@
                         errorMessage.classList.add('error-text');
                         errorMessage.classList.remove('text-green-400');
                         extractedPdfText = "";
-                        // summarizeTextButton.classList.add('hidden'); // No longer exists
                     } finally {
                         loadingIndicator.classList.add('hidden');
                     }
@@ -508,15 +504,12 @@
             } else {
                 fileNameDisplay.textContent = 'Nenhum arquivo escolhido';
                 extractedPdfText = "";
-                // summarizeTextButton.classList.add('hidden'); // No longer exists
-                // summaryOutputContainer.classList.add('hidden'); // No longer exists
             }
         });
 
-        // summarizeTextButton.addEventListener('click', handleSummarizeText); // Removed
         deeperExplanationButton.addEventListener('click', handleDeeperExplanation); 
         confirmAnswerButton.addEventListener('click', handleConfirmAnswer); 
-        hintButton.addEventListener('click', handleGenerateHint); 
+        // Removed hintButton event listener
         analyzePerformanceButton.addEventListener('click', handleAnalyzePerformance); 
 
 
@@ -564,7 +557,7 @@
                 numQuestionsSelect.querySelector('option[value="0"]').classList.remove('hidden'); 
             }
             if (extractedPdfText && errorMessage.classList.contains('text-green-400')) {
-                 errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`; // Adjusted message
+                 errorMessage.textContent = `Texto do PDF extraído com sucesso! Pronto para ${currentQuizMode === 'generate' ? 'gerar questões' : 'extrair questões'}.`;
             }
         }
 
@@ -602,11 +595,7 @@
             errorMessage.classList.add('error-text'); 
             loadingIndicator.classList.add('hidden');
             generationWarning.classList.add('hidden');
-            // summarizeTextButton.classList.add('hidden'); // No longer exists
-            // summaryOutputContainer.classList.add('hidden'); // No longer exists
-            // summaryOutputText.textContent = ''; // No longer exists
-            hintOutputContainer.classList.add('hidden');
-            hintOutputText.textContent = '';
+            // Hint elements are removed from reset as they are no longer global
             performanceAnalysisOutputContainer.classList.add('hidden');
             performanceAnalysisOutputText.textContent = '';
             startQuizButton.disabled = false;
@@ -692,32 +681,7 @@
             }
         }
 
-        async function handleGenerateHint() {
-            const question = questions[currentQuestionIndex];
-            if (!question || quizState[currentQuestionIndex].isAnswered) return;
-
-            hintLoader.classList.remove('hidden');
-            hintButton.disabled = true;
-            hintOutputText.textContent = '';
-            hintOutputContainer.classList.add('hidden');
-
-            try {
-                let optionsString = "";
-                for (const key in question.options) {
-                    optionsString += `${key}) ${question.options[key]} \n`;
-                }
-                const prompt = `Você é um tutor médico. Para a seguinte questão de múltipla escolha, forneça uma dica sutil (em uma frase curta) que ajude o aluno a pensar na direção certa, mas NÃO revele a resposta diretamente nem mencione a letra da opção correta. Questão: "${question.text}". Opções:\n${optionsString}`;
-                const hint = await callGeminiAPI(prompt);
-                hintOutputText.textContent = hint;
-                hintOutputContainer.classList.remove('hidden');
-            } catch (error) {
-                console.error("Erro ao gerar dica:", error);
-                hintOutputText.textContent = `Erro ao gerar dica: ${error.message}`;
-                hintOutputContainer.classList.remove('hidden'); 
-            } finally {
-                hintLoader.classList.add('hidden');
-            }
-        }
+        // Removed handleGenerateHint function
 
         async function handleAnalyzePerformance() {
             if (userAnswers.length === 0) {
@@ -778,8 +742,6 @@
             generationWarning.classList.remove('hidden'); 
             startQuizButton.disabled = true;
             
-            // summaryOutputContainer.classList.add('hidden'); // No longer exists
-
             let numQs = parseInt(numQuestionsSelect.value);
             const difficulty = difficultySelect.value; 
             
@@ -892,20 +854,15 @@
             confirmAnswerButton.disabled = true;
             deeperExplanationOutput.textContent = ''; 
             deeperExplanationButton.classList.add('hidden'); 
-            hintOutputContainer.classList.add('hidden'); 
-            hintOutputText.textContent = '';
-            hintButton.disabled = false; 
-            hintButton.classList.remove('hidden'); 
+            // Hint elements removed
             
             prevQuestionButton.disabled = currentQuestionIndex === 0;
             nextQuestionButton.innerHTML = currentQuestionIndex === questions.length - 1 ? 'Ver Resultado <i class="fas fa-poll-h ml-2"></i>' : 'Próxima Questão <i class="fas fa-arrow-right ml-2"></i>';
             
             if (currentQState.isAnswered) {
                 nextQuestionButton.disabled = false;
-                hintButton.classList.add('hidden'); 
             } else {
                 nextQuestionButton.disabled = true;
-                hintButton.classList.remove('hidden');
             }
 
 
@@ -921,7 +878,7 @@
                     eliminateBtn.dataset.option = key;
 
                     const button = document.createElement('button');
-                    button.classList.add('dark-input', 'text-left', 'p-3', 'rounded-md', 'border', 'hover:bg-gray-600', 'option-button'); 
+                    button.classList.add('dark-input', 'text-left', 'p-3', 'rounded-md', 'border', 'hover:bg-gray-100', 'option-button'); 
                     button.innerHTML = `<span class="font-bold mr-2">${key}.</span> ${question.options[key]}`;
                     button.dataset.option = key;
                     
@@ -1067,7 +1024,7 @@
             Array.from(optionsContainer.querySelectorAll('.option-button')).forEach(btn => btn.disabled = true);
             Array.from(optionsContainer.querySelectorAll('.eliminate-icon')).forEach(icon => icon.style.display = 'none');
             confirmAnswerButton.classList.add('hidden');
-            hintButton.classList.add('hidden');
+            // hintButton.classList.add('hidden'); // Removed
             nextQuestionButton.disabled = false;
         }
 
@@ -1159,7 +1116,7 @@
 
             showFeedback(isCorrect, currentQState.selectedAnswerLetter, question.correctAnswerLetter, question.explanation, question.options);
             confirmAnswerButton.classList.add('hidden');
-            hintButton.classList.add('hidden'); 
+            // hintButton.classList.add('hidden'); // Removed
             nextQuestionButton.disabled = false;
         }
 
